@@ -1,17 +1,4 @@
 {
-    "_hash": "4d470f560b86f0126cbd6bd2b32835f74fb3c85a94d6a56278d2155d576f48da",
-    "patches": {
-        "colorlibhq/adminlte-laravel": [
-            {
-                "package": "colorlibhq/adminlte-laravel",
-                "description": "Disable AdminLTE activity logging",
-                "url": "patches/adminlte-disable-activity-logging.patch",
-                "sha256": "a6331b33c595affa71d27bba1fcd23cf76cce56c0ee1b55f938e302e91a4eed8",
-                "depth": 1,
-                "extra": {
-                    "provenance": "root"
-                }
-            }
-        ]
-    }
+    "_hash": "6142bfcb78f54dfbf5247ae5e463f25bdb8fff1890806e2e45aa81a59c211653",
+    "patches": []
 }
