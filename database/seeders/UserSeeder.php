@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         // Buat user Admin Sistem
         $admin = User::updateOrCreate(
             [
-                'email' => 'admin@pmub.test',
+                'email' => 'ma.mamu1986@gmail.com',
             ],
             [
                 'name' => 'Administrator PMUB',
