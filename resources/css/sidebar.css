@@ -1,0 +1,510 @@
+/* ==========================================================================
+   PMUB - SIDEBAR
+   AdminLTE 4
+   ========================================================================== */
+
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.app-sidebar {
+    width: 250px;
+
+    background-color: #1e293b !important;
+
+    border-right: 0 !important;
+
+    box-shadow:
+        4px 0 18px rgba(15, 23, 42, 0.10);
+
+    --bs-body-bg: #1e293b;
+    --bs-body-color: #cbd5e1;
+}
+
+
+/* ==========================================================================
+   BRAND
+   ========================================================================== */
+
+.app-sidebar .sidebar-brand {
+    height: 68px;
+
+    background-color: #172033;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.06);
+}
+
+
+.app-sidebar .brand-link {
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 1.2rem;
+
+    text-decoration: none;
+}
+
+
+.app-sidebar .brand-image {
+    width: 36px;
+    height: 36px;
+
+    object-fit: contain;
+
+    margin-right: 0.7rem;
+
+    filter: drop-shadow(
+        0 2px 4px rgba(0, 0, 0, 0.15)
+    );
+}
+
+
+.app-sidebar .brand-text {
+    color: #f8fafc;
+
+    font-size: 1.05rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* ==========================================================================
+   SIDEBAR WRAPPER
+   ========================================================================== */
+
+.app-sidebar .sidebar-wrapper {
+    padding:
+        0.8rem
+        0.65rem
+        1.2rem;
+}
+
+
+/* ==========================================================================
+   MENU
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu {
+    gap: 3px;
+}
+
+
+/* ==========================================================================
+   MENU ITEM
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu > .nav-item {
+    margin: 0;
+}
+
+
+/* ==========================================================================
+   NAV LINK
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-link {
+
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+
+    padding:
+        0.62rem
+        0.78rem;
+
+    border-radius: 9px;
+
+    color: #cbd5e1;
+
+    font-size: 0.9rem;
+
+    font-weight: 400;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+/* ==========================================================================
+   ICON
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-icon {
+
+    width: 1.45rem;
+
+    min-width: 1.45rem;
+
+    margin-right: 0.55rem;
+
+    color: #94a3b8;
+
+    font-size: 0.95rem;
+
+    text-align: center;
+
+    transition:
+        color 0.18s ease;
+}
+
+
+/* ==========================================================================
+   HOVER
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-link:hover {
+
+    color: #ffffff;
+
+    background-color:
+        rgba(255, 255, 255, 0.07);
+
+    transform:
+        translateX(2px);
+}
+
+
+.app-sidebar .sidebar-menu .nav-link:hover .nav-icon {
+
+    color: #e2e8f0;
+}
+
+
+/* ==========================================================================
+   ACTIVE
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-link.active {
+
+    color: #ffffff;
+
+    background-color:
+        rgba(255, 255, 255, 0.11);
+
+    font-weight: 600;
+
+    box-shadow:
+        inset 3px 0 0 rgba(255, 255, 255, 0.75);
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-link.active
+.nav-icon {
+
+    color: #ffffff;
+}
+
+
+/* ==========================================================================
+   OPEN PARENT MENU
+   ========================================================================== */
+
+.app-sidebar
+.sidebar-menu
+.nav-item.menu-open
+> .nav-link {
+
+    color: #ffffff;
+
+    background-color:
+        rgba(255, 255, 255, 0.055);
+
+    font-weight: 600;
+}
+
+
+/* ==========================================================================
+   NAV HEADER / SECTION
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-header {
+
+    margin-top: 1.25rem;
+
+    margin-bottom: 0.4rem;
+
+    padding:
+        0.45rem
+        0.75rem;
+
+    color: #94a3b8;
+
+    font-size: 0.66rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+}
+
+
+/* ==========================================================================
+   SUBMENU
+   ========================================================================== */
+
+.app-sidebar .sidebar-menu .nav-treeview {
+
+    margin-top: 2px;
+
+    padding-left: 0.35rem;
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-link {
+
+    min-height: 38px;
+
+    padding:
+        0.5rem
+        0.7rem
+        0.5rem
+        2.25rem;
+
+    border-radius: 7px;
+
+    color: #aebccc;
+
+    font-size: 0.86rem;
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-link:hover {
+
+    color: #ffffff;
+
+    background-color:
+        rgba(255, 255, 255, 0.055);
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-link.active {
+
+    color: #ffffff;
+
+    background-color:
+        rgba(255, 255, 255, 0.09);
+
+    box-shadow: none;
+}
+
+
+/* ==========================================================================
+   SUBMENU ICON
+   ========================================================================== */
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-icon {
+
+    width: 1.2rem;
+
+    min-width: 1.2rem;
+
+    margin-right: 0.45rem;
+
+    color: #64748b;
+
+    font-size: 0.7rem;
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-link:hover
+.nav-icon,
+
+.app-sidebar
+.sidebar-menu
+.nav-treeview
+.nav-link.active
+.nav-icon {
+
+    color: #cbd5e1;
+}
+
+
+/* ==========================================================================
+   TREEVIEW ARROW
+   ========================================================================== */
+
+.app-sidebar
+.sidebar-menu
+.nav-link
+.nav-arrow {
+
+    margin-left: auto;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.app-sidebar
+.sidebar-menu
+.nav-item.menu-open
+> .nav-link
+.nav-arrow {
+
+    color: #cbd5e1;
+
+    transform:
+        rotate(90deg);
+}
+
+
+/* ==========================================================================
+   BADGE
+   ========================================================================== */
+
+.app-sidebar
+.sidebar-menu
+.badge {
+
+    margin-left: auto;
+
+    padding:
+        0.22rem
+        0.48rem;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+
+    font-weight: 600;
+}
+
+
+/* ==========================================================================
+   DOCUMENTATION BUTTON
+   ========================================================================== */
+
+.app-sidebar .sidebar-docs-cta {
+
+    margin-top: 1.25rem;
+
+    padding-top: 0.9rem !important;
+}
+
+
+.app-sidebar
+.sidebar-docs-cta
+.btn {
+
+    border-radius: 8px;
+
+    border-color:
+        rgba(255, 255, 255, 0.15);
+
+    color: #cbd5e1;
+
+    font-size: 0.8rem;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.app-sidebar
+.sidebar-docs-cta
+.btn:hover {
+
+    background-color:
+        rgba(255, 255, 255, 0.07);
+
+    border-color:
+        rgba(255, 255, 255, 0.25);
+
+    color: #ffffff;
+}
+
+
+/* ==========================================================================
+   SCROLLBAR
+   ========================================================================== */
+
+.app-sidebar
+.sidebar-wrapper::-webkit-scrollbar {
+
+    width: 5px;
+}
+
+
+.app-sidebar
+.sidebar-wrapper::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+
+.app-sidebar
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 10px;
+}
+
+
+.app-sidebar
+.sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+
+    background:
+        rgba(255, 255, 255, 0.2);
+}
+
+
+/* ==========================================================================
+   COLLAPSED SIDEBAR
+   ========================================================================== */
+
+.sidebar-collapse
+.app-sidebar {
+
+    box-shadow:
+        3px 0 14px rgba(15, 23, 42, 0.12);
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+
+    .app-sidebar {
+
+        width: 250px;
+    }
+
+}

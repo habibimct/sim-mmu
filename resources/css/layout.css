@@ -1,0 +1,478 @@
+/* ==========================================================================
+   PMUB - ADMINLTE LAYOUT
+   ========================================================================== */
+
+
+/* ==========================================================================
+   BODY
+   ========================================================================== */
+
+body {
+    border-top: 0 !important;
+}
+
+
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
+
+.app-header {
+    min-height: 64px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+    box-shadow:
+        0 1px 8px rgba(0, 0, 0, 0.10);
+}
+
+.app-header .nav-link {
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.app-header .nav-link:hover {
+    border-radius: 8px;
+}
+
+
+/* ==========================================================================
+   CONTENT WRAPPER
+   ========================================================================== */
+
+.content-wrapper {
+    min-height: calc(100vh - 60px);
+}
+
+
+/* ==========================================================================
+   CONTENT HEADER
+   ========================================================================== */
+
+.content-header {
+    padding-top: 1.25rem;
+    padding-bottom: 1rem;
+}
+
+.content-header h1 {
+    margin-bottom: 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+}
+
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.content {
+    padding-top: 0;
+}
+
+
+/* ==========================================================================
+   CARD
+   ========================================================================== */
+
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 0.9rem 1.1rem;
+    background-color: #fff;
+}
+
+.card-body {
+    padding: 1.1rem;
+}
+
+.card-footer {
+    padding: 0.8rem 1.1rem;
+    background-color: #fff;
+}
+
+
+/* ==========================================================================
+   TABLE
+   ========================================================================== */
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+.table > :not(caption) > * > * {
+    padding: 0.7rem 0.85rem;
+}
+
+
+/* ==========================================================================
+   BUTTON
+   ========================================================================== */
+
+.btn {
+    border-radius: 7px;
+    font-weight: 500;
+    transition:
+        color 0.15s ease,
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.1s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-sm {
+    border-radius: 6px;
+}
+
+
+/* ==========================================================================
+   FORM
+   ========================================================================== */
+
+.form-control,
+.form-select {
+    min-height: 38px;
+
+    border-radius: 7px;
+    border-color: #d6d9de;
+
+    font-size: 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.10);
+}
+
+.form-label {
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+
+/* ==========================================================================
+   SELECT
+   ========================================================================== */
+
+.form-select {
+    cursor: pointer;
+
+    background-position: right 0.75rem center;
+    background-size: 14px 10px;
+}
+
+.form-select-sm {
+    min-height: 32px;
+    border-radius: 6px;
+}
+
+
+/* ==========================================================================
+   DROPDOWN
+   ========================================================================== */
+
+.dropdown-menu {
+    min-width: 180px;
+
+    padding: 0.4rem;
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 9px;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+.dropdown-item {
+    padding: 0.55rem 0.75rem;
+
+    border-radius: 6px;
+
+    font-size: 0.875rem;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #f3f4f6;
+}
+
+.dropdown-divider {
+    margin: 0.35rem 0;
+}
+
+
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
+
+.modal-content {
+    border: 0;
+    border-radius: 10px;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.15);
+
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 1rem 1.1rem;
+
+    border-bottom: 1px solid #eef0f2;
+}
+
+.modal-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 1.1rem;
+}
+
+.modal-footer {
+    padding: 0.85rem 1.1rem;
+
+    border-top: 1px solid #eef0f2;
+}
+
+
+/* --------------------------------------------------------------------------
+   Modal backdrop
+   -------------------------------------------------------------------------- */
+
+.modal-backdrop {
+    opacity: 0.45 !important;
+}
+
+
+/* ==========================================================================
+   ALERT
+   ========================================================================== */
+
+.alert {
+    border: 0;
+    border-radius: 8px;
+}
+
+
+/* ==========================================================================
+   BADGE
+   ========================================================================== */
+
+.badge {
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.page-link {
+    margin: 0 2px;
+
+    border-radius: 6px !important;
+}
+
+
+/* ==========================================================================
+   INPUT GROUP
+   ========================================================================== */
+
+.input-group .form-control,
+.input-group .form-select {
+    border-radius: 0;
+}
+
+.input-group > :first-child {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.input-group > :last-child {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+
+/* ==========================================================================
+   CHECKBOX & RADIO
+   ========================================================================== */
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.10);
+}
+
+
+/* ==========================================================================
+   BUTTON GROUP
+   ========================================================================== */
+
+.btn-group .btn {
+    border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+
+    /* ----------------------------------------------------------------------
+       Content
+       ---------------------------------------------------------------------- */
+
+    .content-header {
+        padding-top: 1rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .content-header h1 {
+        font-size: 1.25rem;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Card
+       ---------------------------------------------------------------------- */
+
+    .card-body {
+        padding: 0.9rem;
+    }
+
+    .card-header {
+        padding: 0.8rem 0.9rem;
+    }
+
+    .card-footer {
+        padding: 0.7rem 0.9rem;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Table
+       ---------------------------------------------------------------------- */
+
+    .table > :not(caption) > * > * {
+        padding: 0.6rem 0.65rem;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Modal
+       ---------------------------------------------------------------------- */
+
+    .modal-dialog {
+        margin: 0.75rem;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .modal-header {
+        padding: 0.85rem 0.9rem;
+    }
+
+    .modal-body {
+        padding: 0.9rem;
+    }
+
+    .modal-footer {
+        padding: 0.75rem 0.9rem;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Button
+       ---------------------------------------------------------------------- */
+
+    .btn {
+        font-size: 0.875rem;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Dropdown
+       ---------------------------------------------------------------------- */
+
+    .dropdown-menu {
+        min-width: 160px;
+        max-width: calc(100vw - 1.5rem);
+    }
+
+}
+
+
+/* ==========================================================================
+   VERY SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+
+    .content-header h1 {
+        font-size: 1.15rem;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+    }
+
+}
