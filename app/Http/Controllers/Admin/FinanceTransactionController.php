@@ -181,10 +181,11 @@ class FinanceTransactionController extends Controller
 
         $summary = (clone $query)
             ->where('status', 'confirmed')
+            ->reorder()
             ->selectRaw("
-        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
-        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense
-    ")
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
+                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense
+            ")
             ->first();
 
         $totalIncome = (float) $summary->total_income;
