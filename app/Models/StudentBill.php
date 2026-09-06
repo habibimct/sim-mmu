@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class StudentBill extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'student_academic_year_id',
@@ -32,6 +34,15 @@ class StudentBill extends Model
             'due_date' => 'date',
             'cancelled_at' => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->getFillable())
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('student_bill');
     }
 
     /**
@@ -93,7 +104,6 @@ class StudentBill extends Model
             )
             ->sum('amount');
     }
-
 
     /**
      * Sisa tagihan yang masih harus dibayar.

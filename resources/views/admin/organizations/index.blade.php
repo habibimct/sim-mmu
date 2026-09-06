@@ -56,7 +56,7 @@
                             <th>Nama</th>
                             <th>Jenis</th>
                             <th>Status</th>
-                            <th width="120">Aksi</th>
+                            <th width="200">Aksi</th>
                         </tr>
                     </thead>
 
@@ -109,7 +109,6 @@
                                         <i class="bi bi-pencil"></i>
                                     </a>
 
-
                                     @if ($organization->type !== 'INDUK')
                                         <form action="{{ route('admin.organizations.toggle-status', $organization) }}"
                                             method="POST" class="d-inline"
@@ -129,6 +128,24 @@
                                             @endif
 
                                         </form>
+
+                                        @if ($organization->student_academic_years_count > 0 || $organization->finance_transactions_count > 0)
+                                            <button type="button" class="btn btn-sm btn-secondary" disabled
+                                                title="Tidak dapat dihapus karena sudah memiliki data siswa">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        @else
+                                            <form action="{{ route('admin.organizations.destroy', $organization) }}"
+                                                method="POST" class="d-inline"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus organisasi {{ $organization->name }}? Data yang sudah terhapus tidak dapat dikembalikan.');">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     @endif
 
                                 </td>

@@ -232,3 +232,67 @@
 @include('admin.students.partials.modal-create')
 @include('admin.students.partials.modal-import')
 @include('admin.students.partials.modal-toggle')
+
+<div id="classStudentsModalContainer"></div>
+
+
+
+@section('js')
+    <script>
+        document.addEventListener('click', function(event) {
+            const button = event.target.closest('.btn-class-students');
+
+            if (!button) {
+                return;
+            }
+
+            const url = button.dataset.url;
+            const container = document.getElementById(
+                'classStudentsModalContainer'
+            );
+
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mt-2 text-muted">
+                        Memuat daftar siswa...
+                    </div>
+                </div>
+            `;
+
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'text/html'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal memuat daftar siswa.');
+                }
+
+                return response.text();
+            })
+            .then(html => {
+                container.innerHTML = html;
+
+                const modalElement =
+                    document.getElementById('classStudentsModal');
+
+                const modal =
+                    new bootstrap.Modal(modalElement);
+
+                modal.show();
+            })
+            .catch(error => {
+                container.innerHTML = '';
+
+                alert(error.message);
+            });
+        });
+
+        console.log('SCRIPT SISWA AKTIF');
+    </script>
+@stop

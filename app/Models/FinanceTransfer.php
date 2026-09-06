@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FinanceTransfer extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'from_organization_id',
@@ -32,6 +34,15 @@ class FinanceTransfer extends Model
             'amount' => 'decimal:2',
             'confirmed_at' => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->getFillable())
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('finance_transfer');
     }
 
     public function fromOrganization(): BelongsTo

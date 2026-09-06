@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentController;
@@ -31,10 +32,25 @@ Route::middleware(['auth'])
         */
 
         Route::middleware('permission:dashboard.view')
-            ->get('/dashboard', function () {
-                return view('admin.dashboard');
-            })
+            ->get('/dashboard', [
+                AdminDashboardController::class,
+                'index',
+            ])
             ->name('dashboard');
+
+        Route::middleware('permission:dashboard.view')
+            ->get('/activity-logs/{activity}', [
+                AdminDashboardController::class,
+                'activityDetail',
+            ])
+            ->name('activity-logs.detail');
+
+        Route::middleware('permission:dashboard.view')
+            ->get('/activity-logs', [
+                AdminDashboardController::class,
+                'activityLogs',
+            ])
+            ->name('activity-logs.index');
 
 
         /*
@@ -69,6 +85,11 @@ Route::middleware(['auth'])
                 [OrganizationController::class, 'toggleStatus']
             )
             ->name('organizations.toggle-status');
+
+        Route::delete('/organizations/{organization}', [
+            OrganizationController::class,
+            'destroy',
+        ])->name('organizations.destroy');
 
         /*
         |--------------------------------------------------------------------------
@@ -131,6 +152,11 @@ Route::middleware(['auth', 'organization.scope'])
 
         Route::patch('students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])
             ->name('students.toggle-status');
+
+
+        Route::middleware('permission:students.view')
+            ->get('/students/class/{schoolClass}/students', [StudentController::class, 'studentsByClass'])
+            ->name('students.class-students');
 
 
         Route::get(

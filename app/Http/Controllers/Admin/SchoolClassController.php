@@ -99,28 +99,6 @@ class SchoolClassController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Ambil data
-        |--------------------------------------------------------------------------
-        */
-
-        $schoolClasses = $query
-            ->orderBy(
-                'academic_year_id'
-            )
-            ->orderBy(
-                'organization_id'
-            )
-            ->orderBy(
-                'level'
-            )
-            ->orderBy(
-                'name'
-            )
-            ->paginate(15)
-            ->withQueryString();
-
-        /*
-        |--------------------------------------------------------------------------
         | Organisasi untuk filter
         |--------------------------------------------------------------------------
         */
@@ -159,6 +137,7 @@ class SchoolClassController extends Controller
             ->withCount('studentAcademicYears')
             ->orderBy('academic_year_id')
             ->orderBy('organization_id')
+            ->orderBy('level')
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
@@ -752,8 +731,12 @@ class SchoolClassController extends Controller
         int $academicYearId
     ): SchoolClass {
         $organization = Organization::findOrFail($organizationId);
+        $academicYear = AcademicYear::findOrFail($academicYearId);
 
-        $alumniName = 'Alumni ' . $organization->name;
+        $alumniName = 'Alumni '
+            . $organization->name
+            . ' - '
+            . $academicYear->name;
 
         return SchoolClass::firstOrCreate(
             [

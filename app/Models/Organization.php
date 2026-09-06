@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\FinanceTransaction;
@@ -9,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Organization extends Model
 {
+    use LogsActivity;
+    
     protected $fillable = [
         'parent_id',
         'code',
@@ -160,5 +164,13 @@ class Organization extends Model
         return $this->hasMany(
             TeachingAssignment::class
         );
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->getFillable())
+            ->logOnlyDirty()
+            ->useLogName('organization');
     }
 }

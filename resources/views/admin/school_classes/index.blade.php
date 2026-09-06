@@ -9,20 +9,20 @@
         <h1 class="m-0">
             Daftar Kelas
         </h1>
+        <div>
+            @can('classes.manage')
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
 
-        @can('classes.manage')
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Tambah Kelas
 
-                <i class="bi bi-plus-lg me-1"></i>
-                Tambah Kelas
-
-            </button>
-            <a href="{{ route('admin.school-classes.bulk-create') }}" class="btn btn-success">
-                <i class="fas fa-layer-group"></i>
-                Buat Banyak Kelas
-            </a>
-        @endcan
-
+                </button>
+                <a href="{{ route('admin.school-classes.bulk-create') }}" class="btn btn-success">
+                    <i class="fas fa-layer-group"></i>
+                    Buat Banyak Kelas
+                </a>
+            @endcan
+        </div>
     </div>
 
 @stop
@@ -290,7 +290,7 @@
     </div>
 
 
- @include('admin.school_classes.partials.create-modal')
+    @include('admin.school_classes.partials.create-modal')
 
 @stop
 

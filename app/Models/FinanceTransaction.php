@@ -96,7 +96,8 @@ class FinanceTransaction extends Model
                 'cancelled_at',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+            ->useLogName('finance_transaction');
     }
 
 

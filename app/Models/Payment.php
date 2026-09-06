@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'organization_id',
@@ -39,6 +41,15 @@ class Payment extends Model
             'amount' => 'decimal:2',
             'confirmed_at' => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->getFillable())
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('payment');
     }
 
     /**
@@ -82,7 +93,6 @@ class Payment extends Model
             'confirmed_by'
         );
     }
-
 
     public function financeTransaction(): HasOne
     {

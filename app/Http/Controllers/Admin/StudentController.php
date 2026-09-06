@@ -14,6 +14,7 @@ use App\Models\StudentAcademicYear;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class StudentController extends Controller
 {
@@ -490,6 +491,71 @@ class StudentController extends Controller
                 'academicYears',
                 'schoolClasses',
                 'schoolClassSummary'
+            )
+        );
+    }
+
+
+    public function studentsByClass(
+        Request $request,
+        SchoolClass $schoolClass
+    ): View {
+        /*
+    |--------------------------------------------------------------------------
+    | Pastikan kelas berada dalam kewenangan user
+    |--------------------------------------------------------------------------
+    */
+
+        $organizationIds =
+            Student::organizationIdsForUser();
+
+        abort_unless(
+            $organizationIds->contains(
+                $schoolClass->organization_id
+            ),
+            403
+        );
+
+        /*
+    |--------------------------------------------------------------------------
+    | Ambil siswa pada kelas dan tahun akademik tersebut
+    |--------------------------------------------------------------------------
+    */
+
+        $students = StudentAcademicYear::query()
+            ->with([
+                'student',
+            ])
+            ->where(
+                'school_class_id',
+                $schoolClass->id
+            )
+            ->where(
+                'academic_year_id',
+                $schoolClass->academic_year_id
+            )
+            ->where(
+                'organization_id',
+                $schoolClass->organization_id
+            )
+            ->where(
+                'status',
+                'active'
+            )
+            ->whereHas(
+                'student'
+            )
+            ->get()
+            ->sortBy(
+                fn($item) => $item->student->name
+            )
+            ->values();
+
+        return view(
+            'admin.students.partials.class-students',
+            compact(
+                'schoolClass',
+                'students'
             )
         );
     }

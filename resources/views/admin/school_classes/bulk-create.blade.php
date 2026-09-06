@@ -16,10 +16,7 @@
             </h3>
         </div>
 
-        <form
-            method="POST"
-            action="{{ route('admin.school-classes.bulk-store') }}"
-        >
+        <form method="POST" action="{{ route('admin.school-classes.bulk-store') }}">
 
             @csrf
 
@@ -49,28 +46,16 @@
                         Tahun Ajaran
                     </label>
 
-                    <select
-                        name="academic_year_id"
-                        class="form-select"
-                        required
-                    >
+                    <select name="academic_year_id" class="form-select" required>
 
                         <option value="">
                             -- Pilih Tahun Ajaran --
                         </option>
 
                         @foreach ($academicYears as $academicYear)
-
-                            <option
-                                value="{{ $academicYear->id }}"
-                                @selected(
-                                    old('academic_year_id')
-                                    == $academicYear->id
-                                )
-                            >
+                            <option value="{{ $academicYear->id }}" @selected(old('academic_year_id') == $academicYear->id)>
                                 {{ $academicYear->name }}
                             </option>
-
                         @endforeach
 
                     </select>
@@ -84,28 +69,16 @@
                         Unit
                     </label>
 
-                    <select
-                        name="organization_id"
-                        class="form-select"
-                        required
-                    >
+                    <select name="organization_id" class="form-select" required>
 
                         <option value="">
                             -- Pilih Unit --
                         </option>
 
                         @foreach ($organizations as $organization)
-
-                            <option
-                                value="{{ $organization->id }}"
-                                @selected(
-                                    old('organization_id')
-                                    == $organization->id
-                                )
-                            >
+                            <option value="{{ $organization->id }}" @selected(old('organization_id') == $organization->id)>
                                 {{ $organization->name }}
                             </option>
-
                         @endforeach
 
                     </select>
@@ -121,29 +94,16 @@
                             Tingkat Awal
                         </label>
 
-                        <select
-                            name="from_level"
-                            id="from_level"
-                            class="form-select"
-                            required
-                        >
+                        <select name="from_level" id="from_level" class="form-select" required>
 
                             <option value="">
                                 -- Pilih --
                             </option>
 
                             @for ($level = 1; $level <= 12; $level++)
-
-                                <option
-                                    value="{{ $level }}"
-                                    @selected(
-                                        old('from_level')
-                                        == $level
-                                    )
-                                >
+                                <option value="{{ $level }}" @selected(old('from_level') == $level)>
                                     Tingkat {{ $level }}
                                 </option>
-
                             @endfor
 
                         </select>
@@ -157,29 +117,16 @@
                             Tingkat Akhir
                         </label>
 
-                        <select
-                            name="to_level"
-                            id="to_level"
-                            class="form-select"
-                            required
-                        >
+                        <select name="to_level" id="to_level" class="form-select" required>
 
                             <option value="">
                                 -- Pilih --
                             </option>
 
                             @for ($level = 1; $level <= 12; $level++)
-
-                                <option
-                                    value="{{ $level }}"
-                                    @selected(
-                                        old('to_level')
-                                        == $level
-                                    )
-                                >
+                                <option value="{{ $level }}" @selected(old('to_level') == $level)>
                                     Tingkat {{ $level }}
                                 </option>
-
                             @endfor
 
                         </select>
@@ -188,38 +135,45 @@
 
                 </div>
 
+                {{-- Pola Penamaan --}}
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Pola Penamaan Kelas
+                    </label>
+
+                    <select name="naming_mode" id="naming_mode" class="form-select" required>
+                        <option value="letter" @selected(old('naming_mode', 'letter') === 'letter')>
+                            Huruf — 1A, 1B, 1C, ...
+                        </option>
+
+                        <option value="number" @selected(old('naming_mode') === 'number')>
+                            Angka — 1-1, 1-2, 1-3, ...
+                        </option>
+                    </select>
+
+                </div>
+
                 {{-- Jumlah kelas --}}
                 <div id="level-container"></div>
 
-                <div
-                    id="preview"
-                    class="alert alert-info d-none mt-3"
-                >
+                <div id="preview" class="alert alert-info d-none mt-3">
                     <strong>
                         Preview kelas:
                     </strong>
 
-                    <div
-                        id="preview-list"
-                        class="mt-2"
-                    ></div>
+                    <div id="preview-list" class="mt-2"></div>
                 </div>
 
             </div>
 
             <div class="card-footer">
 
-                <a
-                    href="{{ route('admin.school-classes.index') }}"
-                    class="btn btn-secondary"
-                >
+                <a href="{{ route('admin.school-classes.index') }}" class="btn btn-secondary">
                     Kembali
                 </a>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i>
                     Buat Kelas
                 </button>
@@ -251,6 +205,11 @@ document.addEventListener(
                 'to_level'
             );
 
+        const namingMode =
+            document.getElementById(
+                'naming_mode'
+            );
+
         const container =
             document.getElementById(
                 'level-container'
@@ -266,6 +225,13 @@ document.addEventListener(
                 'preview-list'
             );
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate input jumlah kelas berdasarkan tingkat
+        |--------------------------------------------------------------------------
+        */
+
         function generateLevels() {
 
             container.innerHTML = '';
@@ -275,6 +241,7 @@ document.addEventListener(
             );
 
             previewList.innerHTML = '';
+
 
             const from =
                 parseInt(
@@ -286,6 +253,7 @@ document.addEventListener(
                     toLevel.value
                 );
 
+
             if (
                 !from ||
                 !to ||
@@ -293,6 +261,7 @@ document.addEventListener(
             ) {
                 return;
             }
+
 
             for (
                 let level = from;
@@ -305,11 +274,20 @@ document.addEventListener(
                         'div'
                     );
 
+
                 row.className =
                     'row align-items-end mb-3';
 
+
+                const firstName =
+                    namingMode.value === 'letter'
+                        ? level + 'A'
+                        : level + '-1';
+
+
                 row.innerHTML = `
                     <div class="col-md-6">
+
                         <label class="form-label">
                             Tingkat ${level}
                         </label>
@@ -324,22 +302,34 @@ document.addEventListener(
                             value="1"
                             required
                         >
+
                     </div>
 
                     <div class="col-md-6">
+
                         <div class="text-muted preview-level">
-                            Tingkat ${level}: 1A
+                            Tingkat ${level}: ${firstName}
                         </div>
+
                     </div>
                 `;
+
 
                 container.appendChild(
                     row
                 );
             }
 
+
             updatePreview();
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update preview
+        |--------------------------------------------------------------------------
+        */
 
         function updatePreview() {
 
@@ -348,9 +338,12 @@ document.addEventListener(
                     '.class-count'
                 );
 
+
             previewList.innerHTML = '';
 
+
             let hasData = false;
+
 
             inputs.forEach(
                 function (input) {
@@ -360,10 +353,12 @@ document.addEventListener(
                             input.dataset.level
                         );
 
+
                     const count =
                         parseInt(
                             input.value
                         );
+
 
                     if (
                         !count ||
@@ -372,7 +367,9 @@ document.addEventListener(
                         return;
                     }
 
+
                     const names = [];
+
 
                     for (
                         let i = 0;
@@ -380,49 +377,108 @@ document.addEventListener(
                         i++
                     ) {
 
-                        names.push(
-                            level +
-                            String.fromCharCode(
-                                65 + i
-                            )
-                        );
+                        if (
+                            namingMode.value === 'letter'
+                        ) {
+
+                            names.push(
+                                level +
+                                String.fromCharCode(
+                                    65 + i
+                                )
+                            );
+
+                        } else {
+
+                            names.push(
+                                level +
+                                '-' +
+                                (i + 1)
+                            );
+
+                        }
                     }
+
 
                     const div =
                         document.createElement(
                             'div'
                         );
 
-                    div.innerHTML =
-                        `<strong>
+
+                    div.innerHTML = `
+                        <strong>
                             Tingkat ${level}:
                         </strong>
-                        ${names.join(', ')}`;
+                        ${names.join(', ')}
+                    `;
+
 
                     previewList.appendChild(
                         div
                     );
 
+
                     hasData = true;
                 }
             );
 
+
             if (hasData) {
+
                 preview.classList.remove(
                     'd-none'
                 );
+
             }
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Perubahan Tingkat Awal
+        |--------------------------------------------------------------------------
+        */
 
         fromLevel.addEventListener(
             'change',
             generateLevels
         );
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Perubahan Tingkat Akhir
+        |--------------------------------------------------------------------------
+        */
+
         toLevel.addEventListener(
             'change',
             generateLevels
         );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Perubahan Pola Penamaan
+        |--------------------------------------------------------------------------
+        */
+
+        namingMode.addEventListener(
+            'change',
+            function () {
+
+                generateLevels();
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Perubahan jumlah kelas
+        |--------------------------------------------------------------------------
+        */
 
         document.addEventListener(
             'input',
@@ -433,15 +489,25 @@ document.addEventListener(
                         'class-count'
                     )
                 ) {
+
                     updatePreview();
+
                 }
 
             }
         );
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate awal
+        |--------------------------------------------------------------------------
+        */
+
         generateLevels();
 
     }
+
 );
 
 </script>

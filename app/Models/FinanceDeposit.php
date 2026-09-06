@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FinanceDeposit extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'organization_id',
         'target_organization_id',
@@ -31,6 +35,14 @@ class FinanceDeposit extends Model
             'amount' => 'decimal:2',
             'confirmed_at' => 'datetime',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->getFillable())
+            ->logOnlyDirty()
+            ->useLogName('finance_deposit');
     }
 
     public function organization(): BelongsTo

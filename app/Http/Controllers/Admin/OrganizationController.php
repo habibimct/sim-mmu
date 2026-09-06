@@ -13,7 +13,11 @@ class OrganizationController extends Controller
 {
     public function index(): View
     {
-        $organizations = Organization::orderByRaw(
+        $organizations = Organization::withCount([
+            'studentAcademicYears',
+            'financeTransactions',
+        ])
+            ->orderByRaw(
                 "CASE WHEN type = 'INDUK' THEN 0 ELSE 1 END"
             )
             ->orderBy('name')
@@ -230,5 +234,59 @@ class OrganizationController extends Controller
             'success',
             "Organisasi {$organization->name} berhasil {$status}."
         );
+    }
+
+    public function destroy(Organization $organization): RedirectResponse
+    {
+        /*
+    |--------------------------------------------------------------------------
+    | Organisasi INDUK tidak boleh dihapus
+    |--------------------------------------------------------------------------
+    */
+
+        if ($organization->type === 'INDUK') {
+            return back()->withErrors([
+                'delete' => 'Organisasi INDUK tidak boleh dihapus.',
+            ]);
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Tidak boleh dihapus jika sudah memiliki siswa
+    |--------------------------------------------------------------------------
+    */
+
+        if ($organization->studentAcademicYears()->exists()) {
+            return back()->withErrors([
+                'delete' => "Organisasi {$organization->name} tidak dapat dihapus karena sudah memiliki data siswa.",
+            ]);
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Tidak boleh dihapus jika sudah memiliki transaksi keuangan
+    |--------------------------------------------------------------------------
+    */
+
+        if ($organization->financeTransactions()->exists()) {
+            return back()->withErrors([
+                'delete' => "Organisasi {$organization->name} tidak dapat dihapus karena sudah memiliki transaksi keuangan.",
+            ]);
+        }
+
+
+        $organizationName = $organization->name;
+
+        $organization->delete();
+
+
+        return redirect()
+            ->route('admin.organizations.index')
+            ->with(
+                'success',
+                "Organisasi {$organizationName} berhasil dihapus."
+            );
     }
 }

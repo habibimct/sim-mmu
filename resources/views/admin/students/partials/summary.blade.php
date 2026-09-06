@@ -20,48 +20,22 @@
             <table class="table table-hover table-striped mb-0">
 
                 <thead>
-
                     <tr>
-
-                        <th
-                            width="60"
-                            class="text-center"
-                        >
-                            No
-                        </th>
-
-                        <th>
-                            Kelas
-                        </th>
-
-                        <th>
-                            Tahun Akademik
-                        </th>
-
-                        <th class="text-center">
-                            Jumlah Siswa
-                        </th>
-
-                        <th class="text-center">
-                            Aktif
-                        </th>
-
-                        <th class="text-center">
-                            Nonaktif
-                        </th>
-
+                        <th width="60" class="text-center">No</th>
+                        <th>Kelas</th>
+                        <th>Tahun Akademik</th>
+                        <th class="text-center">Jumlah Siswa</th>
+                        <th class="text-center">Aktif</th>
+                        <th class="text-center">Nonaktif</th>
+                        <th width="80" class="text-center">Aksi</th>
                     </tr>
-
                 </thead>
 
 
                 <tbody>
 
-                    @forelse (
-                        $schoolClassSummary
-                        as $summaryItem
-                    )
-
+                    @forelse ($schoolClassSummary
+                        as $summaryItem)
                         <tr>
 
                             <td class="text-center">
@@ -77,42 +51,31 @@
                             </td>
 
                             <td class="text-center fw-bold">
-                                {{ number_format(
-                                    $summaryItem->total_students,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }}
+                                {{ number_format($summaryItem->total_students, 0, ',', '.') }}
                             </td>
 
                             <td class="text-center">
 
                                 <span class="badge bg-success">
 
-                                    {{ number_format(
-                                        $summaryItem->active_students,
-                                        0,
-                                        ',',
-                                        '.'
-                                    ) }}
+                                    {{ number_format($summaryItem->active_students, 0, ',', '.') }}
 
                                 </span>
 
                             </td>
 
                             <td class="text-center">
-
                                 <span class="badge bg-secondary">
-
-                                    {{ number_format(
-                                        $summaryItem->inactive_students,
-                                        0,
-                                        ',',
-                                        '.'
-                                    ) }}
-
+                                    {{ number_format($summaryItem->inactive_students, 0, ',', '.') }}
                                 </span>
+                            </td>
 
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm btn-primary btn-class-students"
+                                    data-url="{{ route('admin.students.class-students', $summaryItem->id) }}"
+                                    title="Lihat daftar siswa">
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </td>
 
                         </tr>
@@ -121,10 +84,7 @@
 
                         <tr>
 
-                            <td
-                                colspan="6"
-                                class="text-center py-4 text-muted"
-                            >
+                            <td colspan="7" class="text-center py-4 text-muted">
 
                                 <i class="bi bi-info-circle me-1"></i>
 
@@ -134,7 +94,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>
