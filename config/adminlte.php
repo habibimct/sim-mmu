@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 4',
+    'title' => 'SIM-MMU',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -127,8 +127,8 @@ return [
     |
     */
 
-    'footer_left' => 'Copyright &copy; 2014-' . date('Y') . ' <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>. All rights reserved.',
-    'footer_right' => 'Anything you want',
+    'footer_left' => 'Copyright &copy; ' . date('Y') . ' <a href="#" class="text-decoration-none">SIM-MMU</a>. All rights reserved.',
+    'footer_right' => 'Sistem Informasi Manajemen - Madrasah Mambaul Ulum',
 
     'preloader' => [
         'enabled' => true,
@@ -302,38 +302,10 @@ return [
         ],
 
         [
-            'text' => 'Siswa',
-            'url' => 'admin/students',
-            'icon' => 'bi bi-mortarboard',
-            'can' => 'students.view',
-        ],
-
-        [
             'text' => 'Guru',
             'url' => 'admin/teachers',
             'icon' => 'bi bi-person-video3',
             'can' => 'teachers.view',
-        ],
-
-        [
-            'text' => 'Penempatan Kelas',
-            'url' => 'admin/students/placement',
-            'icon' => 'bi bi-people-fill',
-            'can' => 'classes.view',
-        ],
-
-        [
-            'text' => 'Pindah Kelas',
-            'url' => 'admin/students/class-transfer',
-            'icon' => 'bi bi-people-fill',
-            'can' => 'classes.view',
-        ],
-
-        [
-            'text' => 'Naik Kelas',
-            'url' => 'admin/students/promotion',
-            'icon' => 'bi bi-people-fill',
-            'can' => 'classes.view',
         ],
 
         [
@@ -345,9 +317,63 @@ return [
 
         [
             'text' => 'Absensi',
-            'url' => 'admin/attendance',
             'icon' => 'bi bi-calendar-check',
             'can' => 'attendance.view',
+            'submenu' => [
+
+                [
+                    'text' => 'Absensi Siswa',
+                    'url' => 'admin/student-attendance',
+                    'icon' => 'bi bi-person-check',
+                    'can' => 'attendance.view',
+                ],
+
+                [
+                    'text' => 'Absensi Guru',
+                    'url' => 'admin/teacher-attendance',
+                    'icon' => 'bi bi-person-check-fill',
+                    'can' => 'attendance.view',
+                ],
+
+            ],
+        ],
+
+        // =========================
+        // SISWA
+        // =========================
+
+        ['header' => 'SISWA'],
+
+        [
+            'text' => 'Daftar Siswa',
+            'url' => 'admin/students',
+            'icon' => 'bi bi-mortarboard',
+            'can' => 'students.view',
+            'active' => ['admin/students'],
+        ],
+
+        [
+            'text' => 'Penempatan Kelas',
+            'url' => 'admin/students/placement',
+            'icon' => 'bi bi-person-plus',
+            'can' => 'classes.view',
+            'active' => ['admin/students/placement*'],
+        ],
+
+        [
+            'text' => 'Pindah Kelas',
+            'url' => 'admin/students/class-transfer',
+            'icon' => 'bi bi-arrow-left-right',
+            'can' => 'classes.view',
+            'active' => ['admin/students/class-transfer*'],
+        ],
+
+        [
+            'text' => 'Naik Kelas',
+            'url' => 'admin/students/promotion',
+            'icon' => 'bi bi-arrow-up-circle',
+            'can' => 'classes.view',
+            'active' => ['admin/students/promotion*'],
         ],
 
         // =========================
@@ -357,24 +383,43 @@ return [
         ['header' => 'KEUANGAN'],
 
         [
-            'text' => 'Keuangan',
-            'url' => 'admin/finance',
-            'icon' => 'bi bi-cash-stack',
-            'can' => 'finance.view',
+            'text' => 'Jenis Tagihan',
+            'url' => 'admin/finance/bill-types',
+            'icon' => 'bi bi-tags',
+            'can' => 'bills.view',
+            'active' => ['admin/finance/bill-types*'],
         ],
 
         [
             'text' => 'Tagihan',
-            'url' => 'admin/bills',
+            'url' => 'admin/finance/bills',
             'icon' => 'bi bi-receipt',
             'can' => 'bills.view',
+            'active' => ['admin/finance/bills*'],
         ],
 
         [
             'text' => 'Pembayaran',
-            'url' => 'admin/payments',
+            'url' => 'admin/finance/payments',
             'icon' => 'bi bi-credit-card',
             'can' => 'payments.view',
+            'active' => ['admin/finance/payments*'],
+        ],
+
+        // [
+        //     'text' => 'Setoran',
+        //     'url' => 'admin/finance/deposits',
+        //     'icon' => 'bi bi-box-arrow-in-down',
+        //     'can' => 'finance.view',
+        //     'active' => ['admin/finance/deposits*'],
+        // ],
+
+        [
+            'text' => 'Transaksi Keuangan',
+            'url' => 'admin/finance/transactions',
+            'icon' => 'bi bi-cash-stack',
+            'can' => 'finance.view',
+            'active' => ['admin/finance/transactions*'],
         ],
 
         // =========================
