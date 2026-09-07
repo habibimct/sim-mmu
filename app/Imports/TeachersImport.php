@@ -148,16 +148,9 @@ class TeachersImport implements
 
         if (is_numeric($value)) {
 
-            try {
-
-                return Date::excelToDateTimeObject(
-                    (float) $value
-                )->format('Y-m-d');
-
-            } catch (\Throwable $e) {
-
-                return null;
-            }
+            return Date::excelToDateTimeObject(
+                (float) $value
+            )->format('Y-m-d');
         }
 
         /*
@@ -189,7 +182,15 @@ class TeachersImport implements
             }
         }
 
-        return null;
+        /*
+        |--------------------------------------------------------------------------
+        | Seharusnya tidak tercapai karena sudah divalidasi sebelumnya.
+        |--------------------------------------------------------------------------
+        */
+
+        throw new \InvalidArgumentException(
+            'Tanggal lahir tidak valid.'
+        );
     }
 
     /**
@@ -225,15 +226,98 @@ class TeachersImport implements
 
             /*
             |--------------------------------------------------------------------------
-            | Jangan gunakan rule "date" di sini.
+            | Validasi tanggal lahir
             |--------------------------------------------------------------------------
             |
-            | Excel membaca tanggal sebagai angka serial.
+            | Dapat menerima:
+            |
+            | 1. Tanggal Excel berupa serial number
+            | 2. Format dd/mm/yyyy
+            | 3. Format dd-mm-yyyy
+            | 4. Format yyyy-mm-dd
+            |
+            | Tanggal harus benar-benar valid.
             |
             */
 
             'tanggal_lahir' => [
                 'nullable',
+                function ($attribute, $value, $fail) {
+
+                    if ($value === null || $value === '') {
+                        return;
+                    }
+
+                    $valid = false;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Excel serial date
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (is_numeric($value)) {
+
+                        try {
+
+                            $date = Date::excelToDateTimeObject(
+                                (float) $value
+                            );
+
+                            $valid = $date !== false;
+
+                        } catch (\Throwable $e) {
+
+                            $valid = false;
+                        }
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Tanggal berupa teks
+                    |--------------------------------------------------------------------------
+                    */
+
+                    else {
+
+                        $value = trim((string) $value);
+
+                        $formats = [
+                            'd/m/Y',
+                            'd-m-Y',
+                            'Y-m-d',
+                        ];
+
+                        foreach ($formats as $format) {
+
+                            $date = DateTime::createFromFormat(
+                                '!' . $format,
+                                $value
+                            );
+
+                            if (
+                                $date !== false &&
+                                $date->format($format) === $value
+                            ) {
+                                $valid = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Tanggal tidak valid
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (!$valid) {
+
+                        $fail(
+                            'Tanggal lahir harus berupa tanggal yang valid dengan format dd/mm/yyyy.'
+                        );
+                    }
+                },
             ],
 
             'no_hp' => [
