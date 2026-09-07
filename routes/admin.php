@@ -101,6 +101,15 @@ Route::middleware(['auth'])
             ->get('/users', [UserController::class, 'index'])
             ->name('users.index');
 
+        Route::get('/users/export', [UserController::class, 'export'])
+            ->name('users.export');
+
+        Route::get('/users/template', [UserController::class, 'downloadTemplate'])
+            ->name('users.template');
+
+        Route::post('/users/import', [UserController::class, 'import'])
+            ->name('users.import');
+
         Route::middleware('permission:users.manage')
             ->get('/users/create', [UserController::class, 'create'])
             ->name('users.create');
@@ -116,6 +125,16 @@ Route::middleware(['auth'])
         Route::middleware('permission:users.manage')
             ->put('/users/{user}', [UserController::class, 'update'])
             ->name('users.update');
+
+        Route::patch(
+            '/users/{user}/reset-password',
+            [UserController::class, 'resetPassword']
+        )->name('users.reset-password');
+
+        Route::delete(
+            '/users/{user}',
+            [UserController::class, 'destroy']
+        )->name('users.destroy');
     });
 
 
@@ -242,6 +261,9 @@ Route::middleware(['auth', 'organization.scope'])
             ->patch('teachers/{teacher}/create-account', [TeacherController::class, 'createAccount'])
             ->name('teachers.create-account');
 
+        Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
+            ->name('teachers.destroy');
+
 
 
 
@@ -292,6 +314,11 @@ Route::middleware(['auth', 'organization.scope'])
                 [AcademicYearController::class, 'toggleStatus']
             )
             ->name('academic-years.toggle-status');
+
+        Route::delete(
+            '/academic-years/{academicYear}',
+            [AcademicYearController::class, 'destroy']
+        )->name('academic-years.destroy');
 
 
         /*
@@ -353,6 +380,11 @@ Route::middleware(['auth', 'organization.scope'])
                 [SchoolClassController::class, 'toggleStatus']
             )
             ->name('school-classes.toggle-status');
+
+        Route::delete(
+            '/school-classes/bulk-destroy',
+            [SchoolClassController::class, 'bulkDestroy']
+        )->name('school-classes.bulk-destroy');
 
         Route::delete(
             'students/classes/{schoolClass}',

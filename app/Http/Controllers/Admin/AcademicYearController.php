@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SchoolClass;
+use App\Models\StudentAcademicYear;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,6 +18,12 @@ class AcademicYearController extends Controller
     public function index(): View
     {
         $academicYears = AcademicYear::query()
+            ->withCount([
+                'schoolClasses',
+            ])
+            ->withCount([
+                'studentAcademicYears',
+            ])
             ->orderByDesc('start_date')
             ->orderByDesc('id')
             ->paginate(15);
@@ -143,5 +151,86 @@ class AcademicYearController extends Controller
                 'success',
                 "Tahun ajaran {$academicYear->name} berhasil {$status}."
             );
+    }
+
+    /**
+     * Menghapus tahun akademik.
+     *
+     * Tahun akademik hanya boleh dihapus jika:
+     * - belum memiliki kelas
+     * - belum memiliki data siswa
+     * - masih terbuka
+     */
+    public function destroy(AcademicYear $academicYear)
+    {
+        /*
+    |--------------------------------------------------------------------------
+    | Tahun akademik yang sudah ditutup menjadi histori
+    |--------------------------------------------------------------------------
+    */
+
+        if (! $academicYear->is_active) {
+
+            return back()->with(
+                'error',
+                "Tahun akademik {$academicYear->name} sudah ditutup dan tidak dapat dihapus."
+            );
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Sudah memiliki kelas
+    |--------------------------------------------------------------------------
+    */
+
+        if (
+            SchoolClass::where(
+                'academic_year_id',
+                $academicYear->id
+            )->exists()
+        ) {
+
+            return back()->with(
+                'error',
+                "Tahun akademik {$academicYear->name} tidak dapat dihapus karena sudah memiliki kelas."
+            );
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Sudah memiliki data siswa
+    |--------------------------------------------------------------------------
+    */
+
+        if (
+            StudentAcademicYear::where(
+                'academic_year_id',
+                $academicYear->id
+            )->exists()
+        ) {
+
+            return back()->with(
+                'error',
+                "Tahun akademik {$academicYear->name} tidak dapat dihapus karena sudah memiliki data siswa."
+            );
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Hapus
+    |--------------------------------------------------------------------------
+    */
+
+        $name = $academicYear->name;
+
+        $academicYear->delete();
+
+        return back()->with(
+            'success',
+            "Tahun akademik {$name} berhasil dihapus."
+        );
     }
 }

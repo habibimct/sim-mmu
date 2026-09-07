@@ -189,103 +189,109 @@
 
 @section('js')
 
-<script>
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            function() {
 
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
+                const fromLevel =
+                    document.getElementById(
+                        'from_level'
+                    );
 
-        const fromLevel =
-            document.getElementById(
-                'from_level'
-            );
+                const toLevel =
+                    document.getElementById(
+                        'to_level'
+                    );
 
-        const toLevel =
-            document.getElementById(
-                'to_level'
-            );
+                const namingMode =
+                    document.getElementById(
+                        'naming_mode'
+                    );
 
-        const namingMode =
-            document.getElementById(
-                'naming_mode'
-            );
+                const container =
+                    document.getElementById(
+                        'level-container'
+                    );
 
-        const container =
-            document.getElementById(
-                'level-container'
-            );
+                const preview =
+                    document.getElementById(
+                        'preview'
+                    );
 
-        const preview =
-            document.getElementById(
-                'preview'
-            );
-
-        const previewList =
-            document.getElementById(
-                'preview-list'
-            );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Generate input jumlah kelas berdasarkan tingkat
-        |--------------------------------------------------------------------------
-        */
-
-        function generateLevels() {
-
-            container.innerHTML = '';
-
-            preview.classList.add(
-                'd-none'
-            );
-
-            previewList.innerHTML = '';
-
-
-            const from =
-                parseInt(
-                    fromLevel.value
-                );
-
-            const to =
-                parseInt(
-                    toLevel.value
-                );
-
-
-            if (
-                !from ||
-                !to ||
-                from > to
-            ) {
-                return;
-            }
-
-
-            for (
-                let level = from;
-                level <= to;
-                level++
-            ) {
-
-                const row =
-                    document.createElement(
-                        'div'
+                const previewList =
+                    document.getElementById(
+                        'preview-list'
                     );
 
 
-                row.className =
-                    'row align-items-end mb-3';
+                /*
+                |--------------------------------------------------------------------------
+                | Batas maksimum kelas
+                |--------------------------------------------------------------------------
+                */
+
+                const MAX_CLASSES = 26;
 
 
-                const firstName =
-                    namingMode.value === 'letter'
-                        ? level + 'A'
-                        : level + '-1';
+                /*
+                |--------------------------------------------------------------------------
+                | Generate input jumlah kelas berdasarkan tingkat
+                |--------------------------------------------------------------------------
+                */
+
+                function generateLevels() {
+
+                    container.innerHTML = '';
+
+                    preview.classList.add(
+                        'd-none'
+                    );
+
+                    previewList.innerHTML = '';
 
 
-                row.innerHTML = `
+                    const from =
+                        parseInt(
+                            fromLevel.value
+                        );
+
+                    const to =
+                        parseInt(
+                            toLevel.value
+                        );
+
+
+                    if (
+                        !from ||
+                        !to ||
+                        from > to
+                    ) {
+                        return;
+                    }
+
+
+                    for (
+                        let level = from; level <= to; level++
+                    ) {
+
+                        const row =
+                            document.createElement(
+                                'div'
+                            );
+
+
+                        row.className =
+                            'row align-items-end mb-3';
+
+
+                        const firstName =
+                            namingMode.value === 'letter' ?
+                            level + 'A' :
+                            level + '-1';
+
+
+                        row.innerHTML = `
                     <div class="col-md-6">
 
                         <label class="form-label">
@@ -298,10 +304,14 @@ document.addEventListener(
                             class="form-control class-count"
                             data-level="${level}"
                             min="1"
-                            max="26"
+                            max="${MAX_CLASSES}"
                             value="1"
                             required
                         >
+
+                        <small class="text-muted">
+                            Maksimal ${MAX_CLASSES} kelas
+                        </small>
 
                     </div>
 
@@ -315,98 +325,120 @@ document.addEventListener(
                 `;
 
 
-                container.appendChild(
-                    row
-                );
-            }
-
-
-            updatePreview();
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Update preview
-        |--------------------------------------------------------------------------
-        */
-
-        function updatePreview() {
-
-            const inputs =
-                document.querySelectorAll(
-                    '.class-count'
-                );
-
-
-            previewList.innerHTML = '';
-
-
-            let hasData = false;
-
-
-            inputs.forEach(
-                function (input) {
-
-                    const level =
-                        parseInt(
-                            input.dataset.level
+                        container.appendChild(
+                            row
                         );
-
-
-                    const count =
-                        parseInt(
-                            input.value
-                        );
-
-
-                    if (
-                        !count ||
-                        count < 1
-                    ) {
-                        return;
                     }
 
 
-                    const names = [];
+                    updatePreview();
+                }
 
 
-                    for (
-                        let i = 0;
-                        i < count;
-                        i++
-                    ) {
+                /*
+                |--------------------------------------------------------------------------
+                | Update preview
+                |--------------------------------------------------------------------------
+                */
 
-                        if (
-                            namingMode.value === 'letter'
-                        ) {
+                function updatePreview() {
 
-                            names.push(
-                                level +
-                                String.fromCharCode(
-                                    65 + i
-                                )
-                            );
-
-                        } else {
-
-                            names.push(
-                                level +
-                                '-' +
-                                (i + 1)
-                            );
-
-                        }
-                    }
-
-
-                    const div =
-                        document.createElement(
-                            'div'
+                    const inputs =
+                        document.querySelectorAll(
+                            '.class-count'
                         );
 
 
-                    div.innerHTML = `
+                    previewList.innerHTML = '';
+
+
+                    let hasData = false;
+
+
+                    inputs.forEach(
+                        function(input) {
+
+                            const level =
+                                parseInt(
+                                    input.dataset.level
+                                );
+
+
+                            let count =
+                                parseInt(
+                                    input.value
+                                );
+
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | Pastikan jumlah kelas berada dalam rentang 1–26
+                            |--------------------------------------------------------------------------
+                            */
+
+                            if (
+                                !count ||
+                                count < 1
+                            ) {
+                                return;
+                            }
+
+
+                            if (
+                                count > MAX_CLASSES
+                            ) {
+
+                                count = MAX_CLASSES;
+
+                                input.value =
+                                    MAX_CLASSES;
+                            }
+
+
+                            const names = [];
+
+
+                            for (
+                                let i = 0; i < count; i++
+                            ) {
+
+                                if (
+                                    namingMode.value === 'letter'
+                                ) {
+
+                                    /*
+                                    | A = 65
+                                    | B = 66
+                                    | ...
+                                    | Z = 90
+                                    */
+
+                                    names.push(
+                                        level +
+                                        String.fromCharCode(
+                                            65 + i
+                                        )
+                                    );
+
+                                } else {
+
+                                    names.push(
+                                        level +
+                                        '-' +
+                                        (i + 1)
+                                    );
+
+                                }
+                            }
+
+
+                            const div =
+                                document.createElement(
+                                    'div'
+                                );
+
+
+                            div.innerHTML = `
                         <strong>
                             Tingkat ${level}:
                         </strong>
@@ -414,102 +446,124 @@ document.addEventListener(
                     `;
 
 
-                    previewList.appendChild(
-                        div
+                            previewList.appendChild(
+                                div
+                            );
+
+
+                            hasData = true;
+                        }
                     );
 
 
-                    hasData = true;
+                    if (hasData) {
+
+                        preview.classList.remove(
+                            'd-none'
+                        );
+
+                    }
                 }
-            );
 
 
-            if (hasData) {
+                /*
+                |--------------------------------------------------------------------------
+                | Perubahan Tingkat Awal
+                |--------------------------------------------------------------------------
+                */
 
-                preview.classList.remove(
-                    'd-none'
+                fromLevel.addEventListener(
+                    'change',
+                    generateLevels
                 );
 
-            }
-        }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Perubahan Tingkat Akhir
+                |--------------------------------------------------------------------------
+                */
+
+                toLevel.addEventListener(
+                    'change',
+                    generateLevels
+                );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Perubahan Tingkat Awal
-        |--------------------------------------------------------------------------
-        */
+                /*
+                |--------------------------------------------------------------------------
+                | Perubahan Pola Penamaan
+                |--------------------------------------------------------------------------
+                */
 
-        fromLevel.addEventListener(
-            'change',
-            generateLevels
-        );
+                namingMode.addEventListener(
+                    'change',
+                    function() {
 
+                        generateLevels();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Perubahan Tingkat Akhir
-        |--------------------------------------------------------------------------
-        */
-
-        toLevel.addEventListener(
-            'change',
-            generateLevels
-        );
+                    }
+                );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Perubahan Pola Penamaan
-        |--------------------------------------------------------------------------
-        */
+                /*
+                |--------------------------------------------------------------------------
+                | Perubahan jumlah kelas
+                |--------------------------------------------------------------------------
+                */
 
-        namingMode.addEventListener(
-            'change',
-            function () {
+                document.addEventListener(
+                    'input',
+                    function(event) {
+
+                        if (
+                            event.target.classList.contains(
+                                'class-count'
+                            )
+                        ) {
+
+                            let value =
+                                parseInt(
+                                    event.target.value
+                                );
+
+
+                            /*
+                            | Jangan boleh lebih dari 26.
+                            */
+
+                            if (
+                                value > MAX_CLASSES
+                            ) {
+
+                                event.target.value =
+                                    MAX_CLASSES;
+                            }
+
+
+                            /*
+                            | Update preview.
+                            */
+
+                            updatePreview();
+
+                        }
+
+                    }
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Generate awal
+                |--------------------------------------------------------------------------
+                */
 
                 generateLevels();
 
             }
+
         );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Perubahan jumlah kelas
-        |--------------------------------------------------------------------------
-        */
-
-        document.addEventListener(
-            'input',
-            function (event) {
-
-                if (
-                    event.target.classList.contains(
-                        'class-count'
-                    )
-                ) {
-
-                    updatePreview();
-
-                }
-
-            }
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Generate awal
-        |--------------------------------------------------------------------------
-        */
-
-        generateLevels();
-
-    }
-
-);
-
-</script>
+    </script>
 
 @stop

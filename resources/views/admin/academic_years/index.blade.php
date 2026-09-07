@@ -140,12 +140,18 @@
 
                                 <td>
 
-                                    @can('academic_years.manage')
+                                    @can('settings.manage')
                                         {{-- Edit --}}
                                         @if ($academicYear->is_active)
                                             <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#modalEditTahunAjaran{{ $academicYear->id }}"
-                                                title="Edit Tahun Ajaran">
+                                                data-bs-target="#modalEditTahun{{ $academicYear->id }}" title="Edit">
+
+                                                <i class="bi bi-pencil"></i>
+
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-sm btn-warning" disabled
+                                                title="Tahun akademik sudah ditutup">
 
                                                 <i class="bi bi-pencil"></i>
 
@@ -161,19 +167,21 @@
                                             @method('PATCH')
 
                                             @if ($academicYear->is_active)
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Tutup Tahun Ajaran"
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    title="Tutup Tahun Akademik"
                                                     onclick="return confirm(
-                                                        'Apakah Anda yakin ingin menutup tahun ajaran {{ $academicYear->name }}?'
-                                                    )">
+                    'Tutup tahun akademik {{ $academicYear->name }}?'
+                )">
 
                                                     <i class="bi bi-lock"></i>
 
                                                 </button>
                                             @else
-                                                <button type="submit" class="btn btn-sm btn-success" title="Buka Tahun Ajaran"
+                                                <button type="submit" class="btn btn-sm btn-success"
+                                                    title="Buka Kembali Tahun Akademik"
                                                     onclick="return confirm(
-                                                        'Apakah Anda yakin ingin membuka kembali tahun ajaran {{ $academicYear->name }}?'
-                                                    )">
+                    'Buka kembali tahun akademik {{ $academicYear->name }}?'
+                )">
 
                                                     <i class="bi bi-unlock"></i>
 
@@ -181,6 +189,37 @@
                                             @endif
 
                                         </form>
+
+
+                                        {{-- Hapus --}}
+                                        @if (
+                                            $academicYear->is_active &&
+                                                $academicYear->school_classes_count == 0 &&
+                                                $academicYear->student_academic_years_count == 0)
+                                            <form action="{{ route('admin.academic-years.destroy', $academicYear) }}"
+                                                method="POST" class="d-inline"
+                                                onsubmit="return confirm(
+                                                    'Yakin ingin menghapus tahun akademik {{ $academicYear->name }}?'
+                                                )">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+
+                                                    <i class="bi bi-trash"></i>
+
+                                                </button>
+
+                                            </form>
+                                        @else
+                                            <button type="button" class="btn btn-sm btn-secondary" disabled
+                                                title="Tidak dapat dihapus karena sudah memiliki kelas/data siswa atau sudah ditutup">
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+                                        @endif
                                     @endcan
 
                                 </td>

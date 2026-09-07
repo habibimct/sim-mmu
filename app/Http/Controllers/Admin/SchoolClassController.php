@@ -810,4 +810,217 @@ class SchoolClassController extends Controller
             "Kelas {$className} berhasil dihapus."
         );
     }
+
+    /**
+     * Menghapus kelas secara massal.
+     *
+     * Kelas yang memiliki atau pernah memiliki siswa
+     * akan dilewati dan tidak dihapus.
+     */
+/**
+ * Menghapus kelas secara massal.
+ *
+ * Kelas yang memiliki atau pernah memiliki siswa
+ * akan dilewati.
+ */
+public function bulkDestroy(Request $request)
+{
+    $organizationIds =
+        Organization::accessibleIdsForUser();
+
+    $validated = $request->validate([
+        'class_ids' => [
+            'required',
+            'array',
+            'min:1',
+        ],
+
+        'class_ids.*' => [
+            'integer',
+            'exists:school_classes,id',
+        ],
+    ], [
+        'class_ids.required' =>
+            'Silakan pilih minimal satu kelas.',
+
+        'class_ids.min' =>
+            'Silakan pilih minimal satu kelas.',
+
+        'class_ids.*.exists' =>
+            'Kelas yang dipilih tidak ditemukan.',
+    ]);
+
+
+    $deleted = [];
+
+    $skipped = [];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proses setiap kelas
+    |--------------------------------------------------------------------------
+    */
+
+    DB::transaction(function () use (
+        $validated,
+        $organizationIds,
+        &$deleted,
+        &$skipped
+    ) {
+
+        foreach ($validated['class_ids'] as $classId) {
+
+            $schoolClass =
+                SchoolClass::with('academicYear')
+                    ->find($classId);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Tidak ditemukan
+            |--------------------------------------------------------------------------
+            */
+
+            if (! $schoolClass) {
+                continue;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Pastikan kelas berada dalam kewenangan user
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                ! $organizationIds->contains(
+                    $schoolClass->organization_id
+                )
+            ) {
+                continue;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Kelas Alumni
+            |--------------------------------------------------------------------------
+            */
+
+            if ($schoolClass->is_alumni) {
+
+                $skipped[] =
+                    "{$schoolClass->name} — Kelas Alumni.";
+
+                continue;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Tahun ajaran sudah ditutup
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                ! $schoolClass->academicYear ||
+                ! $schoolClass->academicYear->is_active
+            ) {
+
+                $skipped[] =
+                    "{$schoolClass->name} — Tahun ajaran sudah ditutup.";
+
+                continue;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Masih memiliki / pernah memiliki siswa
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $schoolClass
+                    ->studentAcademicYears()
+                    ->exists()
+            ) {
+
+                $skipped[] =
+                    "{$schoolClass->name} — masih memiliki atau pernah memiliki siswa.";
+
+                continue;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Hapus
+            |--------------------------------------------------------------------------
+            */
+
+            $className =
+                $schoolClass->name;
+
+            $schoolClass->delete();
+
+            $deleted[] =
+                $className;
+        }
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tidak ada yang berhasil dihapus
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        empty($deleted) &&
+        ! empty($skipped)
+    ) {
+
+        return back()
+            ->with(
+                'error',
+                'Tidak ada kelas yang dihapus karena seluruh kelas yang dipilih tidak memenuhi syarat penghapusan.'
+            )
+            ->with(
+                'bulk_delete_skipped',
+                $skipped
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Berhasil
+    |--------------------------------------------------------------------------
+    */
+
+    $message =
+        count($deleted) .
+        ' kelas berhasil dihapus.';
+
+
+    if (! empty($skipped)) {
+
+        $message .= ' ' .
+            count($skipped) .
+            ' kelas dilewati.';
+    }
+
+
+    return back()
+        ->with(
+            'success',
+            $message
+        )
+        ->with(
+            'bulk_delete_skipped',
+            $skipped
+        );
+}
 }

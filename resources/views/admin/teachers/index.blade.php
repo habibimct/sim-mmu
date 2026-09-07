@@ -2,7 +2,8 @@
 
 @section('title', 'Daftar Guru')
 
-@section('content_header') <div class="d-flex justify-content-between align-items-center">
+@section('content_header')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <h1 class="m-0">Daftar Guru</h1>
 
         <div class="d-flex gap-2">
@@ -308,6 +309,25 @@
                                         @endif
 
                                     </form>
+
+                                    @if ($teacher->attendances_count > 0)
+                                        <button type="button" class="btn btn-sm btn-secondary" disabled
+                                            title="Guru tidak dapat dihapus karena sudah memiliki riwayat absensi">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    @else
+                                        <form action="{{ route('admin.teachers.destroy', $teacher) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus guru {{ $teacher->name }}?')">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                title="Hapus Guru">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
 
                                 </td>
                             </tr>

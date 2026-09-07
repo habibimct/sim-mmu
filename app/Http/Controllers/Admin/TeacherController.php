@@ -90,6 +90,7 @@ class TeacherController extends Controller
         */
 
         $teachers = $query
+            ->withCount('attendances')
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
@@ -895,5 +896,36 @@ class TeacherController extends Controller
                 'success',
                 "Akun guru {$teacher->name} berhasil dibuat."
             );
+    }
+
+    public function destroy(Teacher $teacher)
+    {
+        // Jika guru sudah pernah memiliki data absensi,
+        // maka tidak boleh dihapus.
+        if ($teacher->attendances()->exists()) {
+            return back()->with(
+                'error',
+                "Guru {$teacher->name} tidak dapat dihapus karena sudah memiliki riwayat absensi."
+            );
+        }
+
+        $teacherName = $teacher->name;
+
+        // Hapus relasi guru dengan unit
+        $teacher->organizations()->detach();
+
+        // Jika guru memiliki akun user, lepaskan relasinya
+        if ($teacher->user) {
+            $teacher->user->update([
+                'teacher_id' => null,
+            ]);
+        }
+
+        $teacher->delete();
+
+        return back()->with(
+            'success',
+            "Guru {$teacherName} berhasil dihapus."
+        );
     }
 }

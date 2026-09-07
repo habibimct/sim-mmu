@@ -7,7 +7,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
         <div>
-            <h1 class="mb-1">Student Attendance</h1>
+            <h1 class="mb-1">Absensi Siswa</h1>
             <p class="text-muted mb-0">
                 Rekap kehadiran siswa berdasarkan minggu, mata pelajaran, dan pertemuan.
             </p>
@@ -52,7 +52,7 @@
 
                     <h5 class="mb-0 font-weight-bold">
                         <i class="bi bi-calendar3 me-1"></i>
-                        Student Attendance Mingguan
+                        Absensi Siswa
                     </h5>
 
                     <span class="text-muted small">

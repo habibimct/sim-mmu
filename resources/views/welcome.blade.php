@@ -579,31 +579,6 @@
                         </svg>
                     </a>
 
-
-                    {{-- =================================================
-                    REGISTRATION
-                    ================================================== --}}
-
-                    <div class="mt-4 text-center">
-
-                        <p class="text-sm text-slate-500">
-
-                            Belum memiliki akun?
-
-                            <a href="{{ route('register') }}"
-                                class="
-                                    font-semibold
-                                    text-blue-600
-                                    transition
-                                    hover:text-blue-800
-                                ">
-                                Registrasi
-                            </a>
-
-                        </p>
-
-                    </div>
-
                 </div>
 
             </div>
