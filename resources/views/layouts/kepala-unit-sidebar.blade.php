@@ -375,52 +375,76 @@
                    border-l border-white/20
                    space-y-1">
 
-            <div
+            <a href="{{ route('kepala-unit.teachers.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2 rounded-lg
-                       text-xs text-white/60">
-
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                        px-3 py-2
+                        rounded-lg
+                        text-sm
+                        transition
+                        {{ request()->routeIs('kepala-unit.teachers.*')
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                <span
+                    class="w-1.5 h-1.5
+               rounded-full
+               {{ request()->routeIs('kepala-unit.teachers.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Guru
+            </a>
 
-            </div>
 
-
-            <div
+            <a href="{{ route('kepala-unit.students.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2 rounded-lg
-                       text-xs text-white/60">
-
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                        px-3 py-2
+                        rounded-lg
+                        text-sm
+                        transition
+                        {{ request()->routeIs('kepala-unit.students.*')
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                <span
+                    class="w-1.5 h-1.5
+                        rounded-full
+                        {{ request()->routeIs('kepala-unit.students.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Siswa
+            </a>
 
-            </div>
 
-
-            <div
+            <a href="{{ route('kepala-unit.attendances.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2 rounded-lg
-                       text-xs text-white/60">
-
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                        px-3 py-2
+                        rounded-lg
+                        text-sm
+                        transition
+                        {{ request()->routeIs('kepala-unit.attendances.*')
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                <span
+                    class="w-1.5 h-1.5
+                        rounded-full
+                        {{ request()->routeIs('kepala-unit.attendances.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Absensi Guru
+            </a>
 
-            </div>
 
-
-            <div
+            <a href="{{ route('kepala-unit.student-attendances.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2 rounded-lg
-                       text-xs text-white/60">
-
-                <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                        px-3 py-2
+                        rounded-lg
+                        text-sm
+                        transition
+                        {{ request()->routeIs('kepala-unit.student-attendances.*')
+                            ? 'bg-white/10 text-white'
+                            : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                <span
+                    class="w-1.5 h-1.5
+                        rounded-full
+                        {{ request()->routeIs('kepala-unit.student-attendances.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Absensi Siswa
-
-            </div>
+            </a>
 
         </div>
 
@@ -486,7 +510,7 @@
 
 
         {{-- Submenu Laporan --}}
-        <div x-show="openReports" 
+        <div x-show="openReports"
             class="mt-1 ml-5 pl-7
                    border-l border-white/20
                    space-y-1">

@@ -335,7 +335,7 @@
 
                                 <tr>
 
-                                    <td colspan="7" class="text-center text-muted py-4">
+                                    <td colspan="9" class="text-center text-muted py-4">
 
                                         <i class="bi bi-diagram-3 fs-3 d-block mb-2"></i>
 

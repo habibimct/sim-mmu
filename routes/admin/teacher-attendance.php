@@ -17,4 +17,9 @@ Route::middleware(['auth'])
             TeacherAttendanceController::class,
             'filterOptions',
         ])->name('filter-options');
+
+        Route::get(
+            '/{attendance}/detail',
+            [TeacherAttendanceController::class, 'detail']
+        )->name('detail');
     });

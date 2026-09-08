@@ -45,8 +45,8 @@ class RolePermissionSeeder extends Seeder
                 'classes.manage',
 
                 // Mata Pelajaran
-                'subjects.view',
-                'subjects.manage',
+                // 'subjects.view',
+                // 'subjects.manage',
 
                 'attendance.view',
                 'bills.view',

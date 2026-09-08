@@ -18,35 +18,44 @@ class SubjectController extends Controller
         $user = $request->user();
 
         /*
-        |--------------------------------------------------------------------------
-        | Organisasi yang boleh dikelola user
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Query mata pelajaran
+    |--------------------------------------------------------------------------
+    */
 
-        $organizationIds = $user
-            ->organizations()
-            ->where('is_active', true)
-            ->pluck('organizations.id');
+        $query = Subject::query()
+            ->with('organization');
 
 
         /*
-        |--------------------------------------------------------------------------
-        | Query mata pelajaran
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Hak akses melihat
+    |--------------------------------------------------------------------------
+    |
+    | Admin Induk dapat melihat seluruh mata pelajaran.
+    | Admin Unit hanya dapat melihat mata pelajaran unitnya.
+    |
+    */
 
-        $query = Subject::query()
-            ->whereIn(
+        if (!$user->hasRole('admin_sistem')) {
+
+            $organizationIds = $user
+                ->organizations()
+                ->where('is_active', true)
+                ->pluck('organizations.id');
+
+            $query->whereIn(
                 'organization_id',
                 $organizationIds
             );
+        }
 
 
         /*
-        |--------------------------------------------------------------------------
-        | Pencarian
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Pencarian
+    |--------------------------------------------------------------------------
+    */
 
         if ($request->filled('search')) {
 
@@ -61,21 +70,20 @@ class SubjectController extends Controller
                     'like',
                     "%{$search}%"
                 )
-                ->orWhere(
-                    'name',
-                    'like',
-                    "%{$search}%"
-                );
-
+                    ->orWhere(
+                        'name',
+                        'like',
+                        "%{$search}%"
+                    );
             });
         }
 
 
         /*
-        |--------------------------------------------------------------------------
-        | Filter status
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Filter status
+    |--------------------------------------------------------------------------
+    */
 
         if ($request->status === 'active') {
 
@@ -83,7 +91,6 @@ class SubjectController extends Controller
                 'is_active',
                 true
             );
-
         } elseif ($request->status === 'inactive') {
 
             $query->where(
@@ -94,10 +101,10 @@ class SubjectController extends Controller
 
 
         /*
-        |--------------------------------------------------------------------------
-        | Data
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Data
+    |--------------------------------------------------------------------------
+    */
 
         $subjects = $query
             ->orderBy('name')
@@ -213,7 +220,7 @@ class SubjectController extends Controller
             return back()
                 ->withErrors([
                     'code' =>
-                        'Kode mata pelajaran sudah digunakan.',
+                    'Kode mata pelajaran sudah digunakan.',
                 ])
                 ->withInput()
                 ->with(
@@ -232,19 +239,19 @@ class SubjectController extends Controller
         Subject::create([
 
             'organization_id' =>
-                $organizationId,
+            $organizationId,
 
             'code' =>
-                $code,
+            $code,
 
             'name' =>
-                $name,
+            $name,
 
             'is_active' =>
-                $request->boolean(
-                    'is_active',
-                    true
-                ),
+            $request->boolean(
+                'is_active',
+                true
+            ),
 
         ]);
 
@@ -362,7 +369,7 @@ class SubjectController extends Controller
             return back()
                 ->withErrors([
                     'code' =>
-                        'Kode mata pelajaran sudah digunakan.',
+                    'Kode mata pelajaran sudah digunakan.',
                 ])
                 ->withInput()
                 ->with(
@@ -381,16 +388,16 @@ class SubjectController extends Controller
         $subject->update([
 
             'code' =>
-                $code,
+            $code,
 
             'name' =>
-                $name,
+            $name,
 
             'is_active' =>
-                $request->boolean(
-                    'is_active',
-                    false
-                ),
+            $request->boolean(
+                'is_active',
+                false
+            ),
 
         ]);
 

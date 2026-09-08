@@ -210,6 +210,8 @@ class TeacherAttendanceController extends Controller
                 'teachingAssignment.teacher',
                 'teachingAssignment.schoolClass',
                 'teachingAssignment.subject',
+
+                'details.studentAcademicYear.student',
             ])
             ->whereBetween(
                 'date',
@@ -425,6 +427,51 @@ class TeacherAttendanceController extends Controller
         return response()->json([
             'classes' => $classes,
             'subjects' => $subjects,
+        ]);
+    }
+
+    public function detail(Attendance $attendance)
+    {
+        $attendance->load([
+            'teachingAssignment.organization',
+            'teachingAssignment.teacher',
+            'teachingAssignment.schoolClass',
+            'teachingAssignment.subject',
+            'details.studentAcademicYear.student',
+        ]);
+
+        $students = $attendance->details
+            ->map(function ($detail) {
+                return [
+                    'nis' => $detail->studentAcademicYear?->student?->nis,
+                    'name' => $detail->studentAcademicYear?->student?->name,
+                    'status' => $detail->status,
+                    'notes' => $detail->notes,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'attendance' => [
+                'id' => $attendance->id,
+                'date' => $attendance->date?->format('d/m/Y'),
+                'meeting_number' => $attendance->meeting_number,
+                'time' => $attendance->created_at?->format('H:i'),
+            ],
+
+            'teacher' =>
+            $attendance->teachingAssignment?->teacher?->name,
+
+            'organization' =>
+            $attendance->teachingAssignment?->organization?->name,
+
+            'class' =>
+            $attendance->teachingAssignment?->schoolClass?->name,
+
+            'subject' =>
+            $attendance->teachingAssignment?->subject?->name,
+
+            'students' => $students,
         ]);
     }
 }

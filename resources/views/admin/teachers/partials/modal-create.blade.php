@@ -1,14 +1,11 @@
 {{-- Modal Tambah Guru --}}
-<div class="modal fade {{ old('_form') === 'create' && $errors->any() ? 'show' : '' }}"
+<div class="modal fade"
     id="modalTambahGuru"
     tabindex="-1"
     aria-labelledby="modalTambahGuruLabel"
-    aria-hidden="{{ old('_form') === 'create' && $errors->any() ? 'false' : 'true' }}"
-    @if (old('_form') === 'create' && $errors->any())
-        style="display: block;"
-    @endif>
+    aria-hidden="true">
 
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <div class="modal-content">
 
@@ -34,7 +31,7 @@
 
                 <input type="hidden" name="_form" value="create">
 
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
 
                     {{-- Organisasi / Unit --}}
                     <div class="mb-3">
@@ -320,6 +317,3 @@
 
 </div>
 
-@if (old('_form') === 'create' && $errors->any())
-    <div class="modal-backdrop fade show"></div>
-@endif

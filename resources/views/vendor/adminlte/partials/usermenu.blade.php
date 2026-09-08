@@ -1,16 +1,15 @@
 @php
     $user = auth()->user();
     $name = $user->name ?? ($user->email ?? 'Guest');
-    $avatar = ! empty($user?->profile_photo_url)
-        ? $user->profile_photo_url
-        : asset('images/Load.jpg');
+    $avatar = !empty($user?->profile_photo_url) ? $user->profile_photo_url : asset('images/Load.jpg');
     $memberSince = $user?->created_at ? $user->created_at->format('M. Y') : null;
     $showImage = (bool) config('adminlte.usermenu_image');
     $profileUrl = config('adminlte.usermenu_profile_url');
 @endphp
 <li class="nav-item dropdown user-menu">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-        <img src="{{ $avatar }}" class="user-image rounded-circle shadow" alt="{{ $name }}" width="30" height="30">
+        <img src="{{ $avatar }}" class="user-image rounded-circle shadow" alt="{{ $name }}" width="30"
+            height="30">
         <span class="d-none d-md-inline">{{ $name }}</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
@@ -21,7 +20,8 @@
             <li class="user-header {{ config('adminlte.usermenu_header_class', 'text-bg-primary') }}"
                 @unless ($showImage) style="min-height: 0" @endunless>
                 @if ($showImage)
-                    <img src="{{ $avatar }}" class="rounded-circle shadow" alt="{{ $name }}" width="90" height="90">
+                    <img src="{{ $avatar }}" class="rounded-circle shadow" alt="{{ $name }}"
+                        width="90" height="90">
                 @endif
                 <p>
                     {{ $name }}
@@ -40,17 +40,19 @@
             </div>
         </li> --}}
         {{-- Footer --}}
-        <li class="user-footer">
-            @if ($profileUrl)
-                <a href="{{ url($profileUrl) }}" class="btn btn-outline-secondary">
-                    {{ __('adminlte.profile') }}
-                </a>
-            @endif
-            <a href="#" class="btn btn-outline-danger {{ $profileUrl ? 'float-end' : 'w-100' }}"
-               onclick="event.preventDefault(); document.getElementById('adminlte-logout-form').submit();">
+        <li class="user-footer d-flex gap-2">
+            <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary flex-fill">
+                {{ __('adminlte.profile') }}
+            </a>
+
+            <a href="#" class="btn btn-outline-danger flex-fill"
+                onclick="event.preventDefault(); document.getElementById('adminlte-logout-form').submit();">
                 {{ __('adminlte.sign_out') }}
             </a>
-            <form id="adminlte-logout-form" action="{{ url('logout') }}" method="POST" class="d-none">@csrf</form>
+
+            <form id="adminlte-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </li>
     </ul>
 </li>

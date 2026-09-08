@@ -1,29 +1,22 @@
-<div
-    x-data="{
-        openFinance: {{ request()->routeIs('ketua-induk.finance.*') ? 'true' : 'false' }},
-        openOrganization: {{ request()->routeIs('ketua-induk.organization.*') ? 'true' : 'false' }},
-        openReports: {{ request()->routeIs('ketua-induk.reports.*') ? 'true' : 'false' }}
-    }"
+<div x-data="{
+    openFinance: {{ request()->routeIs('ketua-induk.finance.*') ? 'true' : 'false' }},
+    openOrganization: {{ request()->routeIs('ketua-induk.organization.*') ? 'true' : 'false' }},
+    openReports: {{ request()->routeIs('ketua-induk.reports.*') ? 'true' : 'false' }}
+}"
     class="h-full flex flex-col
            bg-blue-950
            text-white
-           shadow-2xl"
->
+           shadow-2xl">
 
     {{-- =========================================================
     BRAND
     ========================================================== --}}
 
-    <div
-        class="h-16 px-5
+    <div class="h-16 px-5
                border-b border-white/20
-               flex items-center"
-    >
+               flex items-center">
 
-        <a
-            href="{{ route('ketua-induk.dashboard') }}"
-            class="flex items-center gap-3 w-full"
-        >
+        <a href="{{ route('ketua-induk.dashboard') }}" class="flex items-center gap-3 w-full">
 
             {{-- Logo --}}
 
@@ -34,14 +27,11 @@
                        border border-white/30
                        backdrop-blur-sm
                        flex items-center justify-center
-                       shadow-sm"
-            >
+                       shadow-sm">
 
-                <span
-                    class="text-white
+                <span class="text-white
                            text-lg
-                           font-bold"
-                >
+                           font-bold">
                     P
                 </span>
 
@@ -52,18 +42,14 @@
 
             <div class="leading-tight">
 
-                <div
-                    class="font-bold
+                <div class="font-bold
                            text-white
-                           tracking-tight"
-                >
+                           tracking-tight">
                     PMUB
                 </div>
 
-                <div
-                    class="text-[11px]
-                           text-white/70"
-                >
+                <div class="text-[11px]
+                           text-white/70">
                     Ketua Induk
                 </div>
 
@@ -86,8 +72,7 @@
                    rounded-2xl
                    bg-white/10
                    border border-white/10
-                   backdrop-blur-sm"
-        >
+                   backdrop-blur-sm">
 
             {{-- Avatar --}}
 
@@ -97,21 +82,12 @@
                        rounded-full
                        bg-white/20
                        border border-white/30
-                       flex items-center justify-center"
-            >
+                       flex items-center justify-center">
 
-                <span
-                    class="text-sm
+                <span class="text-sm
                            font-bold
-                           text-white"
-                >
-                    {{ strtoupper(
-                        substr(
-                            Auth::user()->name,
-                            0,
-                            1
-                        )
-                    ) }}
+                           text-white">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </span>
 
             </div>
@@ -125,16 +101,13 @@
                     class="text-sm
                            font-semibold
                            text-white
-                           truncate"
-                >
+                           truncate">
                     {{ Auth::user()->name }}
                 </p>
 
-                <p
-                    class="text-xs
+                <p class="text-xs
                            text-white/60
-                           truncate"
-                >
+                           truncate">
                     Ketua Induk
                 </p>
 
@@ -149,12 +122,10 @@
     NAVIGATION
     ========================================================== --}}
 
-    <nav
-        class="flex-1
+    <nav class="flex-1
                px-3
                pb-4
-               overflow-y-auto"
-    >
+               overflow-y-auto">
 
         {{-- =====================================================
         UTAMA
@@ -168,28 +139,23 @@
                    font-bold
                    uppercase
                    tracking-[0.18em]
-                   text-white/50"
-        >
+                   text-white/50">
             Utama
         </p>
 
 
         {{-- Dashboard --}}
 
-        <a
-            href="{{ route('ketua-induk.dashboard') }}"
+        <a href="{{ route('ketua-induk.dashboard') }}"
             class="group
                    flex items-center gap-3
                    px-3 py-2.5
                    mb-1
                    rounded-xl
                    transition-all duration-200
-                   {{
-                       request()->routeIs('ketua-induk.dashboard')
-                           ? 'bg-white/20 text-white shadow-lg ring-1 ring-white/20'
-                           : 'text-white/80 hover:bg-white/10 hover:text-white'
-                   }}"
-        >
+                   {{ request()->routeIs('ketua-induk.dashboard')
+                       ? 'bg-white/20 text-white shadow-lg ring-1 ring-white/20'
+                       : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
 
             <span
                 class="w-9 h-9
@@ -197,26 +163,14 @@
                        rounded-lg
                        flex items-center justify-center
                        transition
-                       {{
-                           request()->routeIs('ketua-induk.dashboard')
-                               ? 'bg-white/20 text-white'
-                               : 'bg-white/10 text-white/80 group-hover:bg-white/20'
-                       }}"
-            >
+                       {{ request()->routeIs('ketua-induk.dashboard')
+                           ? 'bg-white/20 text-white'
+                           : 'bg-white/10 text-white/80 group-hover:bg-white/20' }}">
 
-                <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.8"
-                        d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5M9 21v-6h6v6"
-                    />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5M9 21v-6h6v6" />
 
                 </svg>
 
@@ -236,27 +190,21 @@
 
         @php
 
-            $unreadCount = Auth::user()
-                ->unreadNotifications()
-                ->count();
+            $unreadCount = Auth::user()->unreadNotifications()->count();
 
         @endphp
 
 
-        <a
-            href="{{ route('ketua-induk.notifications.index') }}"
+        <a href="{{ route('ketua-induk.notifications.index') }}"
             class="group
                    flex items-center justify-between
                    px-3 py-2.5
                    mb-1
                    rounded-xl
                    transition-all duration-200
-                   {{
-                       request()->routeIs('ketua-induk.notifications.*')
-                           ? 'bg-white/20 text-white shadow-lg ring-1 ring-white/20'
-                           : 'text-white/80 hover:bg-white/10 hover:text-white'
-                   }}"
-        >
+                   {{ request()->routeIs('ketua-induk.notifications.*')
+                       ? 'bg-white/20 text-white shadow-lg ring-1 ring-white/20'
+                       : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
 
             <div class="flex items-center gap-3">
 
@@ -266,26 +214,14 @@
                            rounded-lg
                            flex items-center justify-center
                            transition
-                           {{
-                               request()->routeIs('ketua-induk.notifications.*')
-                                   ? 'bg-white/20 text-white'
-                                   : 'bg-white/10 text-white/80 group-hover:bg-white/20'
-                           }}"
-                >
+                           {{ request()->routeIs('ketua-induk.notifications.*')
+                               ? 'bg-white/20 text-white'
+                               : 'bg-white/10 text-white/80 group-hover:bg-white/20' }}">
 
-                    <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M15 17h5l-1.5-1.8a2 2 0 0 1-.5-1.3V10a6 6 0 0 0-12 0v3.9a2 2 0 0 1-.5 1.3L4 17h5m6 0a3 3 0 0 1-6 0m6 0H9"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M15 17h5l-1.5-1.8a2 2 0 0 1-.5-1.3V10a6 6 0 0 0-12 0v3.9a2 2 0 0 1-.5 1.3L4 17h5m6 0a3 3 0 0 1-6 0m6 0H9" />
 
                     </svg>
 
@@ -300,7 +236,6 @@
 
 
             @if ($unreadCount > 0)
-
                 <span
                     class="min-w-5 h-5
                            px-1.5
@@ -312,14 +247,9 @@
                            font-bold
                            bg-red-500
                            text-white
-                           shadow-sm"
-                >
-                    {{ $unreadCount > 99
-                        ? '99+'
-                        : $unreadCount
-                    }}
+                           shadow-sm">
+                    {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                 </span>
-
             @endif
 
         </a>
@@ -337,15 +267,12 @@
                    font-bold
                    uppercase
                    tracking-[0.18em]
-                   text-white/50"
-        >
+                   text-white/50">
             Keuangan
         </p>
 
 
-        <button
-            type="button"
-            @click="openFinance = !openFinance"
+        <button type="button" @click="openFinance = !openFinance"
             class="w-full
                    group
                    flex items-center justify-between
@@ -354,8 +281,7 @@
                    text-white/80
                    hover:bg-white/10
                    hover:text-white
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
             <div class="flex items-center gap-3">
 
@@ -366,22 +292,12 @@
                            bg-white/10
                            text-white/80
                            flex items-center justify-center
-                           group-hover:bg-white/20"
-                >
+                           group-hover:bg-white/20">
 
-                    <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M3 7h18M5 7v12h14V7M8 11h8M8 15h5M7 4h10"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M3 7h18M5 7v12h14V7M8 11h8M8 15h5M7 4h10" />
 
                     </svg>
 
@@ -395,23 +311,14 @@
             </div>
 
 
-            <svg
-                class="w-4 h-4
+            <svg class="w-4 h-4
                        transition-transform duration-200"
                 :class="{
                     'rotate-180': openFinance
-                }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
+                }" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
 
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                    d="m6 9 6 6 6-6"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m6 9 6 6 6-6" />
 
             </svg>
 
@@ -420,40 +327,29 @@
 
         {{-- Submenu Keuangan --}}
 
-        <div
-            x-show="openFinance"
+        <div x-show="openFinance"
             class="mt-1
                    ml-5
                    pl-7
                    border-l border-white/20
-                   space-y-1"
-        >
+                   space-y-1">
 
             {{-- Keuangan --}}
 
-            <a
-                href="{{ route('ketua-induk.finance.index') }}"
+            <a href="{{ route('ketua-induk.finance.index') }}"
                 class="flex items-center gap-2
                        px-3 py-2
                        rounded-lg
                        text-xs
                        transition
-                       {{
-                           request()->routeIs('ketua-induk.finance.*')
-                               ? 'bg-white/15 text-white'
-                               : 'text-white/60 hover:bg-white/10 hover:text-white'
-                       }}"
-            >
+                       {{ request()->routeIs('ketua-induk.finance.*')
+                           ? 'bg-white/15 text-white'
+                           : 'text-white/60 hover:bg-white/10 hover:text-white' }}">
 
                 <span
                     class="w-1.5 h-1.5
                            rounded-full
-                           {{
-                               request()->routeIs('ketua-induk.finance.*')
-                                   ? 'bg-white'
-                                   : 'bg-white/40'
-                           }}"
-                ></span>
+                           {{ request()->routeIs('ketua-induk.finance.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Ringkasan Keuangan
 
@@ -474,15 +370,12 @@
                    font-bold
                    uppercase
                    tracking-[0.18em]
-                   text-white/50"
-        >
+                   text-white/50">
             Organisasi
         </p>
 
 
-        <button
-            type="button"
-            @click="openOrganization = !openOrganization"
+        <button type="button" @click="openOrganization = !openOrganization"
             class="w-full
                    group
                    flex items-center justify-between
@@ -491,8 +384,7 @@
                    text-white/80
                    hover:bg-white/10
                    hover:text-white
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
             <div class="flex items-center gap-3">
 
@@ -503,22 +395,12 @@
                            bg-white/10
                            text-white/80
                            flex items-center justify-center
-                           group-hover:bg-white/20"
-                >
+                           group-hover:bg-white/20">
 
-                    <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M4 21V5l8-3 8 3v16M8 21v-4h8v4M8 8h2M14 8h2M8 12h2M14 12h2"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M4 21V5l8-3 8 3v16M8 21v-4h8v4M8 8h2M14 8h2M8 12h2M14 12h2" />
 
                     </svg>
 
@@ -532,23 +414,14 @@
             </div>
 
 
-            <svg
-                class="w-4 h-4
+            <svg class="w-4 h-4
                        transition-transform duration-200"
                 :class="{
                     'rotate-180': openOrganization
-                }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
+                }" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
 
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                    d="m6 9 6 6 6-6"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m6 9 6 6 6-6" />
 
             </svg>
 
@@ -557,98 +430,51 @@
 
         {{-- Submenu Organisasi --}}
 
-        <div
-            x-show="openOrganization"
+        <div x-show="openOrganization"
             class="mt-1
                    ml-5
                    pl-7
                    border-l border-white/20
-                   space-y-1"
-        >
+                   space-y-1">
 
             {{-- Guru --}}
 
-            <div
+            <a href="{{ route('ketua-induk.teachers.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2
-                       rounded-lg
-                       text-xs
-                       text-white/60"
-            >
-
-                <span
-                    class="w-1.5 h-1.5
-                           rounded-full
-                           bg-white/40"
-                ></span>
+                px-3 py-2
+                rounded-lg
+                text-sm
+                transition
+                {{ request()->routeIs('ketua-induk.teachers.*')
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                        <span
+                            class="w-1.5 h-1.5
+                    rounded-full
+                    {{ request()->routeIs('ketua-induk.teachers.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Guru
-
-            </div>
+            </a>
 
 
             {{-- Siswa --}}
 
-            <div
+            <a href="{{ route('ketua-induk.students.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2
-                       rounded-lg
-                       text-xs
-                       text-white/60"
-            >
-
-                <span
-                    class="w-1.5 h-1.5
-                           rounded-full
-                           bg-white/40"
-                ></span>
+                px-3 py-2
+                rounded-lg
+                text-sm
+                transition
+                {{ request()->routeIs('ketua-induk.students.*')
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                        <span
+                            class="w-1.5 h-1.5
+                    rounded-full
+                    {{ request()->routeIs('ketua-induk.students.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Siswa
-
-            </div>
-
-
-            {{-- Absensi Guru --}}
-
-            <div
-                class="flex items-center gap-2
-                       px-3 py-2
-                       rounded-lg
-                       text-xs
-                       text-white/60"
-            >
-
-                <span
-                    class="w-1.5 h-1.5
-                           rounded-full
-                           bg-white/40"
-                ></span>
-
-                Absensi Guru
-
-            </div>
-
-
-            {{-- Absensi Siswa --}}
-
-            <div
-                class="flex items-center gap-2
-                       px-3 py-2
-                       rounded-lg
-                       text-xs
-                       text-white/60"
-            >
-
-                <span
-                    class="w-1.5 h-1.5
-                           rounded-full
-                           bg-white/40"
-                ></span>
-
-                Absensi Siswa
-
-            </div>
-
+            </a>
         </div>
 
 
@@ -664,15 +490,12 @@
                    font-bold
                    uppercase
                    tracking-[0.18em]
-                   text-white/50"
-        >
+                   text-white/50">
             Laporan
         </p>
 
 
-        <button
-            type="button"
-            @click="openReports = !openReports"
+        <button type="button" @click="openReports = !openReports"
             class="w-full
                    group
                    flex items-center justify-between
@@ -681,8 +504,7 @@
                    text-white/80
                    hover:bg-white/10
                    hover:text-white
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
             <div class="flex items-center gap-3">
 
@@ -693,22 +515,12 @@
                            bg-white/10
                            text-white/80
                            flex items-center justify-center
-                           group-hover:bg-white/20"
-                >
+                           group-hover:bg-white/20">
 
-                    <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M4 19V5M4 19h16M8 16v-5M12 16V7M16 16v-3"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M4 19V5M4 19h16M8 16v-5M12 16V7M16 16v-3" />
 
                     </svg>
 
@@ -722,23 +534,14 @@
             </div>
 
 
-            <svg
-                class="w-4 h-4
+            <svg class="w-4 h-4
                        transition-transform duration-200"
                 :class="{
                     'rotate-180': openReports
-                }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
+                }" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
 
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                    d="m6 9 6 6 6-6"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m6 9 6 6 6-6" />
 
             </svg>
 
@@ -747,14 +550,12 @@
 
         {{-- Submenu Laporan --}}
 
-        <div
-            x-show="openReports"
+        <div x-show="openReports"
             class="mt-1
                    ml-5
                    pl-7
                    border-l border-white/20
-                   space-y-1"
-        >
+                   space-y-1">
 
             {{-- Data Siswa --}}
 
@@ -763,14 +564,12 @@
                        px-3 py-2
                        rounded-lg
                        text-xs
-                       text-white/60"
-            >
+                       text-white/60">
 
                 <span
                     class="w-1.5 h-1.5
                            rounded-full
-                           bg-white/40"
-                ></span>
+                           bg-white/40"></span>
 
                 Data Siswa
 
@@ -784,14 +583,12 @@
                        px-3 py-2
                        rounded-lg
                        text-xs
-                       text-white/60"
-            >
+                       text-white/60">
 
                 <span
                     class="w-1.5 h-1.5
                            rounded-full
-                           bg-white/40"
-                ></span>
+                           bg-white/40"></span>
 
                 Absensi
 
@@ -805,14 +602,12 @@
                        px-3 py-2
                        rounded-lg
                        text-xs
-                       text-white/60"
-            >
+                       text-white/60">
 
                 <span
                     class="w-1.5 h-1.5
                            rounded-full
-                           bg-white/40"
-                ></span>
+                           bg-white/40"></span>
 
                 Keuangan
 
@@ -827,16 +622,13 @@
     BOTTOM
     ========================================================== --}}
 
-    <div
-        class="border-t
+    <div class="border-t
                border-white/20
-               p-3"
-    >
+               p-3">
 
         {{-- Profil --}}
 
-        <a
-            href="{{ route('profile.edit') }}"
+        <a href="{{ route('profile.edit') }}"
             class="group
                    flex items-center gap-3
                    px-3 py-2.5
@@ -845,8 +637,7 @@
                    text-white/80
                    hover:bg-white/10
                    hover:text-white
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
             <span
                 class="w-9 h-9
@@ -854,22 +645,12 @@
                        bg-white/10
                        text-white/80
                        flex items-center justify-center
-                       group-hover:bg-white/20"
-            >
+                       group-hover:bg-white/20">
 
-                <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.8"
-                        d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-                    />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
 
                 </svg>
 
@@ -885,16 +666,11 @@
 
         {{-- Logout --}}
 
-        <form
-            method="POST"
-            action="{{ route('logout') }}"
-            class="mt-1"
-        >
+        <form method="POST" action="{{ route('logout') }}" class="mt-1">
 
             @csrf
 
-            <button
-                type="submit"
+            <button type="submit"
                 class="group
                        w-full
                        flex items-center gap-3
@@ -904,8 +680,7 @@
                        text-white/70
                        hover:bg-red-500/20
                        hover:text-red-100
-                       transition-all duration-200"
-            >
+                       transition-all duration-200">
 
                 <span
                     class="w-9 h-9
@@ -914,22 +689,12 @@
                            text-white/70
                            flex items-center justify-center
                            group-hover:bg-red-500/20
-                           group-hover:text-red-100"
-                >
+                           group-hover:text-red-100">
 
-                    <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M10 17l5-5-5-5M15 12H3M21 19V5a2 2 0 0 0-2-2h-5"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M10 17l5-5-5-5M15 12H3M21 19V5a2 2 0 0 0-2-2h-5" />
 
                     </svg>
 

@@ -316,6 +316,13 @@ return [
         ],
 
         [
+            'text' => 'Penugasan Mengajar',
+            'url' => 'admin/teaching-assignments',
+            'icon' => 'bi bi-person-workspace',
+            'can' => 'subjects.view',
+        ],
+
+        [
             'text' => 'Absensi',
             'icon' => 'bi bi-calendar-check',
             'can' => 'attendance.view',
