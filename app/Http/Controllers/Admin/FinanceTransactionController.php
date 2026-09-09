@@ -936,6 +936,7 @@ class FinanceTransactionController extends Controller
                     $query->whereIn('code', [
                         'keuangan_induk',
                         'ketua_induk',
+                        'pengurus_induk',
                     ]);
                 })
                 ->whereHas('organizations', function ($query) use ($transaction) {

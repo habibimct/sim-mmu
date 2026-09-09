@@ -23,7 +23,9 @@ Route::middleware([
         Route::get(
             '/dashboard',
             [DashboardController::class, 'index']
-        )->name('dashboard');
+        )
+            ->middleware('permission:dashboard.view')
+            ->name('dashboard');
 
 
         /*
@@ -35,7 +37,9 @@ Route::middleware([
         Route::get(
             '/keuangan',
             [FinanceController::class, 'index']
-        )->name('finance.index');
+        )
+            ->middleware('permission:finance.view')
+            ->name('finance.index');
 
 
         /*
@@ -47,15 +51,17 @@ Route::middleware([
         Route::get(
             '/notifikasi',
             [NotificationController::class, 'index']
-        )->name('notifications.index');
-
-
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.index');
 
 
         Route::get(
             '/notifikasi/{notification}/bukti-setoran',
             [NotificationController::class, 'depositProof']
-        )->name('notifications.deposit.proof');
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.deposit.proof');
 
 
         /*
@@ -67,7 +73,9 @@ Route::middleware([
         Route::get(
             '/guru',
             [TeacherController::class, 'index']
-        )->name('teachers.index');
+        )
+            ->middleware('permission:teachers.view')
+            ->name('teachers.index');
 
 
         /*
@@ -79,5 +87,8 @@ Route::middleware([
         Route::get(
             '/siswa',
             [StudentController::class, 'index']
-        )->name('students.index');
+        )
+            ->middleware('permission:students.view')
+            ->name('students.index');
+
     });

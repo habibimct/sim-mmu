@@ -20,8 +20,7 @@ TOPBAR
 
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 
         </svg>
 
@@ -32,11 +31,14 @@ TOPBAR
 
     <div class="hidden sm:block">
 
-        <h1
-            class="text-lg
-                    font-semibold
-                    text-gray-800">
-            Ketua Induk
+        <h1 class="text-lg font-semibold text-gray-800">
+
+            @if (Auth::user()->hasRole('ketua_induk'))
+                Ketua PMUB
+            @elseif (Auth::user()->hasRole('pengurus_induk'))
+                Pengurus PMUB
+            @endif
+
         </h1>
 
     </div>
@@ -131,8 +133,7 @@ DROPDOWN
 
                     <div>
 
-                        <h3
-                            class="text-sm
+                        <h3 class="text-sm
                     font-semibold
                     text-gray-800">
                             Notifikasi
@@ -219,10 +220,9 @@ NOTIFICATION LIST
 
                                 <div class="mt-0.5 shrink-0">
 
-                                    <svg class="h-5 w-5 {{ $icon }}" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="1.8"
+                                    <svg class="h-5 w-5 {{ $icon }}" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                                             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                     </svg>
 
@@ -290,8 +290,7 @@ NOTIFICATION LIST
 
                 {{-- Footer --}}
 
-                <div
-                    class="border-t
+                <div class="border-t
                     border-gray-100
                     bg-gray-50">
 
@@ -334,10 +333,6 @@ NOTIFICATION LIST
                         {{ Auth::user()->name }}
                     </p>
 
-                    <p class="text-xs
-            text-gray-500">
-                        Ketua Induk
-                    </p>
 
                 </div>
 
@@ -363,11 +358,9 @@ NOTIFICATION LIST
                 <svg class="w-4 h-4
         text-gray-400
         transition-transform"
-                    :class="{ 'rotate-180': userMenuOpen }" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                    :class="{ 'rotate-180': userMenuOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m6 9 6 6 6-6" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
 
                 </svg>
 

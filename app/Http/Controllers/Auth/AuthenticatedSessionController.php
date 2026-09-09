@@ -58,7 +58,10 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        if ($user->hasRole('ketua_induk')) {
+        if (
+            $user->hasRole('ketua_induk') ||
+            $user->hasRole('pengurus_induk')
+        ) {
             return redirect()->route('ketua-induk.dashboard');
         }
 
@@ -93,7 +96,10 @@ class AuthenticatedSessionController extends Controller
     |--------------------------------------------------------------------------
     */
 
-        if ($user->hasRole('ketua_induk')) {
+        if (
+            $user->hasRole('ketua_induk') ||
+            $user->hasRole('pengurus_induk')
+        ) {
             return 'ketua-induk.dashboard';
         }
 

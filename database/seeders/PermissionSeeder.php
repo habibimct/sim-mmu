@@ -59,6 +59,9 @@ class PermissionSeeder extends Seeder
             ['code' => 'payments.confirm', 'name' => 'Mengonfirmasi pembayaran', 'module' => 'payments'],
             ['code' => 'payments.cancel', 'name' => 'Membatalkan pembayaran', 'module' => 'payments'],
 
+            // Notifikasi
+            ['code' => 'notifications.view', 'name' => 'Melihat Notifikasi', 'module' => 'notifications'],
+
             // Keuangan
             ['code' => 'finance.view', 'name' => 'Melihat Keuangan', 'module' => 'finance'],
             ['code' => 'finance.manage', 'name' => 'Mengelola Keuangan', 'module' => 'finance'],

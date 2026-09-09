@@ -18,9 +18,12 @@ class DashboardController extends Controller
 
         abort_unless(
             $user->is_active
-            && $user->can('dashboard.view')
-            && $user->roles()
-                ->where('code', 'ketua_induk')
+                && $user->can('dashboard.view')
+                && $user->roles()
+                ->whereIn('code', [
+                    'ketua_induk',
+                    'pengurus_induk',
+                ])
                 ->exists(),
             403
         );

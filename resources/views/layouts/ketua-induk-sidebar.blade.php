@@ -49,8 +49,14 @@
                 </div>
 
                 <div class="text-[11px]
-                           text-white/70">
-                    Ketua Induk
+           text-white/70">
+
+                    @if (Auth::user()->hasRole('ketua_induk'))
+                        Ketua
+                    @elseif (Auth::user()->hasRole('pengurus_induk'))
+                        Pengurus
+                    @endif
+
                 </div>
 
             </div>
@@ -96,7 +102,6 @@
             {{-- Nama --}}
 
             <div class="min-w-0">
-
                 <p
                     class="text-sm
                            font-semibold
@@ -104,13 +109,6 @@
                            truncate">
                     {{ Auth::user()->name }}
                 </p>
-
-                <p class="text-xs
-                           text-white/60
-                           truncate">
-                    Ketua Induk
-                </p>
-
             </div>
 
         </div>
@@ -448,8 +446,8 @@
                 {{ request()->routeIs('ketua-induk.teachers.*')
                     ? 'bg-white/10 text-white'
                     : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
-                        <span
-                            class="w-1.5 h-1.5
+                <span
+                    class="w-1.5 h-1.5
                     rounded-full
                     {{ request()->routeIs('ketua-induk.teachers.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
@@ -468,8 +466,8 @@
                 {{ request()->routeIs('ketua-induk.students.*')
                     ? 'bg-white/10 text-white'
                     : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
-                        <span
-                            class="w-1.5 h-1.5
+                <span
+                    class="w-1.5 h-1.5
                     rounded-full
                     {{ request()->routeIs('ketua-induk.students.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 

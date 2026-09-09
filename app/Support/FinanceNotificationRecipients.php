@@ -103,6 +103,7 @@ class FinanceNotificationRecipients
                         [
                             'keuangan_induk',
                             'ketua_induk',
+                            'pengurus_induk',
                         ]
                     );
                 }
@@ -162,9 +163,12 @@ class FinanceNotificationRecipients
                 );
             })
             ->whereHas('roles', function ($query) {
-                $query->where(
+                $query->whereIn(
                     'code',
-                    'ketua_induk'
+                    [
+                        'ketua_induk',
+                        'pengurus_induk',
+                    ]
                 );
             })
             ->get();

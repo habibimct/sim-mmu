@@ -29,7 +29,10 @@ class FinanceController extends Controller
             $user->is_active
                 && $user->can('finance.view')
                 && $user->roles()
-                ->where('code', 'ketua_induk')
+                ->whereIn('code', [
+                    'ketua_induk',
+                    'pengurus_induk',
+                ])
                 ->exists(),
             403
         );
