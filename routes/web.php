@@ -41,6 +41,7 @@ require __DIR__ . '/admin/subjects.php';
 require __DIR__ . '/admin/student-attendance.php';
 require __DIR__ . '/admin/teaching-assignments.php';
 require __DIR__ . '/admin/teacher-attendance.php';
+require __DIR__ . '/admin/reports.php';
 require __DIR__ . '/notifications.php';
 require __DIR__ . '/ketua-induk.php';
 require __DIR__ . '/kepala-unit.php';

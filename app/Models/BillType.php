@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\BelongsToOrganization;
+use App\Models\StudentBill;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -53,7 +54,8 @@ class BillType extends Model
     public function studentBills(): HasMany
     {
         return $this->hasMany(
-            StudentBill::class
+            StudentBill::class,
+            'bill_type_id'
         );
     }
 }
