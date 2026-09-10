@@ -437,9 +437,67 @@ return [
 
         [
             'text' => 'Laporan',
-            'url' => 'admin/reports',
             'icon' => 'bi bi-bar-chart',
             'can' => 'reports.view',
+            'submenu' => [
+
+                [
+                    'text' => 'Laporan Siswa',
+                    'url' => 'admin/laporan/siswa',
+                    'icon' => 'bi bi-people',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Guru',
+                    'url' => 'admin/laporan/guru',
+                    'icon' => 'bi bi-person-badge',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Absensi',
+                    'url' => 'admin/laporan/absensi',
+                    'icon' => 'bi bi-calendar-check',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Keuangan',
+                    'url' => 'admin/laporan/keuangan',
+                    'icon' => 'bi bi-cash-stack',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Tagihan',
+                    'url' => 'admin/laporan/tagihan',
+                    'icon' => 'bi bi-receipt',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Pembayaran',
+                    'url' => 'admin/laporan/pembayaran',
+                    'icon' => 'bi bi-credit-card',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Setoran',
+                    'url' => 'admin/laporan/setoran',
+                    'icon' => 'bi bi-bank',
+                    'can' => 'reports.view',
+                ],
+
+                [
+                    'text' => 'Laporan Audit',
+                    'url' => 'admin/laporan/audit',
+                    'icon' => 'bi bi-shield-check',
+                    'can' => 'reports.view',
+                ],
+
+            ],
         ],
 
         [
