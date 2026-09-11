@@ -5,6 +5,9 @@ use App\Http\Controllers\Admin\TeacherReportController;
 use App\Http\Controllers\Admin\AttendanceReportController;
 use App\Http\Controllers\Admin\Reports\FinanceReportController;
 use App\Http\Controllers\Admin\Reports\BillReportController;
+use App\Http\Controllers\Admin\Reports\PaymentReportController;
+use App\Http\Controllers\Admin\Reports\DepositReportController;
+use App\Http\Controllers\Admin\Reports\AuditReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([
@@ -99,4 +102,51 @@ Route::middleware([
 
         Route::get('/tagihan/periode', [BillReportController::class, 'periods'])
             ->name('bills.periods');
+
+
+
+
+        Route::get('/pembayaran', [PaymentReportController::class, 'index'])
+            ->name('payments');
+
+        Route::get('/pembayaran/{payment}/detail', [PaymentReportController::class, 'detail'])
+            ->name('payments.detail');
+
+        Route::get('/pembayaran/export-excel', [PaymentReportController::class, 'exportExcel'])
+            ->name('payments.export-excel');
+
+        Route::get('/pembayaran/export-pdf', [PaymentReportController::class, 'exportPdf'])
+            ->name('payments.export-pdf');
+
+
+
+
+
+        Route::get('/setoran', [DepositReportController::class, 'index'])
+            ->name('deposits');
+
+        Route::get('/setoran/{deposit}/detail', [DepositReportController::class, 'detail'])
+            ->name('deposits.detail');
+
+        Route::get('/setoran/export-excel', [DepositReportController::class, 'exportExcel'])
+            ->name('deposits.export-excel');
+
+        Route::get('/setoran/export-pdf', [DepositReportController::class, 'exportPdf'])
+            ->name('deposits.export-pdf');
+
+
+
+
+
+        Route::get('/audit', [AuditReportController::class, 'index'])
+            ->name('audit');
+
+        Route::get('/audit/{activity}/detail', [AuditReportController::class, 'detail'])
+            ->name('audit.detail');
+
+        Route::get('/audit/export-excel', [AuditReportController::class, 'exportExcel'])
+            ->name('audit.export-excel');
+
+        Route::get('/audit/export-pdf',[AuditReportController::class, 'exportPdf'])
+            ->name('audit.export-pdf');
     });
