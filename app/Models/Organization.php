@@ -12,13 +12,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Organization extends Model
 {
     use LogsActivity;
-    
+
     protected $fillable = [
         'parent_id',
         'code',
         'name',
         'type',
         'is_active',
+        'logo_path',
+        'address',
+        'phone',
+        'email',
+        'website',
     ];
 
     protected $casts = [

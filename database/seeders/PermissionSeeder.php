@@ -75,6 +75,8 @@ class PermissionSeeder extends Seeder
 
             // Pengaturan
             ['code' => 'settings.manage', 'name' => 'Mengelola Pengaturan', 'module' => 'settings'],
+            ['code' => 'profile_induk.manage', 'name' => 'Mengelola Profil Induk', 'module' => 'settings'],
+            ['code' => 'profile_unit.manage', 'name' => 'Mengelola Profil Unit', 'module' => 'settings'],
         ];
 
         foreach ($permissions as $permission) {

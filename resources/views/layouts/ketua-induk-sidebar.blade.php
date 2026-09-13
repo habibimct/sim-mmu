@@ -20,20 +20,28 @@
 
             {{-- Logo --}}
 
+            @php
+                $induk = Auth::user()->organizations->firstWhere('type', 'induk');
+            @endphp
+
             <div
                 class="w-10 h-10
-                       rounded-xl
-                       bg-white/20
-                       border border-white/30
-                       backdrop-blur-sm
-                       flex items-center justify-center
-                       shadow-sm">
+           rounded-xl
+           bg-white/20
+           border border-white/30
+           backdrop-blur-sm
+           flex items-center justify-center
+           shadow-sm
+           overflow-hidden">
 
-                <span class="text-white
-                           text-lg
-                           font-bold">
-                    P
-                </span>
+                @if ($induk?->logo_path)
+                    <img src="{{ asset('storage/' . $induk->logo_path) }}" alt="{{ $induk->name }}"
+                        class="w-full h-full object-contain p-1">
+                @else
+                    <span class="text-white text-lg font-bold">
+                        {{ strtoupper(substr($induk?->name ?? 'P', 0, 1)) }}
+                    </span>
+                @endif
 
             </div>
 

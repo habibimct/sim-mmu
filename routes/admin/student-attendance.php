@@ -8,14 +8,25 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
 
-        Route::get('/student-attendance/filter-options', [
-            StudentAttendanceController::class,
-            'filterOptions',
-        ])->name('student-attendance.filter-options');
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa
+        |--------------------------------------------------------------------------
+        */
 
-        Route::get('/student-attendance', [
-            StudentAttendanceController::class,
-            'index',
-        ])->name('student-attendance.index');
+        Route::middleware('permission:attendance.view')
+            ->group(function () {
+
+                Route::get('/student-attendance/filter-options', [
+                    StudentAttendanceController::class,
+                    'filterOptions',
+                ])->name('student-attendance.filter-options');
+
+                Route::get('/student-attendance', [
+                    StudentAttendanceController::class,
+                    'index',
+                ])->name('student-attendance.index');
+
+            });
 
     });

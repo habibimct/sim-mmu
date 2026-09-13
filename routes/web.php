@@ -14,9 +14,26 @@ Route::get('/dashboard', [
 ])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get(
+        '/profile',
+        [ProfileController::class, 'edit']
+    )->name('profile.edit');
+
+    Route::patch(
+        '/profile',
+        [ProfileController::class, 'update']
+    )->name('profile.update');
+
+    Route::delete(
+        '/profile/photo',
+        [ProfileController::class, 'removePhoto']
+    )->name('profile.photo.destroy');
+
+    Route::delete(
+        '/profile',
+        [ProfileController::class, 'destroy']
+    )->name('profile.destroy');
 });
 
 Route::middleware(['auth', 'permission:users.view'])
@@ -42,6 +59,7 @@ require __DIR__ . '/admin/student-attendance.php';
 require __DIR__ . '/admin/teaching-assignments.php';
 require __DIR__ . '/admin/teacher-attendance.php';
 require __DIR__ . '/admin/reports.php';
+require __DIR__ . '/admin/settings.php';
 require __DIR__ . '/notifications.php';
 require __DIR__ . '/ketua-induk.php';
 require __DIR__ . '/kepala-unit.php';

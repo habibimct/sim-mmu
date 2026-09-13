@@ -14,7 +14,9 @@ Route::middleware('auth')->group(function () {
     Route::get(
         '/notifications',
         [NotificationController::class, 'index']
-    )->name('notifications.index');
+    )
+        ->middleware('permission:notifications.view')
+        ->name('notifications.index');
 
 
     /*
@@ -26,7 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::post(
         '/notifications/{notification}/read',
         [NotificationController::class, 'markAsRead']
-    )->name('notifications.read');
+    )
+        ->middleware('permission:notifications.view')
+        ->name('notifications.read');
 
 
     /*
@@ -38,7 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::post(
         '/notifications/read-all',
         [NotificationController::class, 'markAllAsRead']
-    )->name('notifications.read-all');
+    )
+        ->middleware('permission:notifications.view')
+        ->name('notifications.read-all');
 
 
     /*
@@ -50,6 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::get(
         '/notifications/{notification}/deposit-proof',
         [NotificationController::class, 'depositProof']
-    )->name('notifications.deposit-proof');
+    )
+        ->middleware('permission:notifications.view')
+        ->name('notifications.deposit-proof');
 
 });

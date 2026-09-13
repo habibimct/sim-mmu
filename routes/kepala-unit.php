@@ -17,74 +17,126 @@ Route::middleware([
     ->group(function () {
 
         /*
-    |--------------------------------------------------------------------------
-    | Dashboard
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | Dashboard
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('/dashboard', function () {
             return view('kepala-unit.dashboard');
-        })->name('dashboard');
+        })
+            ->middleware('permission:dashboard.view')
+            ->name('dashboard');
 
 
         /*
-    |--------------------------------------------------------------------------
-    | Notifikasi
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | Notifikasi
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('/notifications', [
             NotificationController::class,
             'index',
-        ])->name('notifications.index');
+        ])
+            ->middleware('permission:notifications.view')
+            ->name('notifications.index');
 
         Route::post('/notifications/read-all', [
             NotificationController::class,
             'markAllAsRead',
-        ])->name('notifications.read-all');
+        ])
+            ->middleware('permission:notifications.view')
+            ->name('notifications.read-all');
 
         Route::post('/notifications/{notification}/read', [
             NotificationController::class,
             'markAsRead',
-        ])->name('notifications.read');
+        ])
+            ->middleware('permission:notifications.view')
+            ->name('notifications.read');
 
         Route::get('/notifications/{notification}/deposit-proof', [
             NotificationController::class,
             'depositProof',
-        ])->name('notifications.deposit-proof');
+        ])
+            ->middleware('permission:notifications.view')
+            ->name('notifications.deposit-proof');
 
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Keuangan
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('/finance/transactions', [
             FinanceTransactionController::class,
             'index',
-        ])->name('finance.transactions.index');
+        ])
+            ->middleware('permission:finance.view')
+            ->name('finance.transactions.index');
 
         Route::get('/finance/summary', [
             FinanceSummaryController::class,
             'index',
-        ])->name('finance.summary.index');
+        ])
+            ->middleware('permission:finance.view')
+            ->name('finance.summary.index');
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Guru
+        |--------------------------------------------------------------------------
+        */
 
         Route::get(
             '/guru',
             [TeacherController::class, 'index']
-        )->name('teachers.index');
+        )
+            ->middleware('permission:teachers.view')
+            ->name('teachers.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa
+        |--------------------------------------------------------------------------
+        */
 
         Route::get(
             '/siswa',
             [StudentController::class, 'index']
-        )->name('students.index');
+        )
+            ->middleware('permission:students.view')
+            ->name('students.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Guru
+        |--------------------------------------------------------------------------
+        */
 
         Route::get(
             '/absensi-guru',
             [AttendanceController::class, 'index']
-        )->name('attendances.index');
+        )
+            ->middleware('permission:attendance.view')
+            ->name('attendances.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa
+        |--------------------------------------------------------------------------
+        */
 
         Route::get(
             '/absensi-siswa',
             [StudentAttendanceController::class, 'index']
-        )->name('student-attendances.index');
+        )
+            ->middleware('permission:attendance.view')
+            ->name('student-attendances.index');
     });

@@ -769,6 +769,47 @@ class PaymentReportController extends Controller
             $filterDescription[] = 'Pencarian: ' . $search;
         }
 
+
+        /*
+|--------------------------------------------------------------------------
+| Profil Organisasi untuk Kop
+|--------------------------------------------------------------------------
+*/
+
+        $organization = null;
+
+        $organizationNames = $payments
+            ->pluck('organization.name')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $organizationName =
+            $organizationNames->count() === 1
+            ? $organizationNames->first()
+            : 'Beberapa Unit';
+
+        if ($organizationNames->count() === 1) {
+
+            $organization =
+                Organization::whereIn(
+                    'id',
+                    $organizationIds
+                )
+                ->where(
+                    'name',
+                    $organizationNames->first()
+                )
+                ->first();
+        }
+
+        $induk =
+            Organization::where(
+                'type',
+                'induk'
+            )->firstOrFail();
+
+
         /*
     |--------------------------------------------------------------------------
     | PDF
@@ -779,6 +820,10 @@ class PaymentReportController extends Controller
             [
                 'payments' => $payments,
                 'filterDescription' => $filterDescription,
+
+                'organization' => $organization,
+                'induk' => $induk,
+                'organizationName' => $organizationName,
             ]
         );
 

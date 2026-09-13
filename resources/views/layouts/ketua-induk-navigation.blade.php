@@ -341,15 +341,19 @@ NOTIFICATION LIST
 
                 <div
                     class="w-9 h-9
-        rounded-full
-        bg-blue-100
-        flex items-center
-        justify-center">
-
-                    <span class="text-sm font-semibold text-blue-700">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </span>
-
+           rounded-full
+           bg-blue-100
+           overflow-hidden
+           flex items-center
+           justify-center">
+                    @if (Auth::user()->profile_photo_path)
+                        <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}"
+                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-sm font-semibold text-blue-700">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </span>
+                    @endif
                 </div>
 
 
@@ -368,8 +372,8 @@ NOTIFICATION LIST
 
 
             {{-- =========================================================
-USER MENU
-========================================================== --}}
+            USER MENU
+            ========================================================== --}}
 
             <div x-cloak x-show="userMenuOpen" @click.outside="userMenuOpen = false" x-transition
                 class="absolute

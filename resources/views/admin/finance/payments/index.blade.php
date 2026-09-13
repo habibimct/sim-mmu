@@ -24,14 +24,12 @@
                 <i class="bi bi-funnel me-1"></i>
                 Filter
             </button>
-
-            @can('create', App\Models\Payment::class)
+            @can('payments.create')
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreatePayment">
                     <i class="bi bi-plus-lg me-1"></i>
                     Tambah Pembayaran
                 </button>
             @endcan
-
         </div>
 
     </div>
@@ -240,8 +238,6 @@
                     </table>
 
                 </div>
-
-
             @else
                 <div class="text-center py-5">
 

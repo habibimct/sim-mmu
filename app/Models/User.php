@@ -27,6 +27,7 @@ class User extends Authenticatable
         'initial_password',
         'status',
         'is_active',
+        'profile_photo_path',
     ];
 
     protected $hidden = [
@@ -95,6 +96,7 @@ class User extends Authenticatable
                 'email',
                 'status',
                 'is_active',
+                'profile_photo_path',
             ])
             ->logOnlyDirty()
             ->useLogName('user');

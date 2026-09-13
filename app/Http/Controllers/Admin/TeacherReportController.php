@@ -247,6 +247,16 @@ class TeacherReportController extends Controller
             abort(403);
         }
 
+        $organization = null;
+
+        if ($organizationId) {
+            $organization = Organization::whereIn('id', $organizationIds)
+                ->find($organizationId);
+        }
+
+        $induk = Organization::where('type', 'induk')
+            ->firstOrFail();
+
         $query = Teacher::query()
             ->with([
                 'organizations',
@@ -306,7 +316,11 @@ class TeacherReportController extends Controller
 
         $pdf = Pdf::loadView(
             'admin.reports.teachers.exports.pdf',
-            compact('teachers')
+            [
+                'teachers' => $teachers,
+                'organization' => $organization,
+                'induk' => $induk,
+            ]
         );
 
         $pdf->setPaper('a4', 'landscape');

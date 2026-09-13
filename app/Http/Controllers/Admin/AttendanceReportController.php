@@ -1224,6 +1224,16 @@ class AttendanceReportController extends Controller
         }
 
         /*
+|--------------------------------------------------------------------------
+| Profil Induk
+|--------------------------------------------------------------------------
+*/
+        $induk = Organization::where(
+            'type',
+            'induk'
+        )->firstOrFail();
+
+        /*
     |--------------------------------------------------------------------------
     | PDF
     |--------------------------------------------------------------------------
@@ -1251,6 +1261,9 @@ class AttendanceReportController extends Controller
 
                 'organization' =>
                 $organization,
+
+                'induk' =>
+                $induk,
 
                 'schoolClass' =>
                 $schoolClass,
@@ -1898,6 +1911,10 @@ class AttendanceReportController extends Controller
     |--------------------------------------------------------------------------
     */
 
+        $induk = Organization::where('type', 'induk')
+            ->firstOrFail();
+
+
         $pdf = Pdf::loadView(
             'admin.reports.attendance.exports.student-pdf',
             [
@@ -1921,6 +1938,9 @@ class AttendanceReportController extends Controller
 
                 'organization' =>
                 $organization,
+
+                'induk' =>
+                $induk,
 
                 'schoolClass' =>
                 $schoolClass,

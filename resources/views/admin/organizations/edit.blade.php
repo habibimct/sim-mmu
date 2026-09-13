@@ -99,13 +99,13 @@
                         class="form-select @error('type') is-invalid @enderror"
                         required
                     >
-                        <option value="INDUK"
-                            @selected(old('type', $organization->type) === 'INDUK')>
+                        <option value="induk"
+                            @selected(old('type', $organization->type) === 'induk')>
                             INDUK
                         </option>
 
-                        <option value="UNIT"
-                            @selected(old('type', $organization->type) === 'UNIT')>
+                        <option value="unit"
+                            @selected(old('type', $organization->type) === 'unit')>
                             Unit
                         </option>
                     </select>

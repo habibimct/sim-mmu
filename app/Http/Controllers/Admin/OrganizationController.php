@@ -18,7 +18,7 @@ class OrganizationController extends Controller
             'financeTransactions',
         ])
             ->orderByRaw(
-                "CASE WHEN type = 'INDUK' THEN 0 ELSE 1 END"
+                "CASE WHEN type = 'induk' THEN 0 ELSE 1 END"
             )
             ->orderBy('name')
             ->get();
@@ -51,7 +51,7 @@ class OrganizationController extends Controller
 
             'type' => [
                 'required',
-                'in:INDUK,UNIT',
+                'in:induk,unit',
             ],
 
             'is_active' => [
@@ -63,19 +63,19 @@ class OrganizationController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Hanya boleh ada satu INDUK
+        | Hanya boleh ada satu induk
         |--------------------------------------------------------------------------
         */
 
-        if ($validated['type'] === 'INDUK') {
+        if ($validated['type'] === 'induk') {
 
-            $indukExists = Organization::where('type', 'INDUK')->exists();
+            $indukExists = Organization::where('type', 'induk')->exists();
 
             if ($indukExists) {
                 return back()
                     ->withInput()
                     ->withErrors([
-                        'type' => 'Organisasi INDUK sudah ada. Sistem hanya mengizinkan satu INDUK.',
+                        'type' => 'Organisasi induk sudah ada. Sistem hanya mengizinkan satu induk.',
                     ]);
             }
         }
@@ -118,7 +118,7 @@ class OrganizationController extends Controller
 
             'type' => [
                 'required',
-                'in:INDUK,UNIT',
+                'in:induk,unit',
             ],
 
             'is_active' => [
@@ -130,35 +130,35 @@ class OrganizationController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | INDUK tidak boleh diubah menjadi UNIT
+        | induk tidak boleh diubah menjadi UNIT
         |--------------------------------------------------------------------------
         */
 
         if (
-            $organization->type === 'INDUK'
-            && $validated['type'] !== 'INDUK'
+            $organization->type === 'induk'
+            && $validated['type'] !== 'induk'
         ) {
 
             return back()
                 ->withInput()
                 ->withErrors([
-                    'type' => 'Organisasi INDUK tidak boleh diubah menjadi UNIT.',
+                    'type' => 'Organisasi induk tidak boleh diubah menjadi unit.',
                 ]);
         }
 
 
         /*
         |--------------------------------------------------------------------------
-        | Unit tidak boleh diubah menjadi INDUK jika INDUK sudah ada
+        | Unit tidak boleh diubah menjadi induk jika induk sudah ada
         |--------------------------------------------------------------------------
         */
 
         if (
-            $organization->type !== 'INDUK'
-            && $validated['type'] === 'INDUK'
+            $organization->type !== 'induk'
+            && $validated['type'] === 'induk'
         ) {
 
-            $indukExists = Organization::where('type', 'INDUK')
+            $indukExists = Organization::where('type', 'induk')
                 ->where('id', '!=', $organization->id)
                 ->exists();
 
@@ -167,7 +167,7 @@ class OrganizationController extends Controller
                 return back()
                     ->withInput()
                     ->withErrors([
-                        'type' => 'Organisasi INDUK sudah ada. Sistem hanya mengizinkan satu INDUK.',
+                        'type' => 'Organisasi induk sudah ada. Sistem hanya mengizinkan satu induk.',
                     ]);
             }
         }
@@ -175,19 +175,19 @@ class OrganizationController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | INDUK harus selalu aktif
+        | induk harus selalu aktif
         |--------------------------------------------------------------------------
         */
 
         if (
-            $organization->type === 'INDUK'
+            $organization->type === 'induk'
             && !$validated['is_active']
         ) {
 
             return back()
                 ->withInput()
                 ->withErrors([
-                    'is_active' => 'Organisasi INDUK tidak boleh dinonaktifkan.',
+                    'is_active' => 'Organisasi induk tidak boleh dinonaktifkan.',
                 ]);
         }
 
@@ -205,17 +205,17 @@ class OrganizationController extends Controller
     {
         /*
         |--------------------------------------------------------------------------
-        | INDUK tidak boleh dinonaktifkan
+        | induk tidak boleh dinonaktifkan
         |--------------------------------------------------------------------------
         */
 
         if (
-            $organization->type === 'INDUK'
+            $organization->type === 'induk'
             && $organization->is_active
         ) {
 
             return back()->withErrors([
-                'status' => 'Organisasi INDUK tidak boleh dinonaktifkan.',
+                'status' => 'Organisasi induk tidak boleh dinonaktifkan.',
             ]);
         }
 
@@ -240,13 +240,13 @@ class OrganizationController extends Controller
     {
         /*
     |--------------------------------------------------------------------------
-    | Organisasi INDUK tidak boleh dihapus
+    | Organisasi induk tidak boleh dihapus
     |--------------------------------------------------------------------------
     */
 
-        if ($organization->type === 'INDUK') {
+        if ($organization->type === 'induk') {
             return back()->withErrors([
-                'delete' => 'Organisasi INDUK tidak boleh dihapus.',
+                'delete' => 'Organisasi induk tidak boleh dihapus.',
             ]);
         }
 

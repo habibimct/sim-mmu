@@ -20,12 +20,12 @@
                 Filter
             </button>
 
-            @can('create', App\Models\StudentBill::class)
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
-                    <i class="bi bi-plus-lg me-1"></i>
-                    Tambah Tagihan
-                </button>
-            @endcan
+@can('bills.manage')
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
+        <i class="bi bi-plus-lg me-1"></i>
+        Tambah Tagihan
+    </button>
+@endcan
         </div>
     </div>
 

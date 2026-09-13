@@ -1361,6 +1361,18 @@ class FinanceReportController extends Controller
             );
 
         /*
+|--------------------------------------------------------------------------
+| Profil Induk untuk Kop
+|--------------------------------------------------------------------------
+*/
+
+        $data['induk'] =
+            Organization::where(
+                'type',
+                'induk'
+            )->firstOrFail();
+
+        /*
     |--------------------------------------------------------------------------
     | Grafik untuk PDF
     |--------------------------------------------------------------------------
@@ -2290,43 +2302,43 @@ class FinanceReportController extends Controller
         );
     }
 
-public function categories(Request $request)
-{
-    $user = $request->user();
+    public function categories(Request $request)
+    {
+        $user = $request->user();
 
-    $organizationIds = Organization::accessibleIdsForUser($user);
+        $organizationIds = Organization::accessibleIdsForUser($user);
 
-    $organizationId = $request->input('organization_id', 'all');
-    $type = $request->input('type', 'all');
+        $organizationId = $request->input('organization_id', 'all');
+        $type = $request->input('type', 'all');
 
-    $query = FinanceTransaction::query()
-        ->whereIn('organization_id', $organizationIds)
-        ->where('status', 'confirmed')
-        ->whereNotNull('category')
-        ->where('category', '!=', '');
+        $query = FinanceTransaction::query()
+            ->whereIn('organization_id', $organizationIds)
+            ->where('status', 'confirmed')
+            ->whereNotNull('category')
+            ->where('category', '!=', '');
 
-    if ($organizationId !== 'all') {
-        $query->where(
-            'organization_id',
-            $organizationId
-        );
+        if ($organizationId !== 'all') {
+            $query->where(
+                'organization_id',
+                $organizationId
+            );
+        }
+
+        if ($type !== 'all') {
+            $query->where(
+                'type',
+                $type
+            );
+        }
+
+        $categories = $query
+            ->select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category')
+            ->values()
+            ->toArray();
+
+        return response()->json($categories);
     }
-
-    if ($type !== 'all') {
-        $query->where(
-            'type',
-            $type
-        );
-    }
-
-    $categories = $query
-        ->select('category')
-        ->distinct()
-        ->orderBy('category')
-        ->pluck('category')
-        ->values()
-        ->toArray();
-
-    return response()->json($categories);
-}
 }

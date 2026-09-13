@@ -771,6 +771,35 @@ class AuditReportController extends Controller
             : 'Beberapa Unit';
 
         /*
+|--------------------------------------------------------------------------
+| Profil Organisasi untuk Kop
+|--------------------------------------------------------------------------
+*/
+
+        $organization = null;
+
+        if ($organizationNames->count() === 1) {
+
+            $organization =
+                Organization::whereIn(
+                    'id',
+                    $organizationIds
+                )
+                ->where(
+                    'name',
+                    $organizationNames->first()
+                )
+                ->first();
+        }
+
+        $induk =
+            Organization::where(
+                'type',
+                'induk'
+            )
+            ->firstOrFail();
+
+        /*
     |--------------------------------------------------------------------------
     | Generate PDF
     |--------------------------------------------------------------------------
@@ -779,32 +808,27 @@ class AuditReportController extends Controller
         $pdf = Pdf::loadView(
             'admin.reports.audit.exports.pdf',
             [
-                'activities' =>
-                $activities,
+                'activities' =>$activities,
 
-                'organizationName' =>
-                $organizationName,
+                'organizationName' =>$organizationName,
 
-                'logName' =>
-                $logName,
+                'organization' =>$organization,
 
-                'event' =>
-                $event,
+                'induk' =>$induk,
 
-                'year' =>
-                $year,
+                'logName' =>$logName,
 
-                'month' =>
-                $month,
+                'event' =>$event,
 
-                'dateFrom' =>
-                $dateFrom,
+                'year' =>$year,
 
-                'dateTo' =>
-                $dateTo,
+                'month' =>$month,
 
-                'search' =>
-                $search,
+                'dateFrom' =>$dateFrom,
+
+                'dateTo' =>$dateTo,
+
+                'search' =>$search,
             ]
         );
 

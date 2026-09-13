@@ -7,7 +7,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Str;
+use Intervention\Image\Format;
 
 class ProfileController extends Controller
 {
@@ -26,15 +30,79 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill(
+            $request->safe()->only([
+                'name',
+                'email',
+            ])
+        );
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        /*
+        |--------------------------------------------------------------------------
+        | Upload Foto Profil
+        |--------------------------------------------------------------------------
+        */
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if ($request->hasFile('profile_photo')) {
+            $oldPhoto = $user->profile_photo_path;
+
+            $image = Image::decode(
+                $request->file('profile_photo')
+            );
+
+            $image->scaleDown(
+                width: 600,
+                height: 600
+            );
+
+            $filename = Str::uuid() . '.webp';
+            $path = 'profile-photos/' . $filename;
+
+            Storage::disk('public')->put(
+                $path,
+                $image->encodeUsingFormat(
+                    Format::WEBP,
+                    quality: 80
+                )
+            );
+
+            $user->profile_photo_path = $path;
+
+            if ($oldPhoto && $oldPhoto !== $path) {
+                Storage::disk('public')->delete($oldPhoto);
+            }
+        }
+
+        $user->save();
+
+        return Redirect::route('profile.edit')
+            ->with('status', 'profile-updated');
+    }
+
+    /**
+     * Delete the user's profile photo.
+     */
+    public function removePhoto(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete(
+                $user->profile_photo_path
+            );
+
+            $user->profile_photo_path = null;
+            $user->save();
+        }
+
+        return Redirect::route('profile.edit')
+            ->with('status', 'profile-photo-removed');
     }
 
     /**
@@ -47,6 +115,18 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hapus Foto Profil Sebelum User Dihapus
+        |--------------------------------------------------------------------------
+        */
+
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete(
+                $user->profile_photo_path
+            );
+        }
 
         Auth::logout();
 

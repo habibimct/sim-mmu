@@ -670,6 +670,50 @@ class BillReportController extends Controller
 
         $data['bills'] = $bills;
 
+        /*
+    |--------------------------------------------------------------------------
+    | Profil Organisasi untuk Kop
+    |--------------------------------------------------------------------------
+    */
+
+        $user = $request->user();
+
+        $organizationIds =
+            Organization::accessibleIdsForUser($user);
+
+        $organizationId =
+            $request->input('organization_id');
+
+        $organization = null;
+
+        if (
+            $organizationId !== null &&
+            $organizationId !== 'all'
+        ) {
+            $organization =
+                Organization::whereIn(
+                    'id',
+                    $organizationIds
+                )->find(
+                    $organizationId
+                );
+        }
+
+        $induk =
+            Organization::where(
+                'type',
+                'induk'
+            )->firstOrFail();
+
+        $data['organization'] = $organization;
+        $data['induk'] = $induk;
+
+        /*
+    |--------------------------------------------------------------------------
+    | Generate PDF
+    |--------------------------------------------------------------------------
+    */
+
         $pdf = Pdf::loadView(
             'admin.reports.bills.exports.pdf',
             $data

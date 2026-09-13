@@ -5,9 +5,7 @@ TOPBAR
 <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6">
 
     {{-- Mobile menu --}}
-    <button
-        type="button"
-        @click="sidebarOpen = true"
+    <button type="button" @click="sidebarOpen = true"
         class="lg:hidden
                inline-flex
                items-center
@@ -17,15 +15,9 @@ TOPBAR
                text-gray-500
                hover:bg-gray-100
                transition"
-        aria-label="Buka menu"
-    >
+        aria-label="Buka menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
     </button>
 
@@ -42,10 +34,7 @@ TOPBAR
     NOTIFIKASI + USER
     =================================================== --}}
 
-    <div
-        class="flex items-center gap-3 ml-auto"
-        x-data="{ notificationOpen: false }"
-    >
+    <div class="flex items-center gap-3 ml-auto" x-data="{ notificationOpen: false }">
 
         {{-- ==================================================
         NOTIFICATION BELL
@@ -53,9 +42,7 @@ TOPBAR
 
         <div class="relative">
 
-            <button
-                type="button"
-                @click="notificationOpen = !notificationOpen"
+            <button type="button" @click="notificationOpen = !notificationOpen"
                 @click.outside="notificationOpen = false"
                 class="relative
                        inline-flex
@@ -72,35 +59,21 @@ TOPBAR
                        focus:ring-2
                        focus:ring-blue-500
                        focus:ring-offset-2"
-                aria-label="Notifikasi"
-                :aria-expanded="notificationOpen"
-            >
+                aria-label="Notifikasi" :aria-expanded="notificationOpen">
 
                 {{-- Bell --}}
-                <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.8"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
 
 
                 {{-- Badge --}}
                 @php
-                    $unreadNotifications = Auth::user()
-                        ->unreadNotifications()
-                        ->count();
+                    $unreadNotifications = Auth::user()->unreadNotifications()->count();
                 @endphp
 
                 @if ($unreadNotifications > 0)
-
                     <span
                         class="absolute
                                -right-0.5
@@ -115,11 +88,9 @@ TOPBAR
                                leading-[18px]
                                text-white
                                ring-2
-                               ring-white"
-                    >
+                               ring-white">
                         {{ $unreadNotifications > 99 ? '99+' : $unreadNotifications }}
                     </span>
-
                 @endif
 
             </button>
@@ -129,10 +100,7 @@ TOPBAR
             DROPDOWN
             =================================================== --}}
 
-            <div
-                x-cloak
-                x-show="notificationOpen"
-                x-transition
+            <div x-cloak x-show="notificationOpen" x-transition
                 class="absolute
                        right-0
                        z-50
@@ -143,8 +111,7 @@ TOPBAR
                        border
                        border-gray-200
                        bg-white
-                       shadow-xl"
-            >
+                       shadow-xl">
 
                 {{-- Header --}}
                 <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
@@ -162,25 +129,18 @@ TOPBAR
                     </div>
 
                     @if ($unreadNotifications > 0)
-
-                        <form
-                            method="POST"
-                            action="{{ route('notifications.read-all') }}"
-                        >
+                        <form method="POST" action="{{ route('notifications.read-all') }}">
                             @csrf
 
-                            <button
-                                type="submit"
+                            <button type="submit"
                                 class="text-xs
                                        font-medium
                                        text-blue-600
-                                       hover:text-blue-800"
-                            >
+                                       hover:text-blue-800">
                                 Tandai semua dibaca
                             </button>
 
                         </form>
-
                     @endif
 
                 </div>
@@ -193,15 +153,10 @@ TOPBAR
                 <div class="max-h-96 overflow-y-auto">
 
                     @php
-                        $navbarNotifications = Auth::user()
-                            ->notifications()
-                            ->latest()
-                            ->limit(5)
-                            ->get();
+                        $navbarNotifications = Auth::user()->notifications()->latest()->limit(5)->get();
                     @endphp
 
                     @forelse ($navbarNotifications as $notification)
-
                         @php
                             $data = $notification->data;
 
@@ -222,8 +177,7 @@ TOPBAR
                         @endphp
 
 
-                        <a
-                            href="{{ route('notifications.index') }}"
+                        <a href="{{ route('notifications.index') }}"
                             class="block
                                    border-b
                                    border-gray-100
@@ -231,26 +185,17 @@ TOPBAR
                                    py-3
                                    transition
                                    hover:bg-gray-50
-                                   {{ $notification->read_at ? 'bg-white' : 'bg-blue-50/50' }}"
-                        >
+                                   {{ $notification->read_at ? 'bg-white' : 'bg-blue-50/50' }}">
 
                             <div class="flex gap-3">
 
                                 {{-- Icon --}}
                                 <div class="mt-0.5 shrink-0">
 
-                                    <svg
-                                        class="h-5 w-5 {{ $icon }}"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1.8"
-                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                                        />
+                                    <svg class="h-5 w-5 {{ $icon }}" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                     </svg>
 
                                 </div>
@@ -261,10 +206,7 @@ TOPBAR
 
                                     <p
                                         class="text-sm
-                                               {{ $notification->read_at
-                                                   ? 'font-medium text-gray-700'
-                                                   : 'font-semibold text-gray-900' }}"
-                                    >
+                                               {{ $notification->read_at ? 'font-medium text-gray-700' : 'font-semibold text-gray-900' }}">
                                         {{ $title }}
                                     </p>
 
@@ -281,16 +223,13 @@ TOPBAR
 
                                 {{-- Unread indicator --}}
                                 @if (!$notification->read_at)
-
                                     <span
                                         class="mt-2
                                                h-2
                                                w-2
                                                shrink-0
                                                rounded-full
-                                               bg-blue-600"
-                                    ></span>
-
+                                               bg-blue-600"></span>
                                 @endif
 
                             </div>
@@ -304,11 +243,9 @@ TOPBAR
                                    py-8
                                    text-center
                                    text-sm
-                                   text-gray-500"
-                        >
+                                   text-gray-500">
                             Belum ada notifikasi.
                         </div>
-
                     @endforelse
 
                 </div>
@@ -317,8 +254,7 @@ TOPBAR
                 {{-- Footer --}}
                 <div class="border-t border-gray-100 bg-gray-50">
 
-                    <a
-                        href="{{ route('notifications.index') }}"
+                    <a href="{{ route('notifications.index') }}"
                         class="block
                                px-4
                                py-3
@@ -328,8 +264,7 @@ TOPBAR
                                text-blue-600
                                transition
                                hover:bg-gray-100
-                               hover:text-blue-800"
-                    >
+                               hover:text-blue-800">
                         Lihat semua notifikasi
                     </a>
 
@@ -344,20 +279,14 @@ TOPBAR
         USER
         =================================================== --}}
 
-        <div
-            x-data="{ userMenuOpen: false }"
-            class="relative"
-        >
+        <div x-data="{ userMenuOpen: false }" class="relative">
 
-            <button
-                type="button"
-                @click="userMenuOpen = !userMenuOpen"
+            <button type="button" @click="userMenuOpen = !userMenuOpen"
                 class="flex items-center gap-3
                        rounded-lg
                        px-2 py-1.5
                        hover:bg-gray-50
-                       transition"
-            >
+                       transition">
 
                 <div class="text-right">
 
@@ -375,33 +304,28 @@ TOPBAR
                 {{-- Avatar --}}
                 <div
                     class="w-9 h-9
-                           rounded-full
-                           bg-blue-100
-                           flex items-center
-                           justify-center"
-                >
-                    <span class="text-sm font-semibold text-blue-700">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </span>
+           rounded-full
+           bg-blue-100
+           overflow-hidden
+           flex items-center
+           justify-center">
+                    @if (Auth::user()->profile_photo_path)
+                        <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}"
+                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-sm font-semibold text-blue-700">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </span>
+                    @endif
                 </div>
 
 
                 {{-- Chevron --}}
-                <svg
-                    class="w-4 h-4
+                <svg class="w-4 h-4
                            text-gray-400
                            transition-transform"
-                    :class="{ 'rotate-180': userMenuOpen }"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m6 9 6 6 6-6"
-                    />
+                    :class="{ 'rotate-180': userMenuOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
                 </svg>
 
             </button>
@@ -411,11 +335,7 @@ TOPBAR
             USER MENU
             ========================================================== --}}
 
-            <div
-                x-cloak
-                x-show="userMenuOpen"
-                @click.outside="userMenuOpen = false"
-                x-transition
+            <div x-cloak x-show="userMenuOpen" @click.outside="userMenuOpen = false" x-transition
                 class="absolute
                        right-0
                        mt-2
@@ -425,8 +345,7 @@ TOPBAR
                        border border-gray-100
                        shadow-lg
                        z-50
-                       overflow-hidden"
-            >
+                       overflow-hidden">
 
                 {{-- Informasi user --}}
                 <div class="px-4 py-3 border-b border-gray-100">
@@ -443,35 +362,21 @@ TOPBAR
 
 
                 {{-- Keluar --}}
-                <form
-                    method="POST"
-                    action="{{ route('logout') }}"
-                >
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <button
-                        type="submit"
+                    <button type="submit"
                         class="w-full
                                flex items-center gap-3
                                px-4 py-3
                                text-sm
                                text-red-600
                                hover:bg-red-50
-                               transition"
-                    >
+                               transition">
 
-                        <svg
-                            class="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="1.8"
-                                d="M15 12H3m0 0 4-4m-4 4 4 4M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"
-                            />
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                d="M15 12H3m0 0 4-4m-4 4 4 4M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
                         </svg>
 
                         <span>

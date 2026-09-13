@@ -2,18 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+class UpdateIndukProfileRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     public function rules(): array
     {
         return [
@@ -23,16 +21,31 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
             ],
 
-            'email' => [
-                'required',
+            'address' => [
+                'nullable',
                 'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                'max:2000',
             ],
 
-            'profile_photo' => [
+            'phone' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+            ],
+
+            'website' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'logo' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',

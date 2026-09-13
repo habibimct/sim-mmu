@@ -102,13 +102,13 @@
                     >
                         <option value="">-- Pilih Jenis --</option>
 
-                        <option value="INDUK"
-                            @selected(old('type') === 'INDUK')>
+                        <option value="induk"
+                            @selected(old('type') === 'induk')>
                             INDUK
                         </option>
 
-                        <option value="UNIT"
-                            @selected(old('type') === 'UNIT')>
+                        <option value="unit"
+                            @selected(old('type') === 'unit')>
                             Unit
                         </option>
                     </select>

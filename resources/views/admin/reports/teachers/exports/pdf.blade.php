@@ -9,49 +9,154 @@
         Laporan Guru
     </title>
 
-    <style>
+<style>
 
-        body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 10px;
-            color: #222;
-        }
+    body {
+        font-family: DejaVu Sans, sans-serif;
+        font-size: 10px;
+        color: #222;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 5px;
-        }
+    .kop {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 3px;
+    }
 
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 20px;
-        }
+    .kop td {
+        border: none;
+        vertical-align: middle;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    .logo-cell {
+        width: 25%;
+        text-align: left;
+    }
 
-        th,
-        td {
-            border: 1px solid #999;
-            padding: 6px;
-        }
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
 
-        th {
-            background: #eeeeee;
-            text-align: center;
-        }
+    .kop-text {
+        width: 50%;
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.35;
+    }
 
-        .center {
-            text-align: center;
-        }
+    .kop-text-right {
+        width: 25%;
+        text-align: right;
+        font-size: 9px;
+        line-height: 1.35;
+    }
 
-    </style>
+    .organization-name {
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .kop-line {
+        border-top: 2px solid #000;
+        margin-bottom: 8px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #999;
+        padding: 6px;
+    }
+
+    th {
+        background: #eeeeee;
+        text-align: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+</style>
 
 </head>
 
+<table class="kop">
+    <tr>
+
+        <td class="logo-cell">
+
+            @if ($organization?->logo_path)
+                <img
+                    src="{{ public_path('storage/' . $organization->logo_path) }}"
+                    class="logo"
+                >
+            @elseif ($induk?->logo_path)
+                <img
+                    src="{{ public_path('storage/' . $induk->logo_path) }}"
+                    class="logo"
+                >
+            @endif
+
+        </td>
+
+        <td class="kop-text">
+
+            <div class="organization-name">
+                {{ $organization?->name ?? ($induk?->name ?? 'Perkumpulan Mamba\'ul Ulum Bedanten') }}
+            </div>
+
+            @if ($organization?->address ?? $induk?->address)
+                <div>
+                    {{ $organization?->address ?? $induk?->address }}
+                </div>
+            @endif
+
+        </td>
+
+        <td class="kop-text-right">
+
+            @if ($organization?->phone ?? $induk?->phone)
+                <div>
+                    Telp. {{ $organization?->phone ?? $induk?->phone }}
+                </div>
+            @endif
+
+            @if ($organization?->email ?? $induk?->email)
+                <div>
+                    Email: {{ $organization?->email ?? $induk?->email }}
+                </div>
+            @endif
+
+            @if ($organization?->website ?? $induk?->website)
+                <div>
+                    {{ $organization?->website ?? $induk?->website }}
+                </div>
+            @endif
+
+        </td>
+
+    </tr>
+</table>
+
+<div class="kop-line"></div>
 
 <body>
 

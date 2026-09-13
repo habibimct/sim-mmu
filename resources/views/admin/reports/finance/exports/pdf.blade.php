@@ -643,6 +643,62 @@
         }
 
 
+
+        .kop {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 3px;
+        }
+
+        .kop td {
+            border: none;
+            vertical-align: middle;
+        }
+
+        .logo-cell {
+            width: 25%;
+            text-align: left;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .kop-text {
+            width: 50%;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
+        .kop-text-right {
+            width: 25%;
+            text-align: right;
+            font-size: 9px;
+            line-height: 1.35;
+        }
+
+        .header {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
+        .organization-name {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .kop-line {
+            border-top: 2px solid #000;
+            margin-bottom: 8px;
+        }
+
+
         /* =========================================================
    FOOTER
    ========================================================= */
@@ -682,59 +738,85 @@
     @endphp
 
 
-    {{-- ========================================================= --}}
-    {{-- HEADER --}}
-    {{-- ========================================================= --}}
+    {{-- ==========================================================
+     KOP LAPORAN
+     ========================================================== --}}
 
-    <div class="report-header">
+    <table class="kop">
 
-        <table class="report-header-table">
+        <tr>
 
-            <tr>
+            {{-- LOGO --}}
+            <td class="logo-cell">
 
-                <td class="report-header-left">
+                @if ($reportOrganization?->logo_path)
+                    <img src="{{ public_path('storage/' . $reportOrganization->logo_path) }}" class="logo">
+                @elseif ($induk?->logo_path)
+                    <img src="{{ public_path('storage/' . $induk->logo_path) }}" class="logo">
+                @endif
 
-                    <div class="report-label">
-                        Sistem Informasi Manajemen
+            </td>
+
+
+            {{-- IDENTITAS ORGANISASI --}}
+            <td class="kop-text">
+
+                <div class="organization-name">
+                    {{ $reportOrganization?->name ?? ($induk?->name ?? 'Perkumpulan Mamba\'ul Ulum Bedanten') }}
+                </div>
+
+                @if ($reportOrganization?->address ?? $induk?->address)
+                    <div>
+                        {{ $reportOrganization?->address ?? $induk?->address }}
                     </div>
+                @endif
 
-                    <div class="report-title">
-                        Laporan Keuangan
+            </td>
+
+
+            {{-- KONTAK --}}
+            <td class="kop-text-right">
+
+                @if ($reportOrganization?->phone ?? $induk?->phone)
+                    <div>
+                        Telp. {{ $reportOrganization?->phone ?? $induk?->phone }}
                     </div>
+                @endif
 
-                    <div class="report-description">
-                        Rekapitulasi transaksi keuangan berdasarkan periode dan filter laporan.
+                @if ($reportOrganization?->email ?? $induk?->email)
+                    <div>
+                        Email: {{ $reportOrganization?->email ?? $induk?->email }}
                     </div>
+                @endif
 
-                </td>
-
-
-                <td class="report-header-right">
-
-                    <div class="report-date-box">
-
-                        <div class="report-date-label">
-                            Periode Laporan
-                        </div>
-
-                        <div class="report-date-value">
-
-                            {{ \Carbon\Carbon::parse($dateFrom)->translatedFormat('d F Y') }}
-
-                            &ndash;
-
-                            {{ \Carbon\Carbon::parse($dateTo)->translatedFormat('d F Y') }}
-
-                        </div>
-
+                @if ($reportOrganization?->website ?? $induk?->website)
+                    <div>
+                        {{ $reportOrganization?->website ?? $induk?->website }}
                     </div>
+                @endif
 
-                </td>
+            </td>
 
-            </tr>
+        </tr>
 
-        </table>
+    </table>
 
+    <div class="kop-line"></div>
+
+
+    {{-- ==========================================================
+     JUDUL LAPORAN
+     ========================================================== --}}
+
+    <h1 class="header">
+        LAPORAN KEUANGAN
+    </h1>
+
+    <div class="subtitle">
+        Periode:
+        {{ \Carbon\Carbon::parse($dateFrom)->translatedFormat('d F Y') }}
+        &ndash;
+        {{ \Carbon\Carbon::parse($dateTo)->translatedFormat('d F Y') }}
     </div>
 
 

@@ -16,17 +16,28 @@
         <a href="{{ route('kepala-unit.dashboard') }}" class="flex items-center gap-3 w-full">
 
             {{-- Logo --}}
-            <div
-                class="w-10 h-10 rounded-xl
-                       bg-white/20
-                       border border-white/30
-                       backdrop-blur-sm
-                       flex items-center justify-center
-                       shadow-sm">
+            @php
+                $unit = Auth::user()->organizations->firstWhere('type', 'unit');
+            @endphp
 
-                <span class="text-white text-lg font-bold">
-                    P
-                </span>
+            <div
+                class="w-10 h-10
+           rounded-xl
+           bg-white/20
+           border border-white/30
+           backdrop-blur-sm
+           flex items-center justify-center
+           shadow-sm
+           overflow-hidden">
+
+                @if ($unit?->logo_path)
+                    <img src="{{ asset('storage/' . $unit->logo_path) }}" alt="{{ $unit->name }}"
+                        class="w-full h-full object-contain p-1">
+                @else
+                    <span class="text-white text-lg font-bold">
+                        {{ strtoupper(substr($unit?->name ?? 'P', 0, 1)) }}
+                    </span>
+                @endif
 
             </div>
 

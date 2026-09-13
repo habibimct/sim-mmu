@@ -143,8 +143,22 @@ Route::middleware(['auth', 'organization.scope'])
     ->name('admin.')
     ->group(function () {
 
-        Route::get('/students', [StudentController::class, 'index'])
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Melihat
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:students.view')
+            ->get('/students', [StudentController::class, 'index'])
             ->name('students.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Import
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:students.manage')
             ->get('/students/import', [StudentImportController::class, 'create'])
@@ -154,51 +168,116 @@ Route::middleware(['auth', 'organization.scope'])
             ->post('/students/import', [StudentImportController::class, 'store'])
             ->name('students.import.store');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Tambah
+        |--------------------------------------------------------------------------
+        */
+
         Route::middleware('permission:students.manage')
             ->post('/students', [StudentController::class, 'store'])
             ->name('students.store');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Export
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:students.view')
             ->get('/students/export', [StudentController::class, 'export'])
             ->name('students.export');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Template Import
+        |--------------------------------------------------------------------------
+        */
+
         Route::middleware('permission:students.manage')
             ->get('/students/import/template', [StudentController::class, 'downloadTemplate'])
             ->name('students.import.template');
 
-        Route::put('students/{student}', [StudentController::class, 'update'])
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Ubah
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:students.manage')
+            ->put('/students/{student}', [StudentController::class, 'update'])
             ->name('students.update');
 
-        Route::patch('students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])
+
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa - Aktif / Nonaktif
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:students.manage')
+            ->patch('/students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])
             ->name('students.toggle-status');
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Siswa Berdasarkan Kelas
+        |--------------------------------------------------------------------------
+        */
+
         Route::middleware('permission:students.view')
-            ->get('/students/class/{schoolClass}/students', [StudentController::class, 'studentsByClass'])
+            ->get(
+                '/students/class/{schoolClass}/students',
+                [StudentController::class, 'studentsByClass']
+            )
             ->name('students.class-students');
 
 
-        Route::get(
-            'students/placement',
-            [StudentPlacementController::class, 'index']
-        )->name('students.placement.index');
+        /*
+        |--------------------------------------------------------------------------
+        | Penempatan Siswa
+        |--------------------------------------------------------------------------
+        */
 
-        Route::post(
-            'students/placement',
-            [StudentPlacementController::class, 'store']
-        )->name('students.placement.store');
+        Route::middleware('permission:students.manage')
+            ->get(
+                '/students/placement',
+                [StudentPlacementController::class, 'index']
+            )
+            ->name('students.placement.index');
+
+        Route::middleware('permission:students.manage')
+            ->post(
+                '/students/placement',
+                [StudentPlacementController::class, 'store']
+            )
+            ->name('students.placement.store');
 
 
-        Route::get(
-            'students/promotion',
-            [StudentPromotionController::class, 'index']
-        )->name('students.promotion.index');
+        /*
+        |--------------------------------------------------------------------------
+        | Kenaikan Siswa
+        |--------------------------------------------------------------------------
+        */
 
-        Route::post(
-            'students/promotion',
-            [StudentPromotionController::class, 'store']
-        )->name('students.promotion.store');
+        Route::middleware('permission:students.manage')
+            ->get(
+                '/students/promotion',
+                [StudentPromotionController::class, 'index']
+            )
+            ->name('students.promotion.index');
 
+        Route::middleware('permission:students.manage')
+            ->post(
+                '/students/promotion',
+                [StudentPromotionController::class, 'store']
+            )
+            ->name('students.promotion.store');
 
 
 
@@ -213,6 +292,13 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('teachers.export');
 
+
+        /*
+|--------------------------------------------------------------------------
+| Guru - Tambah
+|--------------------------------------------------------------------------
+*/
+
         Route::middleware('permission:teachers.manage')
             ->get('/teachers/create', [TeacherController::class, 'create'])
             ->name('teachers.create');
@@ -220,6 +306,13 @@ Route::middleware(['auth', 'organization.scope'])
         Route::middleware('permission:teachers.manage')
             ->post('/teachers', [TeacherController::class, 'store'])
             ->name('teachers.store');
+
+
+        /*
+|--------------------------------------------------------------------------
+| Guru - Import
+|--------------------------------------------------------------------------
+*/
 
         Route::middleware('permission:teachers.manage')
             ->get(
@@ -242,28 +335,75 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('teachers.import.template');
 
-        Route::get('teachers/{teacher}/edit', [TeacherController::class, 'edit'])
-            ->name('teachers.edit');
 
-        Route::put('teachers/{teacher}', [TeacherController::class, 'update'])
-            ->name('teachers.update');
-
-        Route::patch(
-            'teachers/{teacher}/toggle-status',
-            [TeacherController::class, 'toggleStatus']
-        )->name('teachers.toggle-status');
+        /*
+|--------------------------------------------------------------------------
+| Guru - Ubah
+|--------------------------------------------------------------------------
+*/
 
         Route::middleware('permission:teachers.manage')
-            ->patch('teachers/{teacher}/reset-password', [TeacherController::class, 'resetPassword'])
+            ->get(
+                'teachers/{teacher}/edit',
+                [TeacherController::class, 'edit']
+            )
+            ->name('teachers.edit');
+
+        Route::middleware('permission:teachers.manage')
+            ->put(
+                'teachers/{teacher}',
+                [TeacherController::class, 'update']
+            )
+            ->name('teachers.update');
+
+
+        /*
+|--------------------------------------------------------------------------
+| Guru - Aktif / Nonaktif
+|--------------------------------------------------------------------------
+*/
+
+        Route::middleware('permission:teachers.manage')
+            ->patch(
+                'teachers/{teacher}/toggle-status',
+                [TeacherController::class, 'toggleStatus']
+            )
+            ->name('teachers.toggle-status');
+
+
+        /*
+|--------------------------------------------------------------------------
+| Guru - Akun
+|--------------------------------------------------------------------------
+*/
+
+        Route::middleware('permission:teachers.manage')
+            ->patch(
+                'teachers/{teacher}/reset-password',
+                [TeacherController::class, 'resetPassword']
+            )
             ->name('teachers.reset-password');
 
         Route::middleware('permission:teachers.manage')
-            ->patch('teachers/{teacher}/create-account', [TeacherController::class, 'createAccount'])
+            ->patch(
+                'teachers/{teacher}/create-account',
+                [TeacherController::class, 'createAccount']
+            )
             ->name('teachers.create-account');
 
-        Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
-            ->name('teachers.destroy');
 
+        /*
+|--------------------------------------------------------------------------
+| Guru - Hapus
+|--------------------------------------------------------------------------
+*/
+
+        Route::middleware('permission:teachers.manage')
+            ->delete(
+                '/teachers/{teacher}',
+                [TeacherController::class, 'destroy']
+            )
+            ->name('teachers.destroy');
 
 
 
@@ -315,10 +455,11 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('academic-years.toggle-status');
 
-        Route::delete(
-            '/academic-years/{academicYear}',
-            [AcademicYearController::class, 'destroy']
-        )->name('academic-years.destroy');
+        Route::middleware('permission:academic_years.manage')
+            ->delete(
+                '/academic-years/{academicYear}',
+                [AcademicYearController::class, 'destroy']
+            )->name('academic-years.destroy');
 
 
         /*
@@ -374,6 +515,7 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('school-classes.update');
 
+
         Route::middleware('permission:classes.manage')
             ->patch(
                 '/school-classes/{schoolClass}/toggle-status',
@@ -381,28 +523,43 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('school-classes.toggle-status');
 
-        Route::delete(
-            '/school-classes/bulk-destroy',
-            [SchoolClassController::class, 'bulkDestroy']
-        )->name('school-classes.bulk-destroy');
 
-        Route::delete(
-            'students/classes/{schoolClass}',
-            [SchoolClassController::class, 'destroy']
-        )->name('school-classes.destroy');
+        Route::middleware('permission:classes.manage')
+            ->delete(
+                '/school-classes/bulk-destroy',
+                [SchoolClassController::class, 'bulkDestroy']
+            )
+            ->name('school-classes.bulk-destroy');
 
 
+        Route::middleware('permission:classes.manage')
+            ->delete(
+                'students/classes/{schoolClass}',
+                [SchoolClassController::class, 'destroy']
+            )
+            ->name('school-classes.destroy');
 
-        Route::get(
-            'students/class-transfer',
-            [StudentClassTransferController::class, 'index']
-        )->name('students.class-transfer.index');
 
-        Route::post(
-            'students/class-transfer',
-            [StudentClassTransferController::class, 'store']
-        )->name('students.class-transfer.store');
 
+        /*
+|--------------------------------------------------------------------------
+| Pemindahan Siswa Antar Kelas
+|--------------------------------------------------------------------------
+*/
+
+        Route::middleware('permission:students.manage')
+            ->get(
+                'students/class-transfer',
+                [StudentClassTransferController::class, 'index']
+            )
+            ->name('students.class-transfer.index');
+
+        Route::middleware('permission:students.manage')
+            ->post(
+                'students/class-transfer',
+                [StudentClassTransferController::class, 'store']
+            )
+            ->name('students.class-transfer.store');
 
 
 
@@ -415,43 +572,51 @@ Route::middleware(['auth', 'organization.scope'])
                 Route::get(
                     '/transactions',
                     [FinanceTransactionController::class, 'index']
-                )->name('transactions.index');
+                )
+                    ->middleware('permission:finance.view')
+                    ->name('transactions.index');
 
                 Route::post(
                     '/transactions',
                     [FinanceTransactionController::class, 'store']
-                )->name('transactions.store');
+                )
+                    ->middleware('permission:finance.manage')
+                    ->name('transactions.store');
 
                 Route::post(
                     '/transactions/{transaction}/cancel',
                     [FinanceTransactionController::class, 'cancel']
-                )->name(
-                    'transactions.cancel'
-                );
+                )
+                    ->middleware('permission:finance.manage')
+                    ->name('transactions.cancel');
 
                 Route::get(
-                    'deposits',
+                    '/deposits',
                     [FinanceDepositController::class, 'index']
-                )->name('deposits.index');
+                )
+                    ->middleware('permission:finance.view')
+                    ->name('deposits.index');
 
                 Route::post(
-                    'deposits',
+                    '/deposits',
                     [FinanceDepositController::class, 'store']
-                )->name('deposits.store');
+                )
+                    ->middleware('permission:finance.manage')
+                    ->name('deposits.store');
 
                 Route::post(
-                    'finance/deposits/{deposit}/confirm',
+                    '/deposits/{deposit}/confirm',
                     [FinanceDepositController::class, 'confirm']
-                )->name(
-                    'deposits.confirm'
-                );
+                )
+                    ->middleware('permission:finance.approve')
+                    ->name('deposits.confirm');
 
                 Route::post(
-                    'finance/deposits/{deposit}/reject',
+                    '/deposits/{deposit}/reject',
                     [FinanceDepositController::class, 'reject']
-                )->name(
-                    'deposits.reject'
-                );
+                )
+                    ->middleware('permission:finance.approve')
+                    ->name('deposits.reject');
             });
 
 
@@ -462,22 +627,30 @@ Route::middleware(['auth', 'organization.scope'])
         Route::get(
             '/notifications',
             [NotificationController::class, 'index']
-        )->name('notifications.index');
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.index');
 
         Route::post(
             'notifications/{notification}/read',
             [NotificationController::class, 'markAsRead']
-        )->name('notifications.read');
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.read');
 
         Route::post(
             'notifications/read-all',
             [NotificationController::class, 'markAllAsRead']
-        )->name('notifications.read-all');
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.read-all');
 
         Route::get(
             '/notifications/{notification}/deposit-proof',
             [NotificationController::class, 'depositProof']
-        )->name('notifications.deposit-proof');
+        )
+            ->middleware('permission:notifications.view')
+            ->name('notifications.deposit-proof');
 
 
 
@@ -492,43 +665,59 @@ Route::middleware(['auth', 'organization.scope'])
         Route::get(
             '/finance/bill-types',
             [BillTypeController::class, 'index']
-        )->name('finance.bill-types.index');
+        )
+            ->middleware('permission:bills.view')
+            ->name('finance.bill-types.index');
 
         Route::post(
             '/finance/bill-types',
             [BillTypeController::class, 'store']
-        )->name('finance.bill-types.store');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bill-types.store');
 
         Route::put(
             '/finance/bill-types/{billType}',
             [BillTypeController::class, 'update']
-        )->name('finance.bill-types.update');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bill-types.update');
 
         Route::delete(
             '/finance/bill-types/{billType}',
             [BillTypeController::class, 'destroy']
-        )->name('finance.bill-types.destroy');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bill-types.destroy');
 
 
         Route::get(
             '/finance/bills',
             [StudentBillController::class, 'index']
-        )->name('finance.bills.index');
+        )
+            ->middleware('permission:bills.view')
+            ->name('finance.bills.index');
 
         Route::post(
             '/finance/bills',
             [StudentBillController::class, 'store']
-        )->name('finance.bills.store');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bills.store');
 
         Route::put(
             '/finance/bills/{studentBill}',
             [StudentBillController::class, 'update']
-        )->name('finance.bills.update');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bills.update');
 
         Route::post(
             '/finance/bills/{studentBill}/cancel',
             [StudentBillController::class, 'cancel']
-        )->name('finance.bills.cancel');
+        )
+            ->middleware('permission:bills.manage')
+            ->name('finance.bills.cancel');
 
 
 
@@ -536,61 +725,43 @@ Route::middleware(['auth', 'organization.scope'])
 
         Route::get(
             'finance/payments',
-            [
-                PaymentController::class,
-                'index',
-            ]
-        )->name(
-            'finance.payments.index'
-        );
+            [PaymentController::class, 'index']
+        )
+            ->middleware('permission:payments.view')
+            ->name('finance.payments.index');
 
         Route::get(
             'finance/payments/student/{studentAcademicYear}/bills',
-            [
-                PaymentController::class,
-                'studentBills',
-            ]
-        )->name(
-            'finance.payments.student-bills'
-        );
+            [PaymentController::class, 'studentBills']
+        )
+            ->middleware('permission:payments.view')
+            ->name('finance.payments.student-bills');
 
         Route::post(
             'finance/payments',
-            [
-                PaymentController::class,
-                'store',
-            ]
-        )->name(
-            'finance.payments.store'
-        );
+            [PaymentController::class, 'store']
+        )
+            ->middleware('permission:payments.create')
+            ->name('finance.payments.store');
 
         Route::get(
             'finance/payments/{payment}/detail',
-            [
-                PaymentController::class,
-                'detail',
-            ]
-        )->name(
-            'finance.payments.detail'
-        );
+            [PaymentController::class, 'detail']
+        )
+            ->middleware('permission:payments.view')
+            ->name('finance.payments.detail');
 
         Route::post(
             'finance/payments/{payment}/confirm',
-            [
-                PaymentController::class,
-                'confirm',
-            ]
-        )->name(
-            'finance.payments.confirm'
-        );
+            [PaymentController::class, 'confirm']
+        )
+            ->middleware('permission:payments.confirm')
+            ->name('finance.payments.confirm');
 
         Route::post(
             'finance/payments/{payment}/cancel',
-            [
-                PaymentController::class,
-                'cancel',
-            ]
-        )->name(
-            'finance.payments.cancel'
-        );
+            [PaymentController::class, 'cancel']
+        )
+            ->middleware('permission:payments.cancel')
+            ->name('finance.payments.cancel');
     });

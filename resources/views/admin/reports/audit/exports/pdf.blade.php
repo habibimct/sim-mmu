@@ -8,7 +8,6 @@
     <title>Laporan Audit</title>
 
     <style>
-
         @page {
             margin: 20px;
         }
@@ -114,11 +113,123 @@
             color: #777;
         }
 
+        .kop {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 3px;
+        }
+
+        .kop td {
+            border: none;
+            vertical-align: middle;
+        }
+
+        .logo-cell {
+            width: 25%;
+            text-align: left;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .kop-text {
+            width: 50%;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
+        .kop-text-right {
+            width: 25%;
+            text-align: right;
+            font-size: 9px;
+            line-height: 1.35;
+        }
+
+        .organization-name {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .kop-line {
+            border-top: 2px solid #000;
+            margin-bottom: 8px;
+        }
     </style>
 
 </head>
 
 <body>
+
+    {{-- ==========================================================
+     KOP LAPORAN
+     ========================================================== --}}
+
+    <table class="kop">
+
+        <tr>
+
+            {{-- LOGO --}}
+            <td class="logo-cell">
+
+                @if ($organization?->logo_path)
+                    <img src="{{ public_path('storage/' . $organization->logo_path) }}" class="logo">
+                @elseif ($induk?->logo_path)
+                    <img src="{{ public_path('storage/' . $induk->logo_path) }}" class="logo">
+                @endif
+
+            </td>
+
+
+            {{-- IDENTITAS ORGANISASI --}}
+            <td class="kop-text">
+
+                <div class="organization-name">
+                    {{ $organization?->name ?? ($induk?->name ?? 'Perkumpulan Mamba\'ul Ulum Bedanten') }}
+                </div>
+
+                @if ($organization?->address ?? $induk?->address)
+                    <div>
+                        {{ $organization?->address ?? $induk?->address }}
+                    </div>
+                @endif
+
+            </td>
+
+
+            {{-- KONTAK --}}
+            <td class="kop-text-right">
+
+                @if ($organization?->phone ?? $induk?->phone)
+                    <div>
+                        Telp. {{ $organization?->phone ?? $induk?->phone }}
+                    </div>
+                @endif
+
+                @if ($organization?->email ?? $induk?->email)
+                    <div>
+                        Email: {{ $organization?->email ?? $induk?->email }}
+                    </div>
+                @endif
+
+                @if ($organization?->website ?? $induk?->website)
+                    <div>
+                        {{ $organization?->website ?? $induk?->website }}
+                    </div>
+                @endif
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <div class="kop-line"></div>
+
 
     <h1>LAPORAN AUDIT</h1>
 
@@ -201,10 +312,7 @@
 
                     @endphp
 
-                    {{ $month
-                        ? ($months[(int) $month] ?? $month)
-                        : 'Semua Bulan'
-                    }}
+                    {{ $month ? $months[(int) $month] ?? $month : 'Semua Bulan' }}
 
                 </td>
 
@@ -219,15 +327,11 @@
                 <td colspan="3">
 
                     @if ($dateFrom || $dateTo)
-
                         {{ $dateFrom ?: '...' }}
                         s/d
                         {{ $dateTo ?: '...' }}
-
                     @else
-
                         Semua Tanggal
-
                     @endif
 
                 </td>
@@ -235,7 +339,6 @@
             </tr>
 
             @if ($search)
-
                 <tr>
 
                     <td class="filter-label">
@@ -247,7 +350,6 @@
                     </td>
 
                 </tr>
-
             @endif
 
         </table>
@@ -312,43 +414,24 @@
 
                     $properties = $properties ?? [];
 
-                    $old =
-                        $properties['old'] ?? [];
+                    $old = $properties['old'] ?? [];
 
-                    $attributes =
-                        $properties['attributes'] ?? [];
+                    $attributes = $properties['attributes'] ?? [];
 
-                    $organizationId =
-                        $attributes['organization_id']
-                        ?? $old['organization_id']
-                        ?? null;
+                    $organizationId = $attributes['organization_id'] ?? ($old['organization_id'] ?? null);
 
-                    $organization =
-                        $organizationId
-                            ? \App\Models\Organization::find($organizationId)
-                            : null;
+                    $organization = $organizationId ? \App\Models\Organization::find($organizationId) : null;
 
                     $changes = [];
 
-                    $fields = array_unique(
-                        array_merge(
-                            array_keys($old),
-                            array_keys($attributes)
-                        )
-                    );
+                    $fields = array_unique(array_merge(array_keys($old), array_keys($attributes)));
 
                     foreach ($fields as $field) {
+                        $oldValue = $old[$field] ?? null;
 
-                        $oldValue =
-                            $old[$field] ?? null;
+                        $newValue = $attributes[$field] ?? null;
 
-                        $newValue =
-                            $attributes[$field] ?? null;
-
-                        if (
-                            $activity->event === 'updated'
-                            && $oldValue === $newValue
-                        ) {
+                        if ($activity->event === 'updated' && $oldValue === $newValue) {
                             continue;
                         }
 
@@ -369,13 +452,11 @@
 
                     <td class="center">
 
-                        {{ optional($activity->created_at)
-                            ->format('d/m/Y') }}
+                        {{ optional($activity->created_at)->format('d/m/Y') }}
 
                         <br>
 
-                        {{ optional($activity->created_at)
-                            ->format('H:i:s') }}
+                        {{ optional($activity->created_at)->format('H:i:s') }}
 
                     </td>
 
@@ -386,13 +467,11 @@
                         </strong>
 
                         @if ($activity->causer?->email)
-
                             <br>
 
                             <span style="font-size:7px;">
                                 {{ $activity->causer->email }}
                             </span>
-
                         @endif
 
                     </td>
@@ -400,27 +479,19 @@
                     <td class="center">
 
                         @if ($activity->event === 'created')
-
                             <span class="badge created">
                                 Dibuat
                             </span>
-
                         @elseif ($activity->event === 'updated')
-
                             <span class="badge updated">
                                 Diperbarui
                             </span>
-
                         @elseif ($activity->event === 'deleted')
-
                             <span class="badge deleted">
                                 Dihapus
                             </span>
-
                         @else
-
                             {{ $activity->event ?: '-' }}
-
                         @endif
 
                     </td>
@@ -428,17 +499,11 @@
                     <td>
 
                         @if ($activity->log_name === 'finance_deposit')
-
                             Setoran
-
                         @elseif ($activity->log_name === 'finance_transaction')
-
                             Transaksi Keuangan
-
                         @else
-
                             {{ $activity->log_name ?: '-' }}
-
                         @endif
 
                     </td>
@@ -446,17 +511,13 @@
                     <td class="center">
 
                         @if ($activity->subject_type)
-
                             {{ class_basename($activity->subject_type) }}
 
                             <br>
 
                             #{{ $activity->subject_id }}
-
                         @else
-
                             -
-
                         @endif
 
                     </td>
@@ -472,42 +533,27 @@
                         {{ $activity->description ?: '-' }}
 
                         @if (count($changes))
-
-                            <div class="changes"
-                                 style="margin-top:4px;">
+                            <div class="changes" style="margin-top:4px;">
 
                                 <strong>
                                     Perubahan:
                                 </strong>
 
                                 @foreach ($changes as $change)
-
                                     <div class="change-item">
 
                                         {{ $change['field'] }}:
 
-                                        {{ is_null($change['old'])
-                                            ? '-'
-                                            : (is_array($change['old'])
-                                                ? json_encode($change['old'])
-                                                : $change['old'])
-                                        }}
+                                        {{ is_null($change['old']) ? '-' : (is_array($change['old']) ? json_encode($change['old']) : $change['old']) }}
 
                                         →
 
-                                        {{ $change['new'] === null
-                                            ? '-'
-                                            : (is_array($change['new'])
-                                                ? json_encode($change['new'])
-                                                : $change['new'])
-                                        }}
+                                        {{ $change['new'] === null ? '-' : (is_array($change['new']) ? json_encode($change['new']) : $change['new']) }}
 
                                     </div>
-
                                 @endforeach
 
                             </div>
-
                         @endif
 
                     </td>
@@ -518,8 +564,7 @@
 
                 <tr>
 
-                    <td colspan="8"
-                        class="center">
+                    <td colspan="8" class="center">
 
                         Tidak ada data audit.
 

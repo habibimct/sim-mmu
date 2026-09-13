@@ -79,7 +79,7 @@
                                 </td>
 
                                 <td>
-                                    @if ($organization->type === 'INDUK')
+                                    @if ($organization->type === 'induk')
                                         <span class="badge text-bg-primary">
                                             INDUK
                                         </span>

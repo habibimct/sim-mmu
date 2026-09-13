@@ -5,52 +5,132 @@ use App\Http\Controllers\Guru\ClassController;
 use App\Http\Controllers\Guru\TeacherAttendanceController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('guru.dashboard');
-    })->name('dashboard');
+Route::middleware(['auth'])
+    ->prefix('guru')
+    ->name('guru.')
+    ->group(function () {
 
-    Route::get('/classes', [ClassController::class, 'index'])
-        ->name('classes.index');
+        /*
+        |--------------------------------------------------------------------------
+        | Dashboard
+        |--------------------------------------------------------------------------
+        */
 
-    Route::get('/attendance', [AttendanceController::class, 'index'])
-        ->name('attendance.index');
+        Route::get('/dashboard', function () {
+            return view('guru.dashboard');
+        })
+            ->middleware('permission:dashboard.view')
+            ->name('dashboard');
 
-    Route::get('/attendance/filter-options', [AttendanceController::class, 'filterOptions'])
-        ->name('attendance.filter-options');
 
-    Route::get('/attendance/{teachingAssignment}/students', [
-        AttendanceController::class,
-        'students',
-    ])->name('attendance.students');
+        /*
+        |--------------------------------------------------------------------------
+        | Kelas
+        |--------------------------------------------------------------------------
+        */
 
-    Route::post('/attendance', [
-        AttendanceController::class,
-        'store',
-    ])->name('attendance.store');
+        Route::get('/classes', [ClassController::class, 'index'])
+            ->middleware('permission:classes.view')
+            ->name('classes.index');
 
-    Route::get('/teacher-attendance', [
-        TeacherAttendanceController::class,
-        'index',
-    ])->name('teacher-attendance.index');
 
-    Route::get('/teacher-attendance/filter-options', [
-        TeacherAttendanceController::class,
-        'filterOptions',
-    ])->name('teacher-attendance.filter-options');
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa - Lihat
+        |--------------------------------------------------------------------------
+        */
 
-    Route::get('/attendance/{attendance}/edit', [
-        AttendanceController::class,
-        'edit',
-    ])->name('attendance.edit');
+        Route::get('/attendance', [AttendanceController::class, 'index'])
+            ->middleware('permission:attendance.view')
+            ->name('attendance.index');
 
-    Route::put('/attendance/{attendance}', [
-        AttendanceController::class,
-        'update',
-    ])->name('attendance.update');
+        Route::get('/attendance/filter-options', [
+            AttendanceController::class,
+            'filterOptions',
+        ])
+            ->middleware('permission:attendance.view')
+            ->name('attendance.filter-options');
 
-    Route::delete('/attendance/{attendance}', [
-        AttendanceController::class,
-        'destroy',
-    ])->name('attendance.destroy');
-});
+        Route::get('/attendance/{teachingAssignment}/students', [
+            AttendanceController::class,
+            'students',
+        ])
+            ->middleware('permission:attendance.view')
+            ->name('attendance.students');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa - Mencatat
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/attendance', [
+            AttendanceController::class,
+            'store',
+        ])
+            ->middleware('permission:attendance.create')
+            ->name('attendance.store');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Guru
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/teacher-attendance', [
+            TeacherAttendanceController::class,
+            'index',
+        ])
+            ->middleware('permission:attendance.view')
+            ->name('teacher-attendance.index');
+
+        Route::get('/teacher-attendance/filter-options', [
+            TeacherAttendanceController::class,
+            'filterOptions',
+        ])
+            ->middleware('permission:attendance.view')
+            ->name('teacher-attendance.filter-options');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa - Mengubah
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/attendance/{attendance}/edit', [
+            AttendanceController::class,
+            'edit',
+        ])
+            ->middleware('permission:attendance.update')
+            ->name('attendance.edit');
+
+        Route::put('/attendance/{attendance}', [
+            AttendanceController::class,
+            'update',
+        ])
+            ->middleware('permission:attendance.update')
+            ->name('attendance.update');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Absensi Siswa - Menghapus
+        |--------------------------------------------------------------------------
+        |
+        | Belum ada permission attendance.delete.
+        | Untuk sementara kita pertahankan route dan akan menentukan
+        | aturan penghapusannya setelah melihat business logic/controller.
+        |
+        */
+
+        Route::delete('/attendance/{attendance}', [
+            AttendanceController::class,
+            'destroy',
+        ])
+            ->middleware('permission:attendance.update')
+            ->name('attendance.destroy');
+
+    });

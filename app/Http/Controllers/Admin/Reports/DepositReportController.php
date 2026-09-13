@@ -511,6 +511,35 @@ class DepositReportController extends Controller
             ? $organizationNames->first()
             : 'Beberapa Unit';
 
+
+        /*
+|--------------------------------------------------------------------------
+| Profil Organisasi untuk Kop
+|--------------------------------------------------------------------------
+*/
+
+        $organization = null;
+
+        if ($organizationNames->count() === 1) {
+
+            $organization =
+                Organization::whereIn(
+                    'id',
+                    $organizationIds
+                )
+                ->where(
+                    'name',
+                    $organizationNames->first()
+                )
+                ->first();
+        }
+
+        $induk =
+            Organization::where(
+                'type',
+                'induk'
+            )->firstOrFail();
+
         /*
     |--------------------------------------------------------------------------
     | Siapkan bukti setoran untuk PDF
@@ -559,6 +588,10 @@ class DepositReportController extends Controller
             [
                 'deposits' => $deposits,
                 'organizationName' => $organizationName,
+
+                'organization' => $organization,
+                'induk' => $induk,
+
                 'status' => $status,
                 'year' => $year,
                 'month' => $month,

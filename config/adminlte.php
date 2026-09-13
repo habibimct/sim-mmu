@@ -473,14 +473,14 @@ return [
                     'text' => 'Laporan Tagihan',
                     'url' => 'admin/laporan/tagihan',
                     'icon' => 'bi bi-receipt',
-                    'can' => 'reports.view',
+                    'can' => 'bills.view',
                 ],
 
                 [
                     'text' => 'Laporan Pembayaran',
                     'url' => 'admin/laporan/pembayaran',
                     'icon' => 'bi bi-credit-card',
-                    'can' => 'reports.view',
+                    'can' => 'payments.view',
                 ],
 
                 [
@@ -515,9 +515,38 @@ return [
 
         [
             'text' => 'Pengaturan',
-            'url' => 'admin/settings',
             'icon' => 'bi bi-gear',
             'can' => 'settings.manage',
+            'submenu' => [
+
+                [
+                    'text' => 'Permission',
+                    'url' => 'admin/settings/permissions',
+                    'icon' => 'bi bi-shield-lock',
+                    'can' => 'settings.manage',
+                ],
+
+                [
+                    'text' => 'Profil Induk',
+                    'url' => 'admin/settings/profile-induk',
+                    'icon' => 'bi bi-building',
+                    'can' => 'profile_induk.manage',
+                ],
+
+            ],
+        ],
+
+        [
+            'text' => 'Profil Unit',
+            'url' => 'admin/settings/profile-unit',
+            'icon' => 'bi bi-house',
+            'can' => 'profile_unit.manage',
+        ],
+
+        [
+            'text' => 'Profil Saya',
+            'url' => 'profile',
+            'icon' => 'bi bi-person-circle',
         ],
     ],
 

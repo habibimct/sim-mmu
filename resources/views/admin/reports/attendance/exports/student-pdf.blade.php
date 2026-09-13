@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <meta charset="UTF-8">
@@ -9,7 +10,6 @@
     </title>
 
     <style>
-
         @page {
             margin: 15px;
         }
@@ -52,73 +52,171 @@
             text-align: left;
         }
 
+        .kop {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 3px;
+        }
+
+        .kop td {
+            border: none;
+            vertical-align: middle;
+        }
+
+.logo-cell {
+    width: 25%;
+    text-align: left;
+}
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+.kop-text {
+    width: 50%;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.kop-text-right {
+    width: 25%;
+    text-align: right;
+    font-size: 9px;
+    line-height: 1.35;
+}
+
+        .organization-name {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .kop-line {
+            border-top: 2px solid #000;
+            margin-bottom: 8px;
+        }
     </style>
 
 </head>
 
 <body>
 
+    {{-- ==========================================================
+         KOP LAPORAN
+         ========================================================== --}}
+
+    <table class="kop">
+
+        <tr>
+
+            {{-- LOGO --}}
+            <td class="logo-cell">
+
+                @if ($organization?->logo_path)
+                    <img src="{{ public_path('storage/' . $organization->logo_path) }}" class="logo">
+                @elseif ($induk?->logo_path)
+                    <img src="{{ public_path('storage/' . $induk->logo_path) }}" class="logo">
+                @endif
+
+            </td>
+
+
+            {{-- IDENTITAS ORGANISASI --}}
+            <td class="kop-text">
+
+                <div class="organization-name">
+                    {{ $organization?->name ?? ($induk?->name ?? 'Perkumpulan Mamba\'ul Ulum Bedanten') }}
+                </div>
+
+                @if ($organization?->address ?? $induk?->address)
+                    <div>
+                        {{ $organization?->address ?? $induk?->address }}
+                    </div>
+                @endif
+
+            </td>
+
+
+            {{-- KONTAK --}}
+            <td class="kop-text-right">
+
+                @if ($organization?->phone ?? $induk?->phone)
+                    <div>
+                        Telp. {{ $organization?->phone ?? $induk?->phone }}
+                    </div>
+                @endif
+
+                @if ($organization?->email ?? $induk?->email)
+                    <div>
+                        Email: {{ $organization?->email ?? $induk?->email }}
+                    </div>
+                @endif
+
+                @if ($organization?->website ?? $induk?->website)
+                    <div>
+                        {{ $organization?->website ?? $induk?->website }}
+                    </div>
+                @endif
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    {{-- GARIS KOP --}}
+
+    <div class="kop-line"></div>
+
 
     {{-- ==========================================================
-         JUDUL
-         ========================================================== --}}
+     JUDUL
+     ========================================================== --}}
 
     <table>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="title"
-            >
+
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="title">
                 LAPORAN ABSENSI SISWA
             </td>
+
         </tr>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="info"
-            >
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="info">
                 Bulan:
                 {{ $monthStart->translatedFormat('F Y') }}
             </td>
         </tr>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="info"
-            >
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="info">
                 Tahun Ajaran:
                 {{ $academicYear?->name ?? '-' }}
             </td>
         </tr>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="info"
-            >
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="info">
                 Unit:
                 {{ $organization?->name ?? 'Semua Unit' }}
             </td>
         </tr>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="info"
-            >
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="info">
                 Kelas:
                 {{ $schoolClass?->name ?? 'Semua Kelas' }}
             </td>
         </tr>
 
         <tr>
-            <td
-                colspan="{{ $monthStart->daysInMonth + 7 }}"
-                class="info"
-            >
+            <td colspan="{{ $monthStart->daysInMonth + 7 }}" class="info">
                 Mata Pelajaran:
                 {{ $subject?->name ?? 'Semua Mata Pelajaran' }}
             </td>
@@ -165,16 +263,10 @@
 
             <tr>
 
-                @for (
-                    $day = $monthStart->copy();
-                    $day <= $monthEnd;
-                    $day->addDay()
-                )
-
+                @for ($day = $monthStart->copy(); $day <= $monthEnd; $day->addDay())
                     <th>
                         {{ $day->format('d') }}
                     </th>
-
                 @endfor
 
 
@@ -201,51 +293,18 @@
 
         <tbody>
 
-            @foreach (
-                $students as $index => $student
-            )
-
+            @foreach ($students as $index => $student)
                 @php
 
-                    $daily =
-                        $dailyStatuses[$student->id]
-                        ?? collect();
+                    $daily = $dailyStatuses[$student->id] ?? collect();
 
+                    $present = $daily->filter(fn($status) => $status === 'present')->count();
 
-                    $present =
-                        $daily
-                        ->filter(
-                            fn ($status) =>
-                                $status === 'present'
-                        )
-                        ->count();
+                    $sick = $daily->filter(fn($status) => $status === 'sick')->count();
 
+                    $permission = $daily->filter(fn($status) => $status === 'permission')->count();
 
-                    $sick =
-                        $daily
-                        ->filter(
-                            fn ($status) =>
-                                $status === 'sick'
-                        )
-                        ->count();
-
-
-                    $permission =
-                        $daily
-                        ->filter(
-                            fn ($status) =>
-                                $status === 'permission'
-                        )
-                        ->count();
-
-
-                    $absent =
-                        $daily
-                        ->filter(
-                            fn ($status) =>
-                                $status === 'absent'
-                        )
-                        ->count();
+                    $absent = $daily->filter(fn($status) => $status === 'absent')->count();
 
                 @endphp
 
@@ -271,20 +330,12 @@
                          STATUS HARIAN
                          ================================================== --}}
 
-                    @for (
-                        $day = $monthStart->copy();
-                        $day <= $monthEnd;
-                        $day->addDay()
-                    )
-
+                    @for ($day = $monthStart->copy(); $day <= $monthEnd; $day->addDay())
                         @php
 
-                            $dateKey =
-                                $day->format('Y-m-d');
+                            $dateKey = $day->format('Y-m-d');
 
-                            $status =
-                                $daily[$dateKey]
-                                ?? null;
+                            $status = $daily[$dateKey] ?? null;
 
                         @endphp
 
@@ -292,29 +343,27 @@
                         <td>
 
                             @switch($status)
-
                                 @case('present')
                                     H
-                                    @break
+                                @break
 
                                 @case('sick')
                                     S
-                                    @break
+                                @break
 
                                 @case('permission')
                                     I
-                                    @break
+                                @break
 
                                 @case('absent')
                                     A
-                                    @break
+                                @break
 
                                 @default
                                     -
                             @endswitch
 
                         </td>
-
                     @endfor
 
 
@@ -339,7 +388,6 @@
                     </td>
 
                 </tr>
-
             @endforeach
 
         </tbody>
@@ -380,4 +428,5 @@
 
 
 </body>
+
 </html>

@@ -21,10 +21,12 @@
             Transaksi Keuangan
         </h1>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTransaksiBaru">
-            <i class="bi bi-plus-lg me-1"></i>
-            Transaksi Baru
-        </button>
+        @can('finance.manage')
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTransaksiBaru">
+                <i class="bi bi-plus-lg me-1"></i>
+                Transaksi Baru
+            </button>
+        @endcan
 
     </div>
 

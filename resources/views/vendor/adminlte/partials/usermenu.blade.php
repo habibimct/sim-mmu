@@ -1,8 +1,13 @@
 @php
     $user = auth()->user();
     $name = $user->name ?? ($user->email ?? 'Guest');
-    $avatar = !empty($user?->profile_photo_url) ? $user->profile_photo_url : asset('images/Load.jpg');
+
+    $avatar = !empty($user?->profile_photo_path)
+        ? asset('storage/' . $user->profile_photo_path)
+        : asset('images/Load.jpg');
+
     $memberSince = $user?->created_at ? $user->created_at->format('M. Y') : null;
+
     $showImage = (bool) config('adminlte.usermenu_image');
     $profileUrl = config('adminlte.usermenu_profile_url');
 @endphp

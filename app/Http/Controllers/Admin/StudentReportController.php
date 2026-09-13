@@ -399,7 +399,7 @@ class StudentReportController extends Controller
         );
     }
 
-       public function pdf(Request $request): Response
+    public function pdf(Request $request): Response
     {
         $user = $request->user();
 
@@ -425,6 +425,30 @@ class StudentReportController extends Controller
         ) {
             abort(403);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Profil Organisasi untuk Kop
+        |--------------------------------------------------------------------------
+        */
+
+        $organization = null;
+
+        if ($organizationId) {
+            $organization =
+                Organization::whereIn(
+                    'id',
+                    $organizationIds
+                )->find(
+                    $organizationId
+                );
+        }
+
+        $induk =
+            Organization::where(
+                'type',
+                'induk'
+            )->firstOrFail();
 
         $query = StudentAcademicYear::query()
             ->with([
@@ -509,7 +533,11 @@ class StudentReportController extends Controller
 
         $pdf = Pdf::loadView(
             'admin.reports.students.exports.pdf',
-            compact('studentAcademicYears')
+            [
+                'studentAcademicYears' => $studentAcademicYears,
+                'organization' => $organization,
+                'induk' => $induk,
+            ]
         );
 
         $pdf->setPaper('a4', 'landscape');
