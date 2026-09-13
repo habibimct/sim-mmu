@@ -39,7 +39,7 @@
                 HANYA DESKTOP
                 ================================================== --}}
 
-                 <div
+                <div
                     class="relative hidden overflow-hidden
                     bg-gradient-to-br from-blue-950/95
                     via-blue-900/90
@@ -205,19 +205,28 @@
                         <div>
 
                             {{-- Logo --}}
+                            @php
+                                $induk = \App\Models\Organization::where('type', 'induk')->first();
+                            @endphp
 
                             <div
                                 class="mb-10 flex h-16 w-16
-                       items-center justify-center
-                       rounded-2xl
-                       border border-blue-300/40
-                       bg-blue-500/30
-                       shadow-xl shadow-blue-950/40
-                       backdrop-blur-md">
+           items-center justify-center
+           rounded-2xl
+           border border-blue-300/40
+           bg-blue-500/30
+           shadow-xl shadow-blue-950/40
+           backdrop-blur-md
+           overflow-hidden">
 
-                                <span class="text-3xl font-bold">
-                                    P
-                                </span>
+                                @if ($induk?->logo_path)
+                                    <img src="{{ asset('storage/' . $induk->logo_path) }}" alt="{{ $induk->name }}"
+                                        class="h-full w-full object-contain p-2">
+                                @else
+                                    <span class="text-3xl font-bold text-white">
+                                        P
+                                    </span>
+                                @endif
 
                             </div>
 

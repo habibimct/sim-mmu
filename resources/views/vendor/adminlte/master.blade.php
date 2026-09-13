@@ -23,6 +23,8 @@
     $titlePrefix = config('adminlte.title_prefix', '');
     $titlePostfix = config('adminlte.title_postfix', '');
     $title = trim($titlePrefix . ' ' . ($title ?? config('adminlte.title', 'AdminLTE 4')) . ' ' . $titlePostfix);
+
+    $induk = \App\Models\Organization::where('type', 'induk')->first();
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $rtl ? 'rtl' : 'ltr' }}"
@@ -33,6 +35,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @if ($induk?->logo_path)
+        <link rel="icon" type="image/webp" href="{{ asset('storage/' . $induk->logo_path) }}">
+    @endif
+
     <title>{{ $title }}</title>
 
 
@@ -40,15 +46,15 @@
         @yield('adminlte_css')
     @endif
 
-<style>
-    html {
-        background: #343a40;
-    }
+    <style>
+        html {
+            background: #343a40;
+        }
 
-    body {
-        visibility: hidden;
-    }
-</style>
+        body {
+            visibility: hidden;
+        }
+    </style>
 
     {{-- Compiled AdminLTE + Bootstrap from your Vite pipeline --}}
     @vite(['resources/css/adminlte.css', 'resources/js/adminlte.js'])
@@ -68,11 +74,11 @@
     @yield('css')
     @pluginStyles
 
-<script>
-    window.addEventListener('DOMContentLoaded', function () {
-        document.body.style.visibility = 'visible';
-    });
-</script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            document.body.style.visibility = 'visible';
+        });
+    </script>
 </head>
 
 <body class="{{ $bodyClasses }}">

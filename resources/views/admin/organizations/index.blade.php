@@ -6,15 +6,16 @@
     <div class="d-flex justify-content-between align-items-center">
         <h1>Organisasi</h1>
 
-        <a href="{{ route('admin.organizations.create') }}" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrganizationModal">
             <i class="bi bi-plus-lg"></i>
             Tambah Organisasi
-        </a>
+        </button>
     </div>
 @stop
 
 @section('content')
 
+    {{-- Success --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show">
             <i class="bi bi-check-circle"></i>
@@ -25,15 +26,25 @@
         </div>
     @endif
 
-    @if ($errors->has('status'))
+
+    {{-- Validation Error --}}
+    @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show">
             <i class="bi bi-exclamation-triangle"></i>
-            {{ $errors->first('status') }}
+
+            <strong>Terjadi kesalahan:</strong>
+
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
 
             <button type="button" class="btn-close" data-bs-dismiss="alert">
             </button>
         </div>
     @endif
+
 
     <div class="card">
 
@@ -63,7 +74,9 @@
                     <tbody>
 
                         @forelse ($organizations as $organization)
+
                             <tr>
+
                                 <td>
                                     {{ $loop->iteration }}
                                 </td>
@@ -104,12 +117,17 @@
 
                                 <td>
 
-                                    <a href="{{ route('admin.organizations.edit', $organization) }}"
-                                        class="btn btn-sm btn-warning" title="Edit">
+                                    {{-- EDIT --}}
+                                    <button type="button" class="btn btn-sm btn-warning" title="Edit"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editOrganizationModal{{ $organization->id }}">
                                         <i class="bi bi-pencil"></i>
-                                    </a>
+                                    </button>
 
-                                    @if ($organization->type !== 'INDUK')
+
+                                    {{-- STATUS & DELETE HANYA UNTUK UNIT --}}
+                                    @if ($organization->type !== 'induk')
+                                        {{-- TOGGLE STATUS --}}
                                         <form action="{{ route('admin.organizations.toggle-status', $organization) }}"
                                             method="POST" class="d-inline"
                                             onsubmit="return confirm('Apakah Anda yakin ingin mengubah status organisasi ini?');">
@@ -129,26 +147,31 @@
 
                                         </form>
 
+
+                                        {{-- DELETE --}}
                                         @if ($organization->student_academic_years_count > 0 || $organization->finance_transactions_count > 0)
                                             <button type="button" class="btn btn-sm btn-secondary" disabled
-                                                title="Tidak dapat dihapus karena sudah memiliki data siswa">
+                                                title="Tidak dapat dihapus karena sudah memiliki data">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         @else
                                             <form action="{{ route('admin.organizations.destroy', $organization) }}"
                                                 method="POST" class="d-inline"
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus organisasi {{ $organization->name }}? Data yang sudah terhapus tidak dapat dikembalikan.');">
+
                                                 @csrf
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
+
                                             </form>
                                         @endif
                                     @endif
 
                                 </td>
+
                             </tr>
 
                         @empty
@@ -158,6 +181,7 @@
                                     Belum ada data organisasi.
                                 </td>
                             </tr>
+
                         @endforelse
 
                     </tbody>
@@ -169,5 +193,45 @@
         </div>
 
     </div>
+
+
+
+@include('admin.organizations.modals.create')
+@include('admin.organizations.modals.edit')
+
+@stop
+
+
+@section('js')
+
+    @php
+        $openModal = old('_modal');
+    @endphp
+
+    @if ($openModal === 'create')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modalElement = document.getElementById('createOrganizationModal');
+
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            });
+        </script>
+    @elseif (is_string($openModal) && str_starts_with($openModal, 'edit-'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modalElement = document.getElementById(
+                    'editOrganizationModal{{ str_replace('edit-', '', $openModal) }}'
+                );
+
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            });
+        </script>
+    @endif
 
 @stop

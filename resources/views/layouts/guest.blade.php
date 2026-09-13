@@ -1,3 +1,7 @@
+@php
+    $induk = \App\Models\Organization::where('type', 'induk')->first();
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -24,6 +28,14 @@
         name="csrf-token"
         content="{{ csrf_token() }}"
     >
+
+    @if ($induk?->logo_path)
+        <link
+            rel="icon"
+            type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}"
+        >
+    @endif
 
     <title>
         {{ config('app.name', 'PMUB') }}

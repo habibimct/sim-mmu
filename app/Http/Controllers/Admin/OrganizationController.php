@@ -69,17 +69,24 @@ class OrganizationController extends Controller
 
         if ($validated['type'] === 'induk') {
 
+            if (!$validated['is_active']) {
+                return back()->withInput()->withErrors([
+                    'is_active' => 'Organisasi induk harus selalu aktif.',
+                ]);
+            }
+
             $indukExists = Organization::where('type', 'induk')->exists();
 
             if ($indukExists) {
-                return back()
-                    ->withInput()
-                    ->withErrors([
-                        'type' => 'Organisasi induk sudah ada. Sistem hanya mengizinkan satu induk.',
-                    ]);
+                return back()->withInput()->withErrors([
+                    'type' => 'Organisasi induk sudah ada. Sistem hanya mengizinkan satu induk.',
+                ]);
             }
         }
 
+        $validated['parent_id'] = $validated['type'] === 'unit'
+            ? 1
+            : null;
 
         Organization::create($validated);
 
@@ -191,6 +198,10 @@ class OrganizationController extends Controller
                 ]);
         }
 
+
+        $validated['parent_id'] = $validated['type'] === 'unit'
+            ? 1
+            : null;
 
         $organization->update($validated);
 

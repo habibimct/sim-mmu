@@ -4,16 +4,21 @@
 
         <div class="pmub-preloader-content">
 
-            <img
-                src="{{ asset('images/Load.jpg') }}"
-                alt="PMUB"
-                class="pmub-preloader-logo"
-            >
+            @php
+                $induk = \App\Models\Organization::where('type', 'induk')->first();
+            @endphp
+
+            @if ($induk?->logo_path)
+                <img src="{{ asset('storage/' . $induk->logo_path) }}" alt="{{ $induk->name }}"
+                    class="pmub-preloader-logo">
+            @else
+                <img src="{{ asset('images/Load.jpg') }}" alt="INDUK" class="pmub-preloader-logo">
+            @endif
 
             <div class="pmub-preloader-spinner"></div>
 
             <div class="pmub-preloader-text">
-                PMUB
+                Loading...
             </div>
 
         </div>
@@ -96,7 +101,7 @@
     </style>
 
     <script>
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
 
             const preloader =
                 document.getElementById('pmub-preloader');
@@ -109,7 +114,7 @@
                 'pmub-preloader-hide'
             );
 
-            setTimeout(function () {
+            setTimeout(function() {
 
                 preloader.remove();
 

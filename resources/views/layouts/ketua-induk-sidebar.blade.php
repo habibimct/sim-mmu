@@ -565,7 +565,7 @@
 
             {{-- Data Siswa --}}
 
-            <div
+            {{-- <div
                 class="flex items-center gap-2
                        px-3 py-2
                        rounded-lg
@@ -579,12 +579,12 @@
 
                 Data Siswa
 
-            </div>
+            </div> --}}
 
 
             {{-- Absensi --}}
 
-            <div
+            {{-- <div
                 class="flex items-center gap-2
                        px-3 py-2
                        rounded-lg
@@ -598,26 +598,27 @@
 
                 Absensi
 
-            </div>
+            </div> --}}
 
 
-            {{-- Keuangan --}}
+            {{-- Laporan Keuangan --}}
 
-            <div
+            <a href="{{ route('ketua-induk.reports.finance.index') }}"
                 class="flex items-center gap-2
-                       px-3 py-2
-                       rounded-lg
-                       text-xs
-                       text-white/60">
-
+                px-3 py-2
+                rounded-lg
+                text-sm
+                transition
+                {{ request()->routeIs('ketua-induk.reports.*')
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
                 <span
                     class="w-1.5 h-1.5
-                           rounded-full
-                           bg-white/40"></span>
+                    rounded-full
+                    {{ request()->routeIs('ketua-induk.reports.*') ? 'bg-white' : 'bg-white/40' }}"></span>
 
                 Keuangan
-
-            </div>
+            </a>
 
         </div>
 

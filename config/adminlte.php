@@ -500,12 +500,12 @@ return [
             ],
         ],
 
-        [
-            'text' => 'Audit',
-            'url' => 'admin/audit',
-            'icon' => 'bi bi-journal-text',
-            'can' => 'audit.view',
-        ],
+        // [
+        //     'text' => 'Audit',
+        //     'url' => 'admin/audit',
+        //     'icon' => 'bi bi-journal-text',
+        //     'can' => 'audit.view',
+        // ],
 
         // =========================
         // SISTEM

@@ -21,7 +21,8 @@
 
         {{-- Gradient sangat ringan --}}
 
-        <div class="absolute inset-0 bg-gradient-to-br
+        <div
+            class="absolute inset-0 bg-gradient-to-br
             from-blue-950/40
             via-transparent
             to-slate-950/70">
@@ -149,11 +150,8 @@
                         opacity-60">
 
                         @for ($i = 0; $i < 25; $i++)
-
-                            <span
-                                class="h-1.5 w-1.5 rounded-full bg-blue-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-blue-300">
                             </span>
-
                         @endfor
 
                     </div>
@@ -170,11 +168,8 @@
                         opacity-30">
 
                         @for ($i = 0; $i < 24; $i++)
-
-                            <span
-                                class="h-1 w-1 rounded-full bg-blue-300">
+                            <span class="h-1 w-1 rounded-full bg-blue-300">
                             </span>
-
                         @endfor
 
                     </div>
@@ -214,19 +209,28 @@
                         <div>
 
                             {{-- Logo --}}
+                            @php
+                                $induk = \App\Models\Organization::where('type', 'induk')->first();
+                            @endphp
 
                             <div
                                 class="mb-10 flex h-16 w-16
-                                items-center justify-center
-                                rounded-2xl
-                                border border-blue-300/40
-                                bg-blue-500/30
-                                shadow-xl shadow-blue-950/40
-                                backdrop-blur-md">
+           items-center justify-center
+           rounded-2xl
+           border border-blue-300/40
+           bg-blue-500/30
+           shadow-xl shadow-blue-950/40
+           backdrop-blur-md
+           overflow-hidden">
 
-                                <span class="text-3xl font-bold">
-                                    P
-                                </span>
+                                @if ($induk?->logo_path)
+                                    <img src="{{ asset('storage/' . $induk->logo_path) }}" alt="{{ $induk->name }}"
+                                        class="h-full w-full object-contain p-2">
+                                @else
+                                    <span class="text-3xl font-bold text-white">
+                                        P
+                                    </span>
+                                @endif
 
                             </div>
 
@@ -291,8 +295,7 @@
 
                         {{-- FOOTER --}}
 
-                        <div
-                            class="flex items-center gap-4
+                        <div class="flex items-center gap-4
                             text-sm text-white/75">
 
                             <div
@@ -303,17 +306,10 @@
                                 bg-blue-500/20
                                 backdrop-blur-md">
 
-                                <svg
-                                    class="h-5 w-5"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                    <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M3.75 21h16.5M4.5 21V9.75L12 3l7.5 6.75V21M8.25 21v-6.75h7.5V21" />
 
                                 </svg>
@@ -344,16 +340,14 @@
                 RIGHT PANEL / REGISTER
                 ================================================== --}}
 
-                <div
-                    class="bg-white px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+                <div class="bg-white px-5 py-6 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
 
 
                     {{-- =================================================
                     LOGO MOBILE
                     ================================================== --}}
 
-                    <div
-                        class="mb-4 flex items-center gap-3 lg:hidden">
+                    <div class="mb-4 flex items-center gap-3 lg:hidden">
 
                         <div
                             class="flex h-11 w-11
@@ -394,8 +388,7 @@
                             Selamat datang
                         </p>
 
-                        <h2
-                            class="mt-1 text-2xl font-bold
+                        <h2 class="mt-1 text-2xl font-bold
                             tracking-tight text-slate-800">
 
                             Buat akun baru
@@ -416,9 +409,7 @@
                     FORM
                     ================================================== --}}
 
-                    <form
-                        method="POST"
-                        action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}">
 
                         @csrf
 
@@ -429,11 +420,8 @@
 
                         <div>
 
-                            <x-input-label
-                                for="name"
-                                value="Nama Lengkap"
-                                class="text-sm font-medium text-slate-700"
-                            />
+                            <x-input-label for="name" value="Nama Lengkap"
+                                class="text-sm font-medium text-slate-700" />
 
                             <div class="relative mt-2">
 
@@ -442,17 +430,10 @@
                                     absolute inset-y-0 left-0
                                     flex items-center pl-3">
 
-                                    <svg
-                                        class="h-5 w-5 text-slate-400"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor">
+                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0" />
 
                                     </svg>
@@ -460,30 +441,19 @@
                                 </div>
 
 
-                                <x-text-input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    :value="old('name')"
-                                    required
-                                    autofocus
-                                    autocomplete="name"
-                                    placeholder="Nama lengkap"
+                                <x-text-input id="name" name="name" type="text" :value="old('name')" required
+                                    autofocus autocomplete="name" placeholder="Nama lengkap"
                                     class="block w-full rounded-xl
                                     border-slate-300
                                     py-3 pl-10
                                     text-sm shadow-sm transition
                                     focus:border-blue-500
-                                    focus:ring-blue-500"
-                                />
+                                    focus:ring-blue-500" />
 
                             </div>
 
 
-                            <x-input-error
-                                :messages="$errors->get('name')"
-                                class="mt-2"
-                            />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
 
                         </div>
 
@@ -494,11 +464,7 @@
 
                         <div class="mt-3">
 
-                            <x-input-label
-                                for="email"
-                                value="Email"
-                                class="text-sm font-medium text-slate-700"
-                            />
+                            <x-input-label for="email" value="Email" class="text-sm font-medium text-slate-700" />
 
                             <div class="relative mt-2">
 
@@ -507,17 +473,10 @@
                                     absolute inset-y-0 left-0
                                     flex items-center pl-3">
 
-                                    <svg
-                                        class="h-5 w-5 text-slate-400"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor">
+                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0119.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0l-7.5-4.615a2.25 2.25 0 01-2.36 0l-7.5-4.615A2.25 2.25 0 012.25 6.993V6.75" />
 
                                     </svg>
@@ -525,29 +484,19 @@
                                 </div>
 
 
-                                <x-text-input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    :value="old('email')"
-                                    required
-                                    autocomplete="username"
-                                    placeholder="nama@email.com"
+                                <x-text-input id="email" name="email" type="email" :value="old('email')" required
+                                    autocomplete="username" placeholder="nama@email.com"
                                     class="block w-full rounded-xl
                                     border-slate-300
                                     py-3 pl-10
                                     text-sm shadow-sm transition
                                     focus:border-blue-500
-                                    focus:ring-blue-500"
-                                />
+                                    focus:ring-blue-500" />
 
                             </div>
 
 
-                            <x-input-error
-                                :messages="$errors->get('email')"
-                                class="mt-2"
-                            />
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
                         </div>
 
@@ -558,11 +507,8 @@
 
                         <div class="mt-3">
 
-                            <x-input-label
-                                for="password"
-                                value="Password"
-                                class="text-sm font-medium text-slate-700"
-                            />
+                            <x-input-label for="password" value="Password"
+                                class="text-sm font-medium text-slate-700" />
 
                             <div class="relative mt-2">
 
@@ -571,17 +517,10 @@
                                     absolute inset-y-0 left-0
                                     flex items-center pl-3">
 
-                                    <svg
-                                        class="h-5 w-5 text-slate-400"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor">
+                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 0h10.5a2.25 2.25 0 012.25 2.25v6a2.25 2.25 0 01-2.25 2.25H7.5a2.25 2.25 0 01-2.25-2.25v-6A2.25 2.25 0 017.5 10.5z" />
 
                                     </svg>
@@ -589,28 +528,19 @@
                                 </div>
 
 
-                                <x-text-input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    required
-                                    autocomplete="new-password"
-                                    placeholder="Masukkan password"
+                                <x-text-input id="password" name="password" type="password" required
+                                    autocomplete="new-password" placeholder="Masukkan password"
                                     class="block w-full rounded-xl
                                     border-slate-300
                                     py-3 pl-10
                                     text-sm shadow-sm transition
                                     focus:border-blue-500
-                                    focus:ring-blue-500"
-                                />
+                                    focus:ring-blue-500" />
 
                             </div>
 
 
-                            <x-input-error
-                                :messages="$errors->get('password')"
-                                class="mt-2"
-                            />
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
                         </div>
 
@@ -621,11 +551,8 @@
 
                         <div class="mt-3">
 
-                            <x-input-label
-                                for="password_confirmation"
-                                value="Konfirmasi Password"
-                                class="text-sm font-medium text-slate-700"
-                            />
+                            <x-input-label for="password_confirmation" value="Konfirmasi Password"
+                                class="text-sm font-medium text-slate-700" />
 
                             <div class="relative mt-2">
 
@@ -634,22 +561,13 @@
                                     absolute inset-y-0 left-0
                                     flex items-center pl-3">
 
-                                    <svg
-                                        class="h-5 w-5 text-slate-400"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor">
+                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75" />
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M7.5 10.5h9a2.25 2.25 0 012.25 2.25v6A2.25 2.25 0 0116.5 21h-9a2.25 2.25 0 01-2.25-2.25v-6A2.25 2.25 0 017.5 10.5z" />
 
                                     </svg>
@@ -657,28 +575,19 @@
                                 </div>
 
 
-                                <x-text-input
-                                    id="password_confirmation"
-                                    name="password_confirmation"
-                                    type="password"
-                                    required
-                                    autocomplete="new-password"
-                                    placeholder="Ulangi password"
+                                <x-text-input id="password_confirmation" name="password_confirmation" type="password"
+                                    required autocomplete="new-password" placeholder="Ulangi password"
                                     class="block w-full rounded-xl
                                     border-slate-300
                                     py-3 pl-10
                                     text-sm shadow-sm transition
                                     focus:border-blue-500
-                                    focus:ring-blue-500"
-                                />
+                                    focus:ring-blue-500" />
 
                             </div>
 
 
-                            <x-input-error
-                                :messages="$errors->get('password_confirmation')"
-                                class="mt-2"
-                            />
+                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
 
                         </div>
 
@@ -687,8 +596,7 @@
                         REGISTER
                         ================================================== --}}
 
-                        <button
-                            type="submit"
+                        <button type="submit"
                             class="
                                 mt-4
                                 flex
@@ -713,22 +621,14 @@
                                 focus:ring-blue-500
                                 focus:ring-offset-2
                                 active:scale-[0.99]
-                            "
-                        >
+                            ">
 
                             Daftar Akun
 
-                            <svg
-                                class="ml-2 h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor">
+                            <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
 
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M13.5 4.5L19.5 10.5M19.5 10.5L13.5 16.5M19.5 10.5H4.5" />
 
                             </svg>
@@ -748,20 +648,17 @@
                             text-center
                             text-sm
                             text-slate-500
-                        "
-                    >
+                        ">
 
                         Sudah memiliki akun?
 
-                        <a
-                            href="{{ route('login') }}"
+                        <a href="{{ route('login') }}"
                             class="
                                 font-medium
                                 text-blue-600
                                 transition
                                 hover:text-blue-800
-                            "
-                        >
+                            ">
                             Masuk ke akun
                         </a>
 
@@ -779,8 +676,7 @@
                             text-xs
                             text-slate-400
                             lg:hidden
-                        "
-                    >
+                        ">
 
                         &copy; {{ date('Y') }} PMUB.
                         Semua hak dilindungi.
