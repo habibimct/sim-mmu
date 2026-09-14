@@ -1,4 +1,4 @@
-<div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-200 sm:p-6">
+<div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
 
     <form method="GET"
         action="{{ route('kepala-unit.reports.finance.index') }}"
@@ -14,23 +14,20 @@
                     Dari Tanggal
                 </label>
 
-                <div class="relative">
-                    <input
-                        type="date"
-                        id="date_from"
-                        name="date_from"
-                        value="{{ $dateFrom }}"
-                        class="block w-full rounded-lg border border-gray-300
-                               bg-gray-50 px-3 py-2.5
-                               text-sm text-gray-900
-                               shadow-sm
-                               transition
-                               focus:border-indigo-500
-                               focus:bg-white
-                               focus:outline-none
-                               focus:ring-2
-                               focus:ring-indigo-500/20">
-                </div>
+                <input
+                    type="date"
+                    id="date_from"
+                    name="date_from"
+                    value="{{ $dateFrom }}"
+                    class="block w-full rounded-lg border border-gray-300
+                           bg-gray-50 px-3 py-2.5
+                           text-sm text-gray-900
+                           shadow-sm transition
+                           focus:border-indigo-500
+                           focus:bg-white
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-indigo-500/20">
             </div>
 
             {{-- Sampai Tanggal --}}
@@ -40,23 +37,20 @@
                     Sampai Tanggal
                 </label>
 
-                <div class="relative">
-                    <input
-                        type="date"
-                        id="date_to"
-                        name="date_to"
-                        value="{{ $dateTo }}"
-                        class="block w-full rounded-lg border border-gray-300
-                               bg-gray-50 px-3 py-2.5
-                               text-sm text-gray-900
-                               shadow-sm
-                               transition
-                               focus:border-indigo-500
-                               focus:bg-white
-                               focus:outline-none
-                               focus:ring-2
-                               focus:ring-indigo-500/20">
-                </div>
+                <input
+                    type="date"
+                    id="date_to"
+                    name="date_to"
+                    value="{{ $dateTo }}"
+                    class="block w-full rounded-lg border border-gray-300
+                           bg-gray-50 px-3 py-2.5
+                           text-sm text-gray-900
+                           shadow-sm transition
+                           focus:border-indigo-500
+                           focus:bg-white
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-indigo-500/20">
             </div>
 
             {{-- Kategori --}}
@@ -72,31 +66,26 @@
                     class="block w-full rounded-lg border border-gray-300
                            bg-gray-50 px-3 py-2.5
                            text-sm text-gray-900
-                           shadow-sm
-                           transition
+                           shadow-sm transition
                            focus:border-indigo-500
                            focus:bg-white
                            focus:outline-none
                            focus:ring-2
                            focus:ring-indigo-500/20">
 
-                    <option value="all"
-                        @selected($reportType === 'all')>
+                    <option value="all" @selected($reportType === 'all')>
                         Semua
                     </option>
 
-                    <option value="income"
-                        @selected($reportType === 'income')>
+                    <option value="income" @selected($reportType === 'income')>
                         Pemasukan
                     </option>
 
-                    <option value="expense"
-                        @selected($reportType === 'expense')>
+                    <option value="expense" @selected($reportType === 'expense')>
                         Pengeluaran
                     </option>
 
-                    <option value="deposit"
-                        @selected($reportType === 'deposit')>
+                    <option value="deposit" @selected($reportType === 'deposit')>
                         Setoran
                     </option>
 
@@ -111,17 +100,13 @@
         {{-- Tombol --}}
         <div class="flex flex-wrap items-center gap-3">
 
-            {{-- Tampilkan Laporan --}}
             <button
                 type="submit"
                 class="inline-flex items-center justify-center
-                       rounded-lg
-                       bg-indigo-600
+                       rounded-lg bg-indigo-600
                        px-4 py-2.5
-                       text-sm font-semibold
-                       text-white
-                       shadow-sm
-                       transition
+                       text-sm font-semibold text-white
+                       shadow-sm transition
                        hover:bg-indigo-700
                        focus:outline-none
                        focus:ring-2
@@ -135,7 +120,6 @@
 
             </button>
 
-            {{-- Cetak PDF --}}
             <a
                 href="{{ route(
                     'kepala-unit.reports.finance.pdf',
@@ -143,13 +127,10 @@
                 ) }}"
                 target="_blank"
                 class="inline-flex items-center justify-center
-                       rounded-lg
-                       bg-red-600
+                       rounded-lg bg-red-600
                        px-4 py-2.5
-                       text-sm font-semibold
-                       text-white
-                       shadow-sm
-                       transition
+                       text-sm font-semibold text-white
+                       shadow-sm transition
                        hover:bg-red-700
                        focus:outline-none
                        focus:ring-2
