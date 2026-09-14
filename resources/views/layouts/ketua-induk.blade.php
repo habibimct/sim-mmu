@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 
-<html
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    class="simmmu-loading"
->
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="simmmu-loading">
 
 <head>
 
@@ -11,7 +8,6 @@
     CRITICAL CSS / FIRST PAINT PROTECTION
     ======================================================= --}}
     <style>
-
         [x-cloak] {
             display: none !important;
         }
@@ -66,21 +62,14 @@
         html.simmmu-ready::before {
             display: none;
         }
-
     </style>
 
 
     <meta charset="utf-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta
-        name="csrf-token"
-        content="{{ csrf_token() }}"
-    >
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
     {{-- ======================================================
@@ -92,19 +81,11 @@
     @endphp
 
     @if ($induk?->logo_path)
+        <link rel="icon" type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}">
 
-        <link
-            rel="icon"
-            type="image/webp"
-            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}"
-        >
-
-        <link
-            rel="shortcut icon"
-            type="image/webp"
-            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}"
-        >
-
+        <link rel="shortcut icon" type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}">
     @endif
 
 
@@ -122,11 +103,9 @@
     VITE
     ======================================================= --}}
 
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js'
-    ])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     {{-- ======================================================
     PAGE READY
