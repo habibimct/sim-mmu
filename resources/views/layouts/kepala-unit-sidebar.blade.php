@@ -317,6 +317,23 @@
                 Ringkasan Keuangan
             </a>
 
+            {{-- Laporan Keuangan --}}
+            <a href="{{ route('kepala-unit.reports.finance.index') }}"
+                class="flex items-center gap-2
+                px-3 py-2 rounded-lg
+                text-xs
+                transition
+                {{ request()->routeIs('kepala-unit.reports.finance.summary.*')
+                    ? 'bg-white/15 text-white'
+                    : 'text-white/60 hover:bg-white/10 hover:text-white' }}">
+
+                <span
+                    class="w-1.5 h-1.5 rounded-full
+                    {{ request()->routeIs('kepala-unit.reports.finance.summary.*') ? 'bg-white' : 'bg-white/40' }}"></span>
+
+                Laporan Keuangan
+            </a>
+
         </div>
 
 
@@ -464,7 +481,7 @@
         LAPORAN
         ====================================================== --}}
 
-        <p
+        {{-- <p
             class="px-3 mb-2 mt-6
                    text-[10px]
                    font-bold
@@ -472,10 +489,10 @@
                    tracking-[0.18em]
                    text-white/50">
             Laporan
-        </p>
+        </p> --}}
 
 
-        <button type="button" @click="openReports = !openReports"
+        {{-- <button type="button" @click="openReports = !openReports"
             class="w-full group flex items-center justify-between
                    px-3 py-2.5
                    rounded-xl
@@ -517,11 +534,11 @@
 
             </svg>
 
-        </button>
+        </button> --}}
 
 
         {{-- Submenu Laporan --}}
-        <div x-show="openReports"
+        {{-- <div x-show="openReports"
             class="mt-1 ml-5 pl-7
                    border-l border-white/20
                    space-y-1">
@@ -561,7 +578,7 @@
 
             </div>
 
-        </div>
+        </div> --}}
 
     </nav>
 

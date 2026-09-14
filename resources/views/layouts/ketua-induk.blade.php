@@ -1,27 +1,150 @@
 <!DOCTYPE html>
 
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="simmmu-loading"
+>
 
 <head>
 
+    {{-- ======================================================
+    CRITICAL CSS / FIRST PAINT PROTECTION
+    ======================================================= --}}
     <style>
+
         [x-cloak] {
             display: none !important;
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Critical Tailwind Utility
+        |--------------------------------------------------------------------------
+        | Mencegah elemen .hidden muncul sebelum Tailwind selesai dimuat.
+        */
+
+        [class~="hidden"] {
+            display: none !important;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | First Paint Protection
+        |--------------------------------------------------------------------------
+        */
+
+        html {
+            background: #f3f4f6;
+        }
+
+        html.simmmu-loading body {
+            visibility: hidden;
+        }
+
+        html.simmmu-loading::before {
+            content: "Loading...";
+
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f3f4f6;
+
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        html.simmmu-ready body {
+            visibility: visible;
+        }
+
+        html.simmmu-ready::before {
+            display: none;
+        }
+
     </style>
+
 
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
+
+
+    {{-- ======================================================
+    LOGO / FAVICON INDUK
+    ======================================================= --}}
+
+    @php
+        $induk = \App\Models\Organization::where('type', 'induk')->first();
+    @endphp
+
+    @if ($induk?->logo_path)
+
+        <link
+            rel="icon"
+            type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}"
+        >
+
+        <link
+            rel="shortcut icon"
+            type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}"
+        >
+
+    @endif
+
+
+    {{-- ======================================================
+    TITLE
+    ======================================================= --}}
 
     <title>
         {{ config('app.name', 'PMUB') }} -
         Ketua Induk
     </title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- ======================================================
+    VITE
+    ======================================================= --}}
+
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js'
+    ])
+
+
+    {{-- ======================================================
+    PAGE READY
+    ======================================================= --}}
+
+    <script>
+        window.addEventListener('load', function() {
+
+            document.documentElement.classList.remove(
+                'simmmu-loading'
+            );
+
+            document.documentElement.classList.add(
+                'simmmu-ready'
+            );
+
+        });
+    </script>
 
 </head>
 

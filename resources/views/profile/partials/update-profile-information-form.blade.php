@@ -10,7 +10,7 @@
     </header>
 
     {{-- Foto Profil --}}
-    <div class="mt-6">
+    {{-- <div class="mt-6">
         <div class="flex items-center gap-5">
 
             <div>
@@ -85,7 +85,7 @@
                 </button>
             </form>
         @endif
-    </div>
+    </div> --}}
 
     {{-- Informasi User --}}
     <form

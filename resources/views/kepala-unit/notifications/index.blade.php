@@ -191,7 +191,7 @@
                                                                     Jumlah
                                                                 </span>
 
-                                                                <div class="font-semibold text-gray-800">
+                                                                <div class="font-semibold text-red-600">
 
                                                                     Rp
                                                                     {{ number_format($data['amount'], 0, ',', '.') }}
@@ -247,6 +247,18 @@
 
                                                                 </div>
 
+                                                            </div>
+                                                        @endif
+
+                                                        @if (!empty($data['deposit_id']))
+                                                            <div>
+                                                                <span class="text-gray-500">
+                                                                    ID Transaksi
+                                                                </span>
+
+                                                                <div class="font-semibold text-gray-800">
+                                                                    #{{ $data['deposit_id'] }}
+                                                                </div>
                                                             </div>
                                                         @endif
 
@@ -360,7 +372,7 @@
                                                                     Jumlah
                                                                 </span>
 
-                                                                <div class="font-semibold text-gray-800">
+                                                                <div class="font-semibold text-red-600">
 
                                                                     Rp
                                                                     {{ number_format($data['amount'], 0, ',', '.') }}

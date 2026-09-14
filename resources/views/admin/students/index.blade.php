@@ -8,23 +8,23 @@
         <h1 class="m-0">Daftar Siswa</h1>
 
         <div class="d-flex flex-wrap gap-2">
+            @can('students.manage')
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudent">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Tambah Siswa
+                </button>
 
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudent">
-                <i class="bi bi-plus-lg me-1"></i>
-                Tambah Siswa
-            </button>
+                <a href="{{ route('admin.students.export', request()->query()) }}" class="btn btn-outline-success">
+                    <i class="fas fa-file-excel me-1"></i>
+                    Download Excel
+                </a>
 
-            <a href="{{ route('admin.students.export', request()->query()) }}" class="btn btn-outline-success">
-                <i class="fas fa-file-excel me-1"></i>
-                Download Excel
-            </a>
-
-            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
-                data-bs-target="#importStudentModal">
-                <i class="fas fa-file-upload me-1"></i>
-                Import Excel
-            </button>
-
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                    data-bs-target="#importStudentModal">
+                    <i class="fas fa-file-upload me-1"></i>
+                    Import Excel
+                </button>
+            @endcan
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                 data-bs-target="#studentFilterModal">
                 <i class="bi bi-funnel me-1"></i>
@@ -233,66 +233,101 @@
 @include('admin.students.partials.modal-import')
 @include('admin.students.partials.modal-toggle')
 
+<div
+    id="classStudentsLoading"
+    class="position-fixed top-0 start-0 w-100 h-100 d-none
+           align-items-center justify-content-center"
+    style="z-index: 2000;">
+
+    <div class="bg-white rounded-3 shadow p-4 text-center">
+
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">
+                Loading...
+            </span>
+        </div>
+
+        <div class="mt-2 text-muted">
+            Memuat daftar siswa...
+        </div>
+
+    </div>
+
+</div>
+
 <div id="classStudentsModalContainer"></div>
 
 
 
 @section('js')
     <script>
-        document.addEventListener('click', function(event) {
-            const button = event.target.closest('.btn-class-students');
+   document.addEventListener('click', function(event) {
 
-            if (!button) {
-                return;
-            }
+    const button =
+        event.target.closest('.btn-class-students');
 
-            const url = button.dataset.url;
-            const container = document.getElementById(
-                'classStudentsModalContainer'
+    if (!button) {
+        return;
+    }
+
+    const url = button.dataset.url;
+
+    const container =
+        document.getElementById(
+            'classStudentsModalContainer'
+        );
+
+    const loading =
+        document.getElementById(
+            'classStudentsLoading'
+        );
+
+    loading.classList.remove('d-none');
+    loading.classList.add('d-flex');
+
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'text/html'
+        }
+    })
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error(
+                'Gagal memuat daftar siswa.'
+            );
+        }
+
+        return response.text();
+    })
+    .then(html => {
+
+        container.innerHTML = html;
+
+        const modalElement =
+            document.getElementById(
+                'classStudentsModal'
             );
 
-            container.innerHTML = `
-                <div class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="mt-2 text-muted">
-                        Memuat daftar siswa...
-                    </div>
-                </div>
-            `;
+        const modal =
+            new bootstrap.Modal(modalElement);
 
-            fetch(url, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'text/html'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Gagal memuat daftar siswa.');
-                }
+        modal.show();
 
-                return response.text();
-            })
-            .then(html => {
-                container.innerHTML = html;
+    })
+    .catch(error => {
 
-                const modalElement =
-                    document.getElementById('classStudentsModal');
+        alert(error.message);
 
-                const modal =
-                    new bootstrap.Modal(modalElement);
+    })
+    .finally(() => {
 
-                modal.show();
-            })
-            .catch(error => {
-                container.innerHTML = '';
+        loading.classList.remove('d-flex');
+        loading.classList.add('d-none');
 
-                alert(error.message);
-            });
-        });
+    });
 
-        console.log('SCRIPT SISWA AKTIF');
+});
     </script>
 @stop

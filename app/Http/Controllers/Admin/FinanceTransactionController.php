@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Format;
 
 class FinanceTransactionController extends Controller
 {
@@ -420,18 +422,43 @@ class FinanceTransactionController extends Controller
         | Upload bukti
         |--------------------------------------------------------------------------
         |
-        | Untuk sementara kita simpan file asli.
-        | Kompresi gambar kita pasang setelah alur dasarnya
-        | sudah berhasil.
-        |
         */
 
             $proof = $request->file('proof');
 
-            $proofPath = $proof->store(
-                'finance/deposits',
-                'public'
+            /*
+|--------------------------------------------------------------------------
+| Kompres bukti setoran
+|--------------------------------------------------------------------------
+|
+| File upload maksimal 2 MB.
+| File akan dikonversi menjadi WebP
+| dengan kualitas 80 untuk menghemat storage.
+|
+*/
+
+            $image = Image::decode($proof);
+
+            $encoded = $image->encodeUsingFormat(
+                Format::WEBP,
+                quality: 80
             );
+
+            $proofFileName =
+                uniqid('deposit_', true) . '.webp';
+
+            $proofPath =
+                'finance/deposits/' . $proofFileName;
+
+            Storage::disk('public')->put(
+                $proofPath,
+                (string) $encoded
+            );
+
+            $proofSize =
+                Storage::disk('public')->size(
+                    $proofPath
+                );
 
             /*
         |--------------------------------------------------------------------------
@@ -465,7 +492,7 @@ class FinanceTransactionController extends Controller
                 $proof->getClientOriginalName(),
 
                 'proof_size' =>
-                $proof->getSize(),
+    $proofSize,
 
                 'status' =>
                 'pending',

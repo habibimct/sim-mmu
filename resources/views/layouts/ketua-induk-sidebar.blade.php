@@ -361,6 +361,25 @@
 
             </a>
 
+            {{-- Laporan Keuangan --}}
+
+            <a href="{{ route('ketua-induk.reports.finance.index') }}"
+                class="flex items-center gap-2
+                px-3 py-2
+                rounded-lg
+                text-xs
+                transition
+                {{ request()->routeIs('ketua-induk.reports.*')
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
+                <span
+                    class="w-1.5 h-1.5
+                    rounded-full
+                    {{ request()->routeIs('ketua-induk.reports.*') ? 'bg-white' : 'bg-white/40' }}"></span>
+
+                Laporan Keuangan
+            </a>
+
         </div>
 
 
@@ -488,7 +507,7 @@
         LAPORAN
         ====================================================== --}}
 
-        <p
+        {{-- <p
             class="px-3
                    mb-2
                    mt-6
@@ -551,17 +570,17 @@
 
             </svg>
 
-        </button>
+        </button> --}}
 
 
         {{-- Submenu Laporan --}}
 
-        <div x-show="openReports"
+        {{-- <div x-show="openReports"
             class="mt-1
                    ml-5
                    pl-7
                    border-l border-white/20
-                   space-y-1">
+                   space-y-1"> --}}
 
             {{-- Data Siswa --}}
 
@@ -601,26 +620,7 @@
             </div> --}}
 
 
-            {{-- Laporan Keuangan --}}
-
-            <a href="{{ route('ketua-induk.reports.finance.index') }}"
-                class="flex items-center gap-2
-                px-3 py-2
-                rounded-lg
-                text-sm
-                transition
-                {{ request()->routeIs('ketua-induk.reports.*')
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
-                <span
-                    class="w-1.5 h-1.5
-                    rounded-full
-                    {{ request()->routeIs('ketua-induk.reports.*') ? 'bg-white' : 'bg-white/40' }}"></span>
-
-                Keuangan
-            </a>
-
-        </div>
+        {{-- </div> --}}
 
     </nav>
 

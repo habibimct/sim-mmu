@@ -1,19 +1,77 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="simmmu-loading">
 
 <head>
 
+    {{-- ======================================================
+    CSS AWAL
+    Harus inline agar aktif sebelum Vite/Tailwind selesai
+    ======================================================= --}}
     <style>
         [x-cloak] {
             display: none !important;
         }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Critical Tailwind utilities
+    |--------------------------------------------------------------------------
+    | Mencegah elemen class "hidden" muncul sebelum Tailwind selesai dimuat.
+    */
+
+        [class~="hidden"] {
+            display: none !important;
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | First paint protection
+    |--------------------------------------------------------------------------
+    */
+
+        html.simmmu-loading body {
+            visibility: hidden;
+        }
+
+        html.simmmu-loading::before {
+            content: "Loading...";
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f3f4f6;
+
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        html.simmmu-ready body {
+            visibility: visible;
+        }
+
+        html.simmmu-ready::before {
+            display: none;
+        }
     </style>
 
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @php
+        $induk = \App\Models\Organization::where('type', 'induk')->first();
+    @endphp
+
+    @if ($induk?->logo_path)
+        <link rel="icon" type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}">
+    @endif
+
 
     <title>
         {{ config('app.name', 'PMUB') }} -
@@ -24,6 +82,7 @@
 </head>
 
 <body class="bg-gray-100 text-gray-800">
+
 
     <div x-data="{ sidebarOpen: false }" class="min-h-screen">
 
@@ -69,8 +128,22 @@
             </main>
 
         </div>
-
     </div>
+
+
+    <script>
+        window.addEventListener('load', function() {
+
+            document.documentElement.classList.remove(
+                'simmmu-loading'
+            );
+
+            document.documentElement.classList.add(
+                'simmmu-ready'
+            );
+
+        });
+    </script>
 
 </body>
 

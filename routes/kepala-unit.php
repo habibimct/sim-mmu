@@ -7,6 +7,7 @@ use App\Http\Controllers\KepalaUnit\TeacherController;
 use App\Http\Controllers\KepalaUnit\StudentController;
 use App\Http\Controllers\KepalaUnit\AttendanceController;
 use App\Http\Controllers\KepalaUnit\StudentAttendanceController;
+use App\Http\Controllers\KepalaUnit\KepalaUnitFinanceReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([
@@ -83,6 +84,26 @@ Route::middleware([
         ])
             ->middleware('permission:finance.view')
             ->name('finance.summary.index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Laporan Keuangan
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/laporan/keuangan', [
+            KepalaUnitFinanceReportController::class,
+            'index',
+        ])
+            ->middleware('permission:finance.view')
+            ->name('reports.finance.index');
+
+        Route::get('/laporan/keuangan/pdf', [
+            KepalaUnitFinanceReportController::class,
+            'pdf',
+        ])
+            ->middleware('permission:finance.view')
+            ->name('reports.finance.pdf');
 
 
         /*
