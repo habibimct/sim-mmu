@@ -217,7 +217,7 @@
                 <td class="kop-identitas">
 
                     <div class="nama">
-                        {{ $induk->name }}
+                        {{ $organization?->name ?? ($induk?->name ?? 'Perkumpulan Mamba\'ul Ulum Bedanten') }}
                     </div>
 
                     <div class="subnama">

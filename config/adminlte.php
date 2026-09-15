@@ -4,6 +4,7 @@ use ColorlibHQ\AdminLte\Menu\Filters\ActiveFilter;
 use ColorlibHQ\AdminLte\Menu\Filters\GateFilter;
 use ColorlibHQ\AdminLte\Menu\Filters\HrefFilter;
 use ColorlibHQ\AdminLte\Menu\Filters\SearchFilter;
+use App\Menu\Filters\RecursiveGateFilter;
 
 return [
 
@@ -494,7 +495,7 @@ return [
                     'text' => 'Laporan Audit',
                     'url' => 'admin/laporan/audit',
                     'icon' => 'bi bi-shield-check',
-                    'can' => 'reports.view',
+                    'can' => 'audit.view',
                 ],
 
             ],
@@ -562,7 +563,8 @@ return [
     */
 
     'filters' => [
-        GateFilter::class,
+        RecursiveGateFilter::class,
+        // GateFilter::class,
         HrefFilter::class,
         ActiveFilter::class,
         SearchFilter::class,
