@@ -467,7 +467,7 @@ return [
                     'text' => 'Laporan Keuangan',
                     'url' => 'admin/laporan/keuangan',
                     'icon' => 'bi bi-cash-stack',
-                    'can' => 'reports.view',
+                    'can' => 'finance.view',
                 ],
 
                 [
@@ -488,7 +488,7 @@ return [
                     'text' => 'Laporan Setoran',
                     'url' => 'admin/laporan/setoran',
                     'icon' => 'bi bi-bank',
-                    'can' => 'reports.view',
+                    'can' => 'finance.view',
                 ],
 
                 [
