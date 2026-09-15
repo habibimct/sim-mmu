@@ -1,17 +1,9 @@
-<div
-    class="modal fade"
-    id="modalFilterPaymentReport"
-    tabindex="-1"
-    aria-hidden="true"
->
+<div class="modal fade" id="modalFilterPaymentReport" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <div class="modal-content">
 
-            <form
-                method="GET"
-                action="{{ route('admin.reports.payments') }}"
-            >
+            <form method="GET" action="{{ route('admin.reports.payments') }}">
 
                 <div class="modal-header">
 
@@ -23,11 +15,7 @@
 
                     </h5>
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
                 </div>
 
@@ -36,6 +24,28 @@
 
                     <div class="row g-3">
 
+                        {{-- UNIT / LEMBAGA --}}
+                        <div class="col-md-12">
+
+                            <label class="form-label">
+                                Unit / Lembaga
+                            </label>
+
+                            <select name="organization_id" class="form-select">
+
+                                <option value="">
+                                    Semua Unit
+                                </option>
+
+                                @foreach ($organizations as $organization)
+                                    <option value="{{ $organization->id }}" @selected((string) $organizationId === (string) $organization->id)>
+                                        {{ $organization->name }}
+                                    </option>
+                                @endforeach
+
+                            </select>
+
+                        </div>
 
                         {{-- STATUS --}}
 
@@ -45,40 +55,25 @@
                                 Status
                             </label>
 
-                            <select
-                                name="status"
-                                class="form-select"
-                            >
+                            <select name="status" class="form-select">
 
                                 <option value="">
                                     Semua Status
                                 </option>
 
-                                <option
-                                    value="pending"
-                                    @selected($status === 'pending')
-                                >
+                                <option value="pending" @selected($status === 'pending')>
                                     Menunggu
                                 </option>
 
-                                <option
-                                    value="confirmed"
-                                    @selected($status === 'confirmed')
-                                >
+                                <option value="confirmed" @selected($status === 'confirmed')>
                                     Dikonfirmasi
                                 </option>
 
-                                <option
-                                    value="failed"
-                                    @selected($status === 'failed')
-                                >
+                                <option value="failed" @selected($status === 'failed')>
                                     Gagal
                                 </option>
 
-                                <option
-                                    value="cancelled"
-                                    @selected($status === 'cancelled')
-                                >
+                                <option value="cancelled" @selected($status === 'cancelled')>
                                     Dibatalkan
                                 </option>
 
@@ -95,39 +90,21 @@
                                 Metode Pembayaran
                             </label>
 
-                            <select
-                                name="payment_method"
-                                class="form-select"
-                            >
+                            <select name="payment_method" class="form-select">
 
                                 <option value="">
                                     Semua Metode
                                 </option>
 
-                                <option
-                                    value="cash"
-                                    @selected(
-                                        $paymentMethod === 'cash'
-                                    )
-                                >
+                                <option value="cash" @selected($paymentMethod === 'cash')>
                                     Tunai
                                 </option>
 
-                                <option
-                                    value="bank_transfer"
-                                    @selected(
-                                        $paymentMethod === 'bank_transfer'
-                                    )
-                                >
+                                <option value="bank_transfer" @selected($paymentMethod === 'bank_transfer')>
                                     Transfer Bank
                                 </option>
 
-                                <option
-                                    value="online"
-                                    @selected(
-                                        $paymentMethod === 'online'
-                                    )
-                                >
+                                <option value="online" @selected($paymentMethod === 'online')>
                                     Online
                                 </option>
 
@@ -144,27 +121,16 @@
                                 Tahun
                             </label>
 
-                            <select
-                                name="year"
-                                class="form-select"
-                            >
+                            <select name="year" class="form-select">
 
                                 <option value="">
                                     Semua Tahun
                                 </option>
 
                                 @foreach ($years as $availableYear)
-
-                                    <option
-                                        value="{{ $availableYear }}"
-                                        @selected(
-                                            (string) $year ===
-                                            (string) $availableYear
-                                        )
-                                    >
+                                    <option value="{{ $availableYear }}" @selected((string) $year === (string) $availableYear)>
                                         {{ $availableYear }}
                                     </option>
-
                                 @endforeach
 
                             </select>
@@ -197,27 +163,16 @@
                                 ];
                             @endphp
 
-                            <select
-                                name="month"
-                                class="form-select"
-                            >
+                            <select name="month" class="form-select">
 
                                 <option value="">
                                     Semua Bulan
                                 </option>
 
                                 @foreach ($months as $monthNumber => $monthName)
-
-                                    <option
-                                        value="{{ $monthNumber }}"
-                                        @selected(
-                                            (string) $month ===
-                                            (string) $monthNumber
-                                        )
-                                    >
+                                    <option value="{{ $monthNumber }}" @selected((string) $month === (string) $monthNumber)>
                                         {{ $monthName }}
                                     </option>
-
                                 @endforeach
 
                             </select>
@@ -233,12 +188,7 @@
                                 Tanggal Dari
                             </label>
 
-                            <input
-                                type="date"
-                                name="date_from"
-                                value="{{ $dateFrom }}"
-                                class="form-control"
-                            >
+                            <input type="date" name="date_from" value="{{ $dateFrom }}" class="form-control">
 
                         </div>
 
@@ -251,12 +201,7 @@
                                 Tanggal Sampai
                             </label>
 
-                            <input
-                                type="date"
-                                name="date_to"
-                                value="{{ $dateTo }}"
-                                class="form-control"
-                            >
+                            <input type="date" name="date_to" value="{{ $dateTo }}" class="form-control">
 
                         </div>
 
@@ -269,13 +214,8 @@
                                 Pencarian
                             </label>
 
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ $search }}"
-                                class="form-control"
-                                placeholder="Nomor pembayaran, NIS, atau nama siswa..."
-                            >
+                            <input type="text" name="search" value="{{ $search }}" class="form-control"
+                                placeholder="Nomor pembayaran, NIS, atau nama siswa...">
 
                         </div>
 
@@ -286,10 +226,7 @@
 
                 <div class="modal-footer">
 
-                    <a
-                        href="{{ route('admin.reports.payments') }}"
-                        class="btn btn-outline-secondary"
-                    >
+                    <a href="{{ route('admin.reports.payments') }}" class="btn btn-outline-secondary">
 
                         <i class="bi bi-arrow-counterclockwise me-1"></i>
 
@@ -298,19 +235,12 @@
                     </a>
 
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Batal
                     </button>
 
 
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
+                    <button type="submit" class="btn btn-primary">
 
                         <i class="bi bi-search me-1"></i>
 

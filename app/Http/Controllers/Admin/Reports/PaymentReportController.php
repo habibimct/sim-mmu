@@ -44,12 +44,21 @@ class PaymentReportController extends Controller
             )
             ->pluck('organizations.id');
 
+        $organizations = Organization::query()
+            ->whereIn('id', $organizationIds)
+            ->where('type', 'unit')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
 
         /*
         |--------------------------------------------------------------------------
         | Filter
         |--------------------------------------------------------------------------
         */
+
+        $organizationId = $request->input('organization_id');
 
         $status = $request->input(
             'status'
@@ -78,6 +87,18 @@ class PaymentReportController extends Controller
         $search = trim(
             $request->input('search', '')
         );
+
+
+
+        if ($organizationId !== null && $organizationId !== '') {
+
+            $organizationId = (int) $organizationId;
+
+            abort_unless(
+                $organizationIds->contains($organizationId),
+                403
+            );
+        }
 
 
         /*
@@ -177,6 +198,13 @@ class PaymentReportController extends Controller
             ->whereIn(
                 'organization_id',
                 $organizationIds
+            )
+            ->when(
+                $organizationId,
+                fn($query) => $query->where(
+                    'organization_id',
+                    $organizationId
+                )
             )
             ->when(
                 $status,
@@ -382,6 +410,8 @@ class PaymentReportController extends Controller
             'admin.reports.payments.index',
             compact(
                 'payments',
+                'organizations',
+                'organizationId',
 
                 'years',
 
@@ -577,258 +607,654 @@ class PaymentReportController extends Controller
         );
     }
 
-    public function exportPdf(Request $request)
-    {
-        Gate::authorize('viewAny', Payment::class);
+public function exportPdf(Request $request)
+{
+    Gate::authorize(
+        'viewAny',
+        Payment::class
+    );
 
-        $status = $request->input('status');
-        $paymentMethod = $request->input('payment_method');
-        $year = $request->input('year');
-        $month = $request->input('month');
-        $dateFrom = $request->input('date_from');
-        $dateTo = $request->input('date_to');
-        $search = $request->input('search');
-
-        $request->validate([
-            'status' => [
-                'nullable',
-                'in:pending,confirmed,failed,cancelled',
-            ],
-
-            'payment_method' => [
-                'nullable',
-                'in:cash,bank_transfer,online',
-            ],
-
-            'year' => [
-                'nullable',
-                'integer',
-                'min:2000',
-                'max:2100',
-            ],
-
-            'month' => [
-                'nullable',
-                'integer',
-                'between:1,12',
-            ],
-
-            'date_from' => [
-                'nullable',
-                'date',
-            ],
-
-            'date_to' => [
-                'nullable',
-                'date',
-                'after_or_equal:date_from',
-            ],
-
-            'search' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
-        ]);
-
-        $user = Auth::user();
-
-        /*
-|--------------------------------------------------------------------------
-| Scope organisasi
-|--------------------------------------------------------------------------
-*/
-
-        $organizationIds =
-            Organization::accessibleIdsForUser($user);
-        /*
+    /*
     |--------------------------------------------------------------------------
-    | Query pembayaran
+    | Filter
     |--------------------------------------------------------------------------
     */
-        $payments = Payment::query()
-            ->with([
-                'organization',
-                'creator',
-                'confirmer',
-                'allocations.studentBill.billType',
-                'allocations.studentBill.studentAcademicYear.student',
-                'allocations.studentBill.studentAcademicYear.schoolClass',
-                'allocations.studentBill.studentAcademicYear.academicYear',
-            ])
-            ->whereIn('organization_id', $organizationIds)
 
-            ->when($status, function ($query) use ($status) {
-                $query->where('status', $status);
-            })
+    $organizationId = $request->input(
+        'organization_id'
+    );
 
-            ->when($paymentMethod, function ($query) use ($paymentMethod) {
-                $query->where('payment_method', $paymentMethod);
-            })
+    $status = $request->input(
+        'status'
+    );
 
-            ->when($year, function ($query) use ($year) {
-                $query->whereYear('payment_date', $year);
-            })
+    $paymentMethod = $request->input(
+        'payment_method'
+    );
 
-            ->when($month, function ($query) use ($month) {
-                $query->whereMonth('payment_date', $month);
-            })
+    $year = $request->input(
+        'year'
+    );
 
-            ->when($dateFrom, function ($query) use ($dateFrom) {
-                $query->whereDate('payment_date', '>=', $dateFrom);
-            })
+    $month = $request->input(
+        'month'
+    );
 
-            ->when($dateTo, function ($query) use ($dateTo) {
-                $query->whereDate('payment_date', '<=', $dateTo);
-            })
+    $dateFrom = $request->input(
+        'date_from'
+    );
 
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($query) use ($search) {
+    $dateTo = $request->input(
+        'date_to'
+    );
 
-                    $query->where(
-                        'payment_number',
-                        'like',
-                        '%' . $search . '%'
-                    )
+    $search = trim(
+        $request->input(
+            'search',
+            ''
+        )
+    );
 
-                        ->orWhereHas(
-                            'allocations.studentBill.studentAcademicYear.student',
-                            function ($query) use ($search) {
 
-                                $query->where('name', 'like', '%' . $search . '%')
-                                    ->orWhere('nis', 'like', '%' . $search . '%');
-                            }
-                        );
-                });
-            })
-
-            ->orderByDesc('payment_date')
-            ->orderByDesc('id')
-            ->get();
-
-        /*
+    /*
     |--------------------------------------------------------------------------
-    | Data filter untuk ditampilkan di PDF
+    | Validasi Filter
     |--------------------------------------------------------------------------
     */
-        $months = [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember',
-        ];
 
-        $filterDescription = [];
+    $request->validate([
 
-        if ($year) {
-            $filterDescription[] = 'Tahun: ' . $year;
-        }
+        'organization_id' => [
+            'required',
+            'integer',
+        ],
 
-        if ($month) {
-            $filterDescription[] = 'Bulan: ' . ($months[$month] ?? $month);
-        }
+        'status' => [
+            'nullable',
+            'in:pending,confirmed,failed,cancelled',
+        ],
 
-        if ($status) {
-            $filterDescription[] = 'Status: ' . match ($status) {
-                'pending' => 'Menunggu Konfirmasi',
-                'confirmed' => 'Dikonfirmasi',
-                'failed' => 'Gagal',
-                'cancelled' => 'Dibatalkan',
-                default => $status,
-            };
-        }
+        'payment_method' => [
+            'nullable',
+            'in:cash,bank_transfer,online',
+        ],
 
-        if ($paymentMethod) {
-            $filterDescription[] = 'Metode: ' . match ($paymentMethod) {
-                'cash' => 'Tunai',
-                'bank_transfer' => 'Transfer Bank',
-                'online' => 'Online',
-                default => $paymentMethod,
-            };
-        }
+        'year' => [
+            'nullable',
+            'integer',
+            'min:2000',
+            'max:2100',
+        ],
 
-        if ($dateFrom) {
-            $filterDescription[] = 'Dari: ' .
-                \Carbon\Carbon::parse($dateFrom)->format('d/m/Y');
-        }
+        'month' => [
+            'nullable',
+            'integer',
+            'between:1,12',
+        ],
 
-        if ($dateTo) {
-            $filterDescription[] = 'Sampai: ' .
-                \Carbon\Carbon::parse($dateTo)->format('d/m/Y');
-        }
+        'date_from' => [
+            'nullable',
+            'date',
+        ],
 
-        if ($search) {
-            $filterDescription[] = 'Pencarian: ' . $search;
-        }
+        'date_to' => [
+            'nullable',
+            'date',
+            'after_or_equal:date_from',
+        ],
 
+        'search' => [
+            'nullable',
+            'string',
+            'max:100',
+        ],
+
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | User
+    |--------------------------------------------------------------------------
+    */
+
+    $user = $request->user();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scope Organisasi
+    |--------------------------------------------------------------------------
+    |
+    | User hanya boleh mengakses Unit yang memang menjadi
+    | kewenangannya.
+    |
+    */
+
+    $organizationIds =
+        Organization::accessibleIdsForUser(
+            $user
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validasi Unit yang Dipilih
+    |--------------------------------------------------------------------------
+    */
+
+    $organizationId = (int) $organizationId;
+
+    abort_unless(
+        $organizationIds->contains(
+            $organizationId
+        ),
+        403
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Unit yang Dipilih
+    |--------------------------------------------------------------------------
+    */
+
+    $organization = Organization::query()
+        ->where(
+            'id',
+            $organizationId
+        )
+        ->where(
+            'type',
+            'unit'
+        )
+        ->where(
+            'is_active',
+            true
+        )
+        ->firstOrFail();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Query Pembayaran
+    |--------------------------------------------------------------------------
+    */
+
+    $payments = Payment::query()
+
+        ->with([
+            'organization',
+            'creator',
+            'confirmer',
+
+            'allocations.studentBill.billType',
+
+            'allocations.studentBill.studentAcademicYear.student',
+
+            'allocations.studentBill.studentAcademicYear.schoolClass',
+
+            'allocations.studentBill.studentAcademicYear.academicYear',
+        ])
 
         /*
-|--------------------------------------------------------------------------
-| Profil Organisasi untuk Kop
-|--------------------------------------------------------------------------
-*/
+        |------------------------------------------------------------------
+        | Security Scope
+        |------------------------------------------------------------------
+        */
 
-        $organization = null;
-
-        $organizationNames = $payments
-            ->pluck('organization.name')
-            ->filter()
-            ->unique()
-            ->values();
-
-        $organizationName =
-            $organizationNames->count() === 1
-            ? $organizationNames->first()
-            : 'Beberapa Unit';
-
-        if ($organizationNames->count() === 1) {
-
-            $organization =
-                Organization::whereIn(
-                    'id',
-                    $organizationIds
-                )
-                ->where(
-                    'name',
-                    $organizationNames->first()
-                )
-                ->first();
-        }
-
-        $induk =
-            Organization::where(
-                'type',
-                'induk'
-            )->firstOrFail();
-
+        ->whereIn(
+            'organization_id',
+            $organizationIds
+        )
 
         /*
+        |------------------------------------------------------------------
+        | Unit yang dipilih
+        |------------------------------------------------------------------
+        */
+
+        ->where(
+            'organization_id',
+            $organizationId
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Status
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $status,
+            function ($query) use ($status) {
+
+                $query->where(
+                    'status',
+                    $status
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Metode Pembayaran
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $paymentMethod,
+            function ($query) use ($paymentMethod) {
+
+                $query->where(
+                    'payment_method',
+                    $paymentMethod
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Tahun
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $year,
+            function ($query) use ($year) {
+
+                $query->whereYear(
+                    'payment_date',
+                    $year
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Bulan
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $month,
+            function ($query) use ($month) {
+
+                $query->whereMonth(
+                    'payment_date',
+                    $month
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Tanggal Dari
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $dateFrom,
+            function ($query) use ($dateFrom) {
+
+                $query->whereDate(
+                    'payment_date',
+                    '>=',
+                    $dateFrom
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Tanggal Sampai
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $dateTo,
+            function ($query) use ($dateTo) {
+
+                $query->whereDate(
+                    'payment_date',
+                    '<=',
+                    $dateTo
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Pencarian
+        |------------------------------------------------------------------
+        */
+
+        ->when(
+            $search,
+            function ($query) use ($search) {
+
+                $query->where(
+                    function ($query) use ($search) {
+
+                        $query
+                            ->where(
+                                'payment_number',
+                                'like',
+                                '%' . $search . '%'
+                            )
+
+                            ->orWhereHas(
+                                'allocations.studentBill.studentAcademicYear.student',
+                                function ($query) use ($search) {
+
+                                    $query
+                                        ->where(
+                                            'name',
+                                            'like',
+                                            '%' . $search . '%'
+                                        )
+
+                                        ->orWhere(
+                                            'nis',
+                                            'like',
+                                            '%' . $search . '%'
+                                        );
+
+                                }
+                            );
+
+                    }
+                );
+
+            }
+        )
+
+        /*
+        |------------------------------------------------------------------
+        | Urutan
+        |------------------------------------------------------------------
+        */
+
+        ->orderByDesc(
+            'payment_date'
+        )
+
+        ->orderByDesc(
+            'id'
+        )
+
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Data Filter untuk PDF
+    |--------------------------------------------------------------------------
+    */
+
+    $months = [
+
+        1 => 'Januari',
+        2 => 'Februari',
+        3 => 'Maret',
+        4 => 'April',
+        5 => 'Mei',
+        6 => 'Juni',
+        7 => 'Juli',
+        8 => 'Agustus',
+        9 => 'September',
+        10 => 'Oktober',
+        11 => 'November',
+        12 => 'Desember',
+
+    ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Deskripsi Filter
+    |--------------------------------------------------------------------------
+    */
+
+    $filterDescription = [];
+
+
+    /*
+    | Unit
+    */
+
+    $filterDescription[] =
+        'Unit: ' .
+        $organization->name;
+
+
+    /*
+    | Tahun
+    */
+
+    if ($year) {
+
+        $filterDescription[] =
+            'Tahun: ' .
+            $year;
+
+    }
+
+
+    /*
+    | Bulan
+    */
+
+    if ($month) {
+
+        $filterDescription[] =
+            'Bulan: ' .
+            ($months[$month] ?? $month);
+
+    }
+
+
+    /*
+    | Status
+    */
+
+    if ($status) {
+
+        $filterDescription[] =
+            'Status: ' .
+            match ($status) {
+
+                'pending' =>
+                    'Menunggu Konfirmasi',
+
+                'confirmed' =>
+                    'Dikonfirmasi',
+
+                'failed' =>
+                    'Gagal',
+
+                'cancelled' =>
+                    'Dibatalkan',
+
+                default =>
+                    $status,
+
+            };
+
+    }
+
+
+    /*
+    | Metode Pembayaran
+    */
+
+    if ($paymentMethod) {
+
+        $filterDescription[] =
+            'Metode: ' .
+            match ($paymentMethod) {
+
+                'cash' =>
+                    'Tunai',
+
+                'bank_transfer' =>
+                    'Transfer Bank',
+
+                'online' =>
+                    'Online',
+
+                default =>
+                    $paymentMethod,
+
+            };
+
+    }
+
+
+    /*
+    | Tanggal Dari
+    */
+
+    if ($dateFrom) {
+
+        $filterDescription[] =
+            'Dari: ' .
+            \Carbon\Carbon::parse(
+                $dateFrom
+            )->format(
+                'd/m/Y'
+            );
+
+    }
+
+
+    /*
+    | Tanggal Sampai
+    */
+
+    if ($dateTo) {
+
+        $filterDescription[] =
+            'Sampai: ' .
+            \Carbon\Carbon::parse(
+                $dateTo
+            )->format(
+                'd/m/Y'
+            );
+
+    }
+
+
+    /*
+    | Pencarian
+    */
+
+    if ($search) {
+
+        $filterDescription[] =
+            'Pencarian: ' .
+            $search;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Profil Organisasi Induk
+    |--------------------------------------------------------------------------
+    */
+
+    $induk =
+        Organization::where(
+            'type',
+            'induk'
+        )->firstOrFail();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nama Organisasi
+    |--------------------------------------------------------------------------
+    |
+    | Tidak lagi menggunakan:
+    |
+    | "Beberapa Unit"
+    |
+    | karena Unit sudah dipilih secara eksplisit.
+    |
+    */
+
+    $organizationName =
+        $organization->name;
+
+
+    /*
     |--------------------------------------------------------------------------
     | PDF
     |--------------------------------------------------------------------------
     */
-        $pdf = Pdf::loadView(
-            'admin.reports.payments.exports.pdf',
-            [
-                'payments' => $payments,
-                'filterDescription' => $filterDescription,
 
-                'organization' => $organization,
-                'induk' => $induk,
-                'organizationName' => $organizationName,
-            ]
-        );
+    $pdf = Pdf::loadView(
+        'admin.reports.payments.exports.pdf',
+        [
+            'payments' =>
+                $payments,
 
-        $pdf->setPaper('a4', 'landscape');
+            'filterDescription' =>
+                $filterDescription,
 
-        return $pdf->download('laporan-pembayaran.pdf');
-    }
+            'organization' =>
+                $organization,
+
+            'induk' =>
+                $induk,
+
+            'organizationName' =>
+                $organizationName,
+        ]
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ukuran Kertas
+    |--------------------------------------------------------------------------
+    */
+
+    $pdf->setPaper(
+        'a4',
+        'landscape'
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nama File
+    |--------------------------------------------------------------------------
+    */
+
+    $fileName =
+        'laporan-pembayaran-' .
+        $organization->code .
+        '-' .
+        now()->format('Y-m-d') .
+        '.pdf';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Download
+    |--------------------------------------------------------------------------
+    */
+
+    return $pdf->download(
+        $fileName
+    );
+}
 }
