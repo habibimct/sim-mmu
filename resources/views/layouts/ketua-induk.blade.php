@@ -66,10 +66,11 @@
 
 
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0d6efd">
 
 
     {{-- ======================================================
@@ -124,6 +125,8 @@
 
         });
     </script>
+
+@include('components.pwa-install-script')
 
 </head>
 

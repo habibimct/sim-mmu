@@ -6,10 +6,12 @@
     <x-slot name="header">
 
         <div>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard Kepala Unit
-            </h2>
-
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Dashboard Kepala Unit
+                </h2>
+                @include('components.pwa-install-button')
+            </div>
             <p class="mt-1 text-sm text-gray-500">
                 Ringkasan informasi unit Anda.
             </p>
@@ -26,11 +28,16 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-xl">
 
                 <div class="p-6">
+                    <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Selamat datang,
+                            {{ Auth::user()->name }}
+                        </h3>
+                        <div class="w-full sm:w-auto">
+                            @include('components.pwa-install-button')
+                        </div>
 
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        Selamat datang,
-                        {{ Auth::user()->name }}
-                    </h3>
+                    </div>
 
                     <p class="mt-1 text-sm text-gray-500">
                         Anda masuk sebagai Kepala Unit.
@@ -45,12 +52,10 @@
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 {{-- Keuangan --}}
-                <a
-                    href="{{route('kepala-unit.finance.summary.index')}}"
+                <a href="{{ route('kepala-unit.finance.summary.index') }}"
                     class="bg-white rounded-xl shadow-sm p-6
                            hover:shadow-md transition
-                           border border-gray-100"
-                >
+                           border border-gray-100">
 
                     <div class="flex items-center justify-between">
 
@@ -69,8 +74,7 @@
                         <div
                             class="w-12 h-12 rounded-full
                                    bg-blue-100
-                                   flex items-center justify-center"
-                        >
+                                   flex items-center justify-center">
                             <span class="text-blue-600 text-xl">
                                 Rp
                             </span>
@@ -86,12 +90,10 @@
 
 
                 {{-- Notifikasi --}}
-                <a
-                    href="{{ route('kepala-unit.notifications.index') }}"
+                <a href="{{ route('kepala-unit.notifications.index') }}"
                     class="bg-white rounded-xl shadow-sm p-6
                            hover:shadow-md transition
-                           border border-gray-100"
-                >
+                           border border-gray-100">
 
                     <div class="flex items-center justify-between">
 
@@ -110,8 +112,7 @@
                         <div
                             class="w-12 h-12 rounded-full
                                    bg-yellow-100
-                                   flex items-center justify-center"
-                        >
+                                   flex items-center justify-center">
                             <span class="text-yellow-600 text-xl">
                                 🔔
                             </span>
@@ -130,5 +131,4 @@
         </div>
 
     </div>
-
 @endsection

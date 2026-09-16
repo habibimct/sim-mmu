@@ -63,6 +63,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0d6efd">
+
     @php
         $induk = \App\Models\Organization::where('type', 'induk')->first();
     @endphp
@@ -80,6 +83,8 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+@include('components.pwa-install-script')
 </head>
 
 <body class="bg-gray-100 text-gray-800">

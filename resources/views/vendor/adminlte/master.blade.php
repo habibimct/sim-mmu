@@ -35,6 +35,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0d6efd">
+
     @if ($induk?->logo_path)
         <link rel="icon" type="image/webp" href="{{ asset('storage/' . $induk->logo_path) }}">
     @endif
@@ -79,6 +82,8 @@
             document.body.style.visibility = 'visible';
         });
     </script>
+
+@include('components.pwa-install-script')
 </head>
 
 <body class="{{ $bodyClasses }}">

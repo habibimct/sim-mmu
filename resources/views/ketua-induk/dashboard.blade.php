@@ -31,8 +31,16 @@
                     Organisasi
                 </div>
 
-                <div class="mt-1 text-2xl font-bold text-gray-800">
-                    {{ $induk->name }}
+                <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div class="text-2xl font-bold text-gray-800">
+                        {{ $induk->name }}
+                    </div>
+
+                    <div class="w-full sm:w-auto">
+                        @include('components.pwa-install-button')
+                    </div>
+
                 </div>
 
                 <div class="mt-2 text-sm text-gray-500">
@@ -56,11 +64,9 @@
 
                     {{-- Keuangan --}}
 
-                    <a
-                        href="{{ route('ketua-induk.finance.index') }}"
+                    <a href="{{ route('ketua-induk.finance.index') }}"
                         class="rounded-lg bg-white p-5 shadow-sm
-                               transition hover:shadow-md"
-                    >
+                               transition hover:shadow-md">
 
                         <div class="text-2xl">
                             💰
@@ -79,9 +85,7 @@
 
                     {{-- Organisasi --}}
 
-                    <div
-                        class="rounded-lg bg-white p-5 shadow-sm"
-                    >
+                    <div class="rounded-lg bg-white p-5 shadow-sm">
 
                         <div class="text-2xl">
                             🏫
@@ -100,11 +104,9 @@
 
                     {{-- Notifikasi --}}
 
-                    <a
-                        href="{{ route('ketua-induk.notifications.index') }}"
+                    <a href="{{ route('ketua-induk.notifications.index') }}"
                         class="rounded-lg bg-white p-5 shadow-sm
-                               transition hover:shadow-md"
-                    >
+                               transition hover:shadow-md">
 
                         <div class="text-2xl">
                             🔔
@@ -141,7 +143,6 @@
                 <div class="divide-y divide-gray-100">
 
                     @forelse ($units as $unit)
-
                         <div class="flex items-center justify-between px-5 py-4">
 
                             <div>
@@ -161,8 +162,7 @@
                             <span
                                 class="rounded-full bg-green-100
                                        px-2.5 py-1 text-xs
-                                       font-medium text-green-700"
-                            >
+                                       font-medium text-green-700">
                                 Aktif
                             </span>
 
@@ -173,7 +173,6 @@
                         <div class="px-5 py-8 text-center text-sm text-gray-500">
                             Belum ada unit aktif.
                         </div>
-
                     @endforelse
 
                 </div>
@@ -185,18 +184,17 @@
 
             <div class="overflow-hidden rounded-lg bg-white shadow-sm">
 
-                <div class="flex items-center justify-between
+                <div
+                    class="flex items-center justify-between
                             border-b border-gray-200 px-5 py-4">
 
                     <h3 class="font-semibold text-gray-800">
                         Notifikasi Terbaru
                     </h3>
 
-                    <a
-                        href="{{ route('notifications.index') }}"
+                    <a href="{{ route('notifications.index') }}"
                         class="text-sm font-medium text-indigo-600
-                               hover:text-indigo-800"
-                    >
+                               hover:text-indigo-800">
                         Lihat semua
                     </a>
 
@@ -204,16 +202,13 @@
 
 
                 @forelse ($notifications as $notification)
-
                     @php
                         $data = $notification->data;
                     @endphp
 
-                    <a
-                        href="{{ route('notifications.index') }}"
+                    <a href="{{ route('notifications.index') }}"
                         class="block border-b border-gray-100
-                               px-5 py-4 hover:bg-gray-50"
-                    >
+                               px-5 py-4 hover:bg-gray-50">
 
                         <div class="font-medium text-gray-800">
                             {{ $data['title'] ?? 'Notifikasi' }}
@@ -234,7 +229,6 @@
                     <div class="px-5 py-8 text-center text-sm text-gray-500">
                         Belum ada notifikasi.
                     </div>
-
                 @endforelse
 
             </div>
@@ -243,5 +237,4 @@
         </div>
 
     </div>
-
 @endsection

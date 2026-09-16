@@ -4,6 +4,11 @@
 
 @section('content_header')
     <h1>Dashboard Admin Sistem</h1>
+
+    <button type="button" data-pwa-install class="btn btn-primary">
+        <i class="bi bi-download me-1"></i>
+        Install SIM-MMU
+    </button>
 @stop
 
 @section('content')
