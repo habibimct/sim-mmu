@@ -260,7 +260,7 @@
 
 
         {{-- Riwayat Absensi --}}
-        <a href="#"
+        {{-- <a href="#"
             class="group
                    flex items-center gap-3
                    px-3 py-2.5
@@ -289,7 +289,7 @@
                 Riwayat Absensi
             </span>
 
-        </a>
+        </a> --}}
 
     </nav>
 

@@ -11,7 +11,7 @@
             <div class="modal-content">
 
                 <form method="POST" action="{{ route('admin.finance.transactions.store') }}"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" id="formTransaksiBaru">
 
                     @csrf
 

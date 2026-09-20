@@ -15,6 +15,7 @@ class Attendance extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
+        'sync_id',
         'organization_id',
         'teaching_assignment_id',
         'date',

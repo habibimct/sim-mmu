@@ -593,6 +593,7 @@ class AttendanceController extends Controller
         ) {
 
             $attendance = Attendance::create([
+                'sync_id' => (string) \Illuminate\Support\Str::uuid(),
                 'organization_id' => $teachingAssignment->organization_id,
                 'teaching_assignment_id' => $teachingAssignment->id,
                 'date' => $validated['date'],

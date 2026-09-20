@@ -12,6 +12,7 @@ class FinanceDeposit extends Model
     use LogsActivity;
 
     protected $fillable = [
+        'sync_id',
         'organization_id',
         'target_organization_id',
         'deposit_date',

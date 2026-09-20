@@ -181,17 +181,78 @@ class FinanceTransactionController extends Controller
             ->orderBy('name')
             ->get();
 
-        $summary = (clone $query)
-            ->where('status', 'confirmed')
-            ->reorder()
+        $summaryQuery = FinanceTransaction::query()
+            ->whereIn(
+                'organization_id',
+                $viewOrganizationIds
+            )
+            ->where('status', 'confirmed');
+
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $summaryQuery->where(function ($q) use ($search) {
+
+                $q->where(
+                    'category',
+                    'like',
+                    "%{$search}%"
+                )
+                    ->orWhere(
+                        'description',
+                        'like',
+                        "%{$search}%"
+                    );
+            });
+        }
+
+        if ($request->filled('type')) {
+
+            $summaryQuery->where(
+                'type',
+                $request->type
+            );
+        }
+
+        if ($request->filled('organization_id')) {
+
+            $summaryQuery->where(
+                'organization_id',
+                (int) $request->organization_id
+            );
+        }
+
+        if ($request->filled('payment_method')) {
+
+            $summaryQuery->where(
+                'payment_method',
+                $request->payment_method
+            );
+        }
+
+        $summary = $summaryQuery
             ->selectRaw("
-                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense
-            ")
+        SUM(
+            CASE
+                WHEN type = 'income'
+                THEN amount
+                ELSE 0
+            END
+        ) as total_income,
+
+        SUM(
+            CASE
+                WHEN type = 'expense'
+                THEN amount
+                ELSE 0
+            END
+        ) as total_expense
+    ")
             ->first();
 
-        $totalIncome = (float) $summary->total_income;
-        $totalExpense = (float) $summary->total_expense;
+        $totalIncome = (float) ($summary->total_income ?? 0);
+        $totalExpense = (float) ($summary->total_expense ?? 0);
 
         $netBalance = $totalIncome - $totalExpense;
 
@@ -492,7 +553,7 @@ class FinanceTransactionController extends Controller
                 $proof->getClientOriginalName(),
 
                 'proof_size' =>
-    $proofSize,
+                $proofSize,
 
                 'status' =>
                 'pending',

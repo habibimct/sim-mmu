@@ -16,10 +16,20 @@
     @endif
     <div class="d-flex justify-content-between align-items-center">
 
-        <h1>
-            <i class="bi bi-cash-stack me-1"></i>
-            Transaksi Keuangan
-        </h1>
+        <div>
+            <h1>
+                <i class="bi bi-cash-stack me-1"></i>
+                Transaksi Keuangan
+            </h1>
+
+            <span id="connectionStatus" class="badge bg-success">
+                <i class="bi bi-wifi me-1"></i> Online
+            </span>
+            <span id="pendingSyncStatus" class="badge bg-warning text-dark">
+                <i class="bi bi-cloud-arrow-up me-1"></i>
+                <span id="pendingSyncCount">0</span> menunggu sinkronisasi
+            </span>
+        </div>
 
         @can('finance.manage')
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTransaksiBaru">

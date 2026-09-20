@@ -164,7 +164,8 @@
                                     last:border-b-0
                                     hover:bg-gray-50">
 
-                                <div class="flex items-center
+                                <div
+                                    class="flex items-center
                                         justify-between
                                         gap-3">
 
@@ -263,6 +264,13 @@
             <span x-text="successMessage"></span>
         </div>
 
+        {{-- Pesan offline --}}
+
+        <div x-show="offlineMessage" x-transition
+            class="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+            <span x-text="offlineMessage"></span>
+        </div>
+
         {{-- Pesan gagal --}}
         <div x-show="saveError" x-transition
             class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -344,6 +352,7 @@
 
             saveError: '',
             successMessage: '',
+            offlineMessage: '',
 
             assignmentId: null,
             assignmentName: '',
@@ -358,20 +367,21 @@
                 this.loading = true;
                 this.error = '';
                 this.saveError = '';
+                this.successMessage = '';
+                this.offlineMessage = '';
 
                 this.assignmentId = assignment.id;
                 this.assignmentName = assignment.class_name;
                 this.subjectName = assignment.subject_name;
                 this.academicYearName = assignment.academic_year_name;
-
                 this.students = [];
 
                 try {
                     const response = await fetch(
                         `{{ url('/guru/attendance') }}/${assignment.id}/students`, {
                             headers: {
-                                'Accept': 'application/json'
-                            }
+                                'Accept': 'application/json',
+                            },
                         }
                     );
 
@@ -383,20 +393,117 @@
 
                     const data = await response.json();
 
-                    this.students = data.students.map(student => ({
+                    const students = data.students.map(student => ({
                         id: student.id,
                         nis: student.nis,
                         name: student.name,
                         status: 'present',
-                        notes: ''
+                        notes: '',
                     }));
 
+                    this.students = students;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Simpan daftar siswa ke cache offline
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        window.SimMmuAttendanceOffline &&
+                        typeof window.SimMmuAttendanceOffline.cacheAssignment === 'function'
+                    ) {
+                        await window.SimMmuAttendanceOffline.cacheAssignment({
+                            assignment_id: Number(assignment.id),
+                            class_name: assignment.class_name,
+                            subject_name: assignment.subject_name,
+                            academic_year_name: assignment.academic_year_name,
+                            students: students.map(student => ({
+                                id: student.id,
+                                nis: student.nis,
+                                name: student.name,
+                            })),
+                        });
+
+                        console.log(
+                            '[SIM-MMU Attendance Offline] Cache siswa berhasil disimpan:',
+                            assignment.id
+                        );
+                    }
                 } catch (error) {
-                    console.error(error);
+                    console.warn(
+                        '[SIM-MMU Attendance Offline] Server tidak dapat diakses. Mencoba cache...',
+                        error
+                    );
 
-                    this.error =
-                        'Daftar siswa gagal dimuat. Silakan coba lagi.';
+                    /*
+                    |--------------------------------------------------------------------------
+                    | FALLBACK KE CACHE OFFLINE
+                    |--------------------------------------------------------------------------
+                    */
 
+                    try {
+                        if (
+                            window.SimMmuAttendanceOffline &&
+                            typeof window.SimMmuAttendanceOffline.getCachedAssignment === 'function'
+                        ) {
+                            const cached =
+                                await window.SimMmuAttendanceOffline.getCachedAssignment(
+                                    assignment.id
+                                );
+
+                            if (
+                                cached &&
+                                Array.isArray(cached.students) &&
+                                cached.students.length > 0
+                            ) {
+                                this.assignmentName =
+                                    cached.class_name || this.assignmentName;
+
+                                this.subjectName =
+                                    cached.subject_name || this.subjectName;
+
+                                this.academicYearName =
+                                    cached.academic_year_name ||
+                                    this.academicYearName;
+
+                                this.students = cached.students.map(student => ({
+                                    id: student.id,
+                                    nis: student.nis,
+                                    name: student.name,
+                                    status: 'present',
+                                    notes: '',
+                                }));
+
+                                this.offlineMessage =
+                                    'Mode offline aktif. Daftar siswa dimuat dari cache.';
+
+                                console.log(
+                                    '[SIM-MMU Attendance Offline] Siswa berhasil dimuat dari cache:',
+                                    assignment.id
+                                );
+
+                                return;
+                            }
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Cache tidak tersedia
+                        |--------------------------------------------------------------------------
+                        */
+
+                        this.error =
+                            'Server tidak dapat diakses dan data siswa belum tersedia di cache offline.';
+                    } catch (cacheError) {
+                        console.error(
+                            '[SIM-MMU Attendance Offline] Gagal membaca cache:',
+                            cacheError
+                        );
+
+                        this.error =
+                            'Server tidak dapat diakses dan data offline gagal dimuat.';
+                    }
                 } finally {
                     this.loading = false;
                 }
@@ -407,6 +514,7 @@
                 this.students = [];
                 this.error = '';
                 this.saveError = '';
+                this.offlineMessage = '';
             },
 
             async saveAttendance() {
@@ -420,7 +528,35 @@
                 this.saveError = '';
                 this.successMessage = '';
 
+                const attendanceData = {
+                    teaching_assignment_id: Number(this.assignmentId),
+
+                    date: document
+                        .getElementById('attendance_date')
+                        .value,
+
+                    meeting_number: Number(
+                        document.getElementById('meeting_number').value
+                    ),
+
+                    notes: document
+                        .getElementById('attendance_notes')
+                        .value,
+
+                    students: this.students.map(student => ({
+                        student_academic_year_id: student.id,
+                        status: student.status,
+                        notes: student.notes || null,
+                    })),
+                };
+
                 try {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Coba simpan ke server terlebih dahulu
+                    |--------------------------------------------------------------------------
+                    */
 
                     const response = await fetch(
                         '{{ route('guru.attendance.store') }}', {
@@ -432,40 +568,16 @@
 
                                 'X-CSRF-TOKEN': document
                                     .querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
+                                    .getAttribute('content'),
                             },
 
-                            body: JSON.stringify({
-
-                                teaching_assignment_id: this.assignmentId,
-
-                                date: document
-                                    .getElementById('attendance_date')
-                                    .value,
-
-                                meeting_number: document
-                                    .getElementById('meeting_number')
-                                    .value,
-
-                                notes: document
-                                    .getElementById('attendance_notes')
-                                    .value,
-
-                                students: this.students.map(student => ({
-                                    student_academic_year_id: student.id,
-
-                                    status: student.status,
-
-                                    notes: student.notes || null
-                                }))
-                            })
+                            body: JSON.stringify(attendanceData),
                         }
                     );
 
-
                     /*
                     |--------------------------------------------------------------------------
-                    | Berhasil
+                    | Berhasil online
                     |--------------------------------------------------------------------------
                     */
 
@@ -488,10 +600,13 @@
                         return;
                     }
 
-
                     /*
                     |--------------------------------------------------------------------------
-                    | Gagal
+                    | Server merespons error
+                    |
+                    | Untuk tahap ini, response HTTP error TIDAK langsung
+                    | dimasukkan ke queue. Kita hanya queue ketika komunikasi
+                    | dengan server benar-benar gagal.
                     |--------------------------------------------------------------------------
                     */
 
@@ -509,16 +624,89 @@
 
                 } catch (error) {
 
-                    console.error(error);
+                    /*
+                    |--------------------------------------------------------------------------
+                    | SERVER / INTERNET TIDAK TERSEDIA
+                    |--------------------------------------------------------------------------
+                    */
 
-                    this.saveError =
-                        'Terjadi kesalahan saat menghubungi server. Silakan coba lagi.';
+                    console.warn(
+                        '[SIM-MMU Attendance Offline] Server tidak dapat diakses. Menyimpan ke queue offline...',
+                        error
+                    );
+
+                    try {
+
+                        if (
+                            !window.SimMmuAttendanceOffline ||
+                            typeof window.SimMmuAttendanceOffline.addToQueue !== 'function'
+                        ) {
+                            throw new Error(
+                                'Modul attendance offline belum tersedia.'
+                            );
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Buat sync_id unik untuk transaksi offline
+                        |--------------------------------------------------------------------------
+                        */
+
+                        const syncId =
+                            crypto.randomUUID();
+
+                        const queueData = {
+                            sync_id: syncId,
+
+                            operation: 'create',
+
+                            status: 'pending_sync',
+
+                            created_at: new Date().toISOString(),
+
+                            attendance_id: null,
+
+                            ...attendanceData,
+                        };
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Simpan ke IndexedDB
+                        |--------------------------------------------------------------------------
+                        */
+
+                        await window.SimMmuAttendanceOffline.addToQueue(
+                            queueData
+                        );
+
+                        console.log(
+                            '[SIM-MMU Attendance Offline] Absensi berhasil masuk queue:',
+                            queueData
+                        );
+
+                        this.offlineMessage =
+                            'Server tidak tersedia. Absensi berhasil disimpan di perangkat dan akan disinkronkan saat koneksi kembali.';
+
+                        setTimeout(() => {
+                            this.closeModal();
+                        }, 1500);
+
+                    } catch (offlineError) {
+
+                        console.error(
+                            '[SIM-MMU Attendance Offline] Gagal menyimpan queue:',
+                            offlineError
+                        );
+
+                        this.saveError =
+                            'Server tidak tersedia dan absensi gagal disimpan secara offline.';
+                    }
 
                 } finally {
 
                     this.saving = false;
                 }
-            }
+            },
         };
     }
 </script>

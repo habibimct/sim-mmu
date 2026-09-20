@@ -14,6 +14,7 @@ class FinanceTransaction extends Model
     use HasFactory, BelongsToOrganization, LogsActivity;
 
     protected $fillable = [
+        'sync_id',
         'organization_id',
         'transaction_date',
         'type',

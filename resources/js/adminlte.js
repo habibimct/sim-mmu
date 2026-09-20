@@ -17,6 +17,8 @@ import { OverlayScrollbars } from 'overlayscrollbars'
 // Layout, accessibility). The data-lte-* API is wired on DOMContentLoaded.
 import 'admin-lte'
 
+import './finance-offline';
+
 /**
  * Initialise an optional plugin only when its global is present.
  * Plugin libraries (ApexCharts, jsVectorMap, FullCalendar, Sortable,

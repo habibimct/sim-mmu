@@ -71,6 +71,32 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+<script>
+    window.simMmuOfflineIdentity = {
+        user_id: {{ auth()->id() }},
+        teacher_id: {{ auth()->user()->teacher->id }},
+        name: "{{ auth()->user()->name }}",
+        email: "{{ auth()->user()->email }}",
+        role: "guru"
+    };
+</script>
+
+<script>
+    window.addEventListener('load', async function () {
+        try {
+            if (window.SimMmuOfflineAuth) {
+                await window.SimMmuOfflineAuth.saveCurrentUserOffline();
+                console.log('[SIM-MMU Offline Auth] Identitas Guru tersimpan.');
+            }
+        } catch (error) {
+            console.error(
+                '[SIM-MMU Offline Auth] Gagal menyimpan identitas:',
+                error
+            );
+        }
+    });
+</script>
+
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="theme-color" content="#0d6efd">
 
@@ -127,7 +153,7 @@
         });
     </script>
 
-@include('components.pwa-install-script')
+    @include('components.pwa-install-script')
 
 </head>
 

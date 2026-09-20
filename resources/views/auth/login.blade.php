@@ -507,6 +507,65 @@
                     </form>
 
 
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const form = document.querySelector('form[action="{{ route('login') }}"]');
+
+                            if (!form) {
+                                return;
+                            }
+
+                            form.addEventListener('submit', async function(event) {
+                                if (navigator.onLine) {
+                                    return;
+                                }
+
+                                event.preventDefault();
+
+                                const loginInput = document.getElementById('email');
+                                const passwordInput = document.getElementById('password');
+
+                                const login = loginInput?.value?.trim() ?? '';
+                                const pin = passwordInput?.value ?? '';
+
+                                if (!login || !pin) {
+                                    return;
+                                }
+
+                                try {
+                                    const result = await SimMmuOfflineAuth.loginOffline(
+                                        login,
+                                        pin
+                                    );
+
+                                    if (!result.success) {
+                                        alert(result.message);
+                                        return;
+                                    }
+
+                                    console.log(
+                                        '[SIM-MMU Offline Auth] Login offline berhasil:',
+                                        result.identity
+                                    );
+
+                                    /*
+                                     * Untuk sementara kita belum redirect.
+                                     * Kita tes autentikasi offline terlebih dahulu.
+                                     */
+                                } catch (error) {
+                                    console.error(
+                                        '[SIM-MMU Offline Auth] Login offline gagal:',
+                                        error
+                                    );
+
+                                    alert(
+                                        'Login offline gagal. Silakan coba lagi.'
+                                    );
+                                }
+                            });
+                        });
+                    </script>
+
                     {{-- =================================================
                     REGISTRATION
                     ================================================== --}}
