@@ -4,7 +4,7 @@
 
 @section('content_header')
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
         <div>
             <h1>Tagihan Siswa</h1>
@@ -20,12 +20,12 @@
                 Filter
             </button>
 
-@can('bills.manage')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
-        <i class="bi bi-plus-lg me-1"></i>
-        Tambah Tagihan
-    </button>
-@endcan
+            @can('bills.manage')
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Tambah Tagihan
+                </button>
+            @endcan
         </div>
     </div>
 

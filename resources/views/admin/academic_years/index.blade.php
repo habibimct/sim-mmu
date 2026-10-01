@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Tahun Ajaran')
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <h1 class="m-0">
             Tahun Ajaran
         </h1>

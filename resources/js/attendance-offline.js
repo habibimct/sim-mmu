@@ -1,6 +1,6 @@
 (function () {
     const DB_NAME = 'sim-mmu-offline';
-    const DB_VERSION = 6;
+    const DB_VERSION = 7;
 
     const ATTENDANCE_CACHE_STORE = 'attendance_cache';
     const ATTENDANCE_QUEUE_STORE = 'attendance_queue';

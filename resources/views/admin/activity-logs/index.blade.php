@@ -3,7 +3,7 @@
 @section('title', 'Activity Log')
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
         <h1 class="m-0">
             <i class="bi bi-clock-history me-1"></i>
@@ -29,7 +29,7 @@
         </div>
 
     </div>
-    
+
     @include('admin.activity-logs.partials.filter')
 @stop
 

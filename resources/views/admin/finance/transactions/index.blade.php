@@ -14,7 +14,7 @@
 
         </div>
     @endif
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
         <div>
             <h1>

@@ -3,7 +3,7 @@
 @section('title', 'Organisasi')
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <h1>Organisasi</h1>
 
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrganizationModal">

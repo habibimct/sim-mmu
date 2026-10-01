@@ -10,7 +10,7 @@
     HEADER
     ========================================================== --}}
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
             <div>
                 <h1 class="h4 mb-1">

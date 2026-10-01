@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Laporan Pembayaran')
 @section('content_header')
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">3">
         <div>
             <h1 class="mb-1">
                 Laporan Pembayaran

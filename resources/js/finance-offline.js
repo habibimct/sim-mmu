@@ -1,6 +1,6 @@
 (function () {
     const DB_NAME = 'sim-mmu-offline';
-    const DB_VERSION = 6;
+    const DB_VERSION = 7;
     const STORE_NAME = 'transaction_queue';
 
     function openDatabase() {
