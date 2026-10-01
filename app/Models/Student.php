@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -59,5 +60,19 @@ class Student extends Model
         return $this->hasMany(
             StudentAcademicYear::class
         );
+    }
+
+    /**
+     * Wali / orang tua siswa.
+     */
+    public function guardians(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Guardian::class,
+            'student_guardians'
+        )->withPivot([
+            'relationship',
+            'is_primary',
+        ])->withTimestamps();
     }
 }

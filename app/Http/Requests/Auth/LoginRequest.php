@@ -45,7 +45,8 @@ class LoginRequest extends FormRequest
         $login = $this->string('email');
         $password = $this->string('password');
 
-        // Jika input berupa NIK, cari User melalui Teacher.
+        // Jika input berupa NIK, cari User melalui Teacher atau Guardian.
+
         if (preg_match('/^\d{16}$/', $login)) {
             $teacher = \App\Models\Teacher::where('nik', $login)
                 ->whereNotNull('user_id')
@@ -57,13 +58,23 @@ class LoginRequest extends FormRequest
                     'password' => $password,
                 ];
             } else {
-                $credentials = [
-                    'email' => $login,
-                    'password' => $password,
-                ];
+                $guardian = \App\Models\Guardian::where('nik', $login)
+                    ->whereNotNull('user_id')
+                    ->first();
+
+                if ($guardian) {
+                    $credentials = [
+                        'id' => $guardian->user_id,
+                        'password' => $password,
+                    ];
+                } else {
+                    $credentials = [
+                        'email' => $login,
+                        'password' => $password,
+                    ];
+                }
             }
         } else {
-            // Selain NIK dianggap sebagai email.
             $credentials = [
                 'email' => $login,
                 'password' => $password,

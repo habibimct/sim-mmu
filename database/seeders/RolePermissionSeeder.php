@@ -36,6 +36,10 @@ class RolePermissionSeeder extends Seeder
                 'students.view',
                 'students.manage',
 
+                // Wali / Orang Tua
+                'guardians.view',
+                'guardians.manage',
+
                 // Guru
                 'teachers.view',
                 'teachers.manage',
@@ -98,6 +102,9 @@ class RolePermissionSeeder extends Seeder
                 'attendance.view',
                 'attendance.create',
                 'attendance.update',
+
+                // Koreksi Jawaban AI
+                'ai_grading.use',
             ],
 
             // =====================================================
@@ -131,6 +138,10 @@ class RolePermissionSeeder extends Seeder
                 // Siswa
                 'students.view',
                 'students.manage',
+
+                // Wali / Orang Tua
+                'guardians.view',
+                'guardians.manage',
 
                 // Guru
                 'teachers.view',

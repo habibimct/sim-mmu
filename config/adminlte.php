@@ -324,6 +324,13 @@ return [
         ],
 
         [
+            'text' => 'Wali Murid',
+            'url' => 'admin/guardians',
+            'icon' => 'bi bi-person-workspace',
+            'can' => 'guardians.view',
+        ],
+
+        [
             'text' => 'Absensi',
             'icon' => 'bi bi-calendar-check',
             'can' => 'attendance.view',

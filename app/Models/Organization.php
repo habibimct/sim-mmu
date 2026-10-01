@@ -55,6 +55,16 @@ class Organization extends Model
     }
 
     /**
+     * Wali yang terdaftar pada organisasi ini.
+     */
+    public function guardians(): HasMany
+    {
+        return $this->hasMany(
+            Guardian::class
+        );
+    }
+
+    /**
 
      * Mengambil seluruh organisasi di bawah organisasi ini
      * secara rekursif.

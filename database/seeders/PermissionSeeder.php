@@ -29,6 +29,10 @@ class PermissionSeeder extends Seeder
             ['code' => 'students.view', 'name' => 'Melihat Siswa', 'module' => 'students'],
             ['code' => 'students.manage', 'name' => 'Mengelola Siswa', 'module' => 'students'],
 
+            // Wali / Orang Tua
+            ['code' => 'guardians.view', 'name' => 'Melihat Wali / Orang Tua', 'module' => 'guardians'],
+            ['code' => 'guardians.manage', 'name' => 'Mengelola Wali / Orang Tua', 'module' => 'guardians'],
+
             // Guru
             ['code' => 'teachers.view', 'name' => 'Melihat Guru', 'module' => 'teachers'],
             ['code' => 'teachers.manage', 'name' => 'Mengelola Guru', 'module' => 'teachers'],
@@ -40,6 +44,9 @@ class PermissionSeeder extends Seeder
             // Mata Pelajaran
             ['code' => 'subjects.view', 'name' => 'Melihat Mata Pelajaran', 'module' => 'subjects'],
             ['code' => 'subjects.manage', 'name' => 'Mengelola Mata Pelajaran', 'module' => 'subjects'],
+
+            // Koreksi Jawaban AI
+            ['code' => 'ai_grading.use', 'name' => 'Menggunakan Koreksi Jawaban AI', 'module' => 'ai_grading'],
 
             ['code' => 'teaching_assignments.view', 'name' => 'Melihat Penugasan Mengajar', 'module' => 'teaching_assignments'],
             ['code' => 'teaching_assignments.manage', 'name' => 'Mengelola Penugasan Mengajar', 'module' => 'teaching_assignments'],

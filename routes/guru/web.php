@@ -3,6 +3,7 @@
 use App\Http\Controllers\Guru\AttendanceController;
 use App\Http\Controllers\Guru\ClassController;
 use App\Http\Controllers\Guru\TeacherAttendanceController;
+use App\Http\Controllers\Guru\AiGradingController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])
@@ -133,4 +134,60 @@ Route::middleware(['auth'])
             ->middleware('permission:attendance.update')
             ->name('attendance.destroy');
 
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Koreksi Jawaban AI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/ai-grading', [
+            AiGradingController::class,
+            'index',
+        ])
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.index');
+
+        Route::post(
+            '/ai-grading',
+            [AiGradingController::class, 'store']
+        )
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.store');
+
+        Route::get(
+            '/ai-grading/review',
+            [AiGradingController::class, 'review']
+        )
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.review');
+
+        Route::post('/ai-grading/process', [
+            AiGradingController::class,
+            'process',
+        ])
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.process');
+
+        Route::get('/ai-grading/result', [
+            AiGradingController::class,
+            'result',
+        ])
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.result');
+
+        Route::post('/ai-grading/review', [
+            AiGradingController::class,
+            'saveReview',
+        ])
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.save-review');
+
+        Route::get('/ai-grading/review-result', [
+            AiGradingController::class,
+            'reviewResult',
+        ])
+            ->middleware('permission:ai_grading.use')
+            ->name('ai-grading.review-result');
     });

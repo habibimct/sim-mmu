@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\StudentImportController;
+use App\Http\Controllers\Admin\GuardianController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TeacherImportController;
 use App\Http\Controllers\Admin\AcademicYearController;
@@ -293,11 +294,74 @@ Route::middleware(['auth', 'organization.scope'])
             ->name('teachers.export');
 
 
+
+
+
+
         /*
-|--------------------------------------------------------------------------
-| Guru - Tambah
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Wali / Orang Tua - Melihat
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:guardians.view')
+            ->get('/guardians', [GuardianController::class, 'index'])
+            ->name('guardians.index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Wali / Orang Tua - Tambah
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:guardians.manage')
+            ->post('/guardians', [GuardianController::class, 'store'])
+            ->name('guardians.store');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Wali / Orang Tua - Edit
+        |--------------------------------------------------------------------------
+        */
+        Route::middleware('permission:guardians.manage')
+            ->put('/guardians/{guardian}', [GuardianController::class, 'update'])
+            ->name('guardians.update');
+
+
+        Route::middleware('permission:guardians.manage')
+            ->patch('/guardians/{guardian}/toggle-status', [GuardianController::class, 'toggleStatus'])
+            ->name('guardians.toggle-status');
+
+        Route::middleware('permission:guardians.manage')
+            ->patch(
+                '/guardians/{guardian}/generate-password',
+                [GuardianController::class, 'generatePassword']
+            )
+            ->name('guardians.generate-password');
+
+
+        Route::middleware('permission:guardians.manage')
+            ->get('/guardians/{guardian}/students', [GuardianController::class, 'students'])
+            ->name('guardians.students');
+
+        Route::middleware('permission:guardians.manage')
+            ->post('/guardians/{guardian}/students', [GuardianController::class, 'attachStudent'])
+            ->name('guardians.students.attach');
+
+        Route::middleware('permission:guardians.manage')
+            ->delete(
+                '/guardians/{guardian}/students/{student}',
+                [GuardianController::class, 'detachStudent']
+            )
+            ->name('guardians.students.detach');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Guru - Tambah
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->get('/teachers/create', [TeacherController::class, 'create'])
@@ -309,10 +373,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Guru - Import
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Guru - Import
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->get(
@@ -337,10 +401,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Guru - Ubah
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Guru - Ubah
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->get(
@@ -358,10 +422,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Guru - Aktif / Nonaktif
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Guru - Aktif / Nonaktif
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->patch(
@@ -372,10 +436,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Guru - Akun
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Guru - Akun
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->patch(
@@ -393,10 +457,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Guru - Hapus
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Guru - Hapus
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:teachers.manage')
             ->delete(
@@ -408,10 +472,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Tahun Ajaran
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Tahun Ajaran
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:academic_years.view')
             ->get(
@@ -463,10 +527,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Kelas
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Kelas
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:classes.view')
             ->get(
@@ -542,10 +606,10 @@ Route::middleware(['auth', 'organization.scope'])
 
 
         /*
-|--------------------------------------------------------------------------
-| Pemindahan Siswa Antar Kelas
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Pemindahan Siswa Antar Kelas
+        |--------------------------------------------------------------------------
+        */
 
         Route::middleware('permission:students.manage')
             ->get(
