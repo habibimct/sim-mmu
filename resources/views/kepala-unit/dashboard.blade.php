@@ -25,24 +25,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Sambutan --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-xl">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg bg-white p-6 shadow-sm">
 
                 <div class="p-6">
-                    <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="mt-1 flex flex-col sm:flex-row sm:items-left sm:justify-between">
                         <h3 class="text-lg font-semibold text-gray-800">
                             Selamat datang,
                             {{ Auth::user()->name }}
                         </h3>
-                        <div class="w-full sm:w-auto">
-                            @include('components.pwa-install-button')
-                        </div>
-
                     </div>
 
                     <p class="mt-1 text-sm text-gray-500">
                         Anda masuk sebagai Kepala Unit.
                     </p>
-
+                </div>
+                <div class="w-full sm:w-auto">
+                    @include('components.pwa-install-button')
                 </div>
 
             </div>

@@ -231,20 +231,16 @@ class KepalaUnitFinanceReportController extends Controller
             ->count();
 
         $totalIncome = (float) (clone $baseQuery)
-            ->where('type', 'income')
             ->where(
-                'source_type',
-                '!=',
-                'deposit'
+                'type',
+                'income'
             )
             ->sum('amount');
 
         $totalExpense = (float) (clone $baseQuery)
-            ->where('type', 'expense')
             ->where(
-                'source_type',
-                '!=',
-                'deposit'
+                'type',
+                'expense'
             )
             ->sum('amount');
 

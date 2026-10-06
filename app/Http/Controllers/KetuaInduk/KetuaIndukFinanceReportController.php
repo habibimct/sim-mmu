@@ -224,19 +224,17 @@ class KetuaIndukFinanceReportController extends Controller
             ->where('source_type', 'deposit')
             ->sum('amount');
 
-        // Total pemasukan biasa, tidak termasuk setoran
+        // Total pemasukan
         $totalIncome = (float) (clone $baseQuery)
             ->where('type', 'income')
-            ->where('source_type', '!=', 'deposit')
             ->sum('amount');
 
-        // Total pengeluaran biasa, tidak termasuk setoran
+        // Total pengeluaran
         $totalExpense = (float) (clone $baseQuery)
             ->where('type', 'expense')
-            ->where('source_type', '!=', 'deposit')
             ->sum('amount');
 
-        // Saldo operasional
+        // Saldo
         $netBalance = $totalIncome - $totalExpense;
 
         /*
@@ -249,34 +247,32 @@ class KetuaIndukFinanceReportController extends Controller
             (clone $baseQuery)
             ->reorder()
             ->selectRaw("
-            organization_id,
+                organization_id,
 
-            SUM(
-                CASE
-                    WHEN type = 'income'
-                        AND source_type != 'deposit'
-                    THEN amount
-                    ELSE 0
-                END
-            ) AS total_income,
+                SUM(
+                    CASE
+                        WHEN type = 'income'
+                        THEN amount
+                        ELSE 0
+                    END
+                ) AS total_income,
 
-            SUM(
-                CASE
-                    WHEN type = 'expense'
-                        AND source_type != 'deposit'
-                    THEN amount
-                    ELSE 0
-                END
-            ) AS total_expense,
+                SUM(
+                    CASE
+                        WHEN type = 'expense'
+                        THEN amount
+                        ELSE 0
+                    END
+                ) AS total_expense,
 
-            SUM(
-                CASE
-                    WHEN source_type = 'deposit'
-                    THEN amount
-                    ELSE 0
-                END
-            ) AS total_deposit
-        ")
+                SUM(
+                    CASE
+                        WHEN source_type = 'deposit'
+                        THEN amount
+                        ELSE 0
+                    END
+                ) AS total_deposit
+            ")
             ->groupBy('organization_id')
             ->with('organization:id,name,type')
             ->get()

@@ -25,28 +25,28 @@
 
             {{-- Informasi INDUK --}}
 
-            <div class="rounded-lg bg-white p-6 shadow-sm">
-
-                <div class="text-sm text-gray-500">
-                    Organisasi
-                </div>
-
-                <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-                    <div class="text-2xl font-bold text-gray-800">
-                        {{ $induk->name }}
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg bg-white p-6 shadow-sm">
+                <div>
+                    <div class="text-sm text-gray-500">
+                        Organisasi
                     </div>
 
-                    <div class="w-full sm:w-auto">
-                        @include('components.pwa-install-button')
+                    <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                        <div class="text-2xl font-bold text-gray-800">
+                            {{ $induk->name }}
+                        </div>
+
                     </div>
 
+                    <div class="mt-2 text-sm text-gray-500">
+                        {{ $units->count() }} unit aktif
+                    </div>
                 </div>
 
-                <div class="mt-2 text-sm text-gray-500">
-                    {{ $units->count() }} unit aktif
+                <div class="w-full sm:w-auto">
+                    @include('components.pwa-install-button')
                 </div>
-
             </div>
 
 
