@@ -54,7 +54,7 @@
 
                             <div class="font-medium text-gray-900">
                                 {{ $row->organization?->type === 'induk'
-                                    ? 'PMUB'
+                                    ? 'INDUK'
                                     : ($row->organization?->name ?? '-') }}
                             </div>
 

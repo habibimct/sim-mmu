@@ -189,22 +189,16 @@ class KetuaIndukFinanceReportController extends Controller
 
         if ($reportType === 'income') {
 
-            $baseQuery
-                ->where('type', 'income')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                );
+            $baseQuery->where(
+                'type',
+                'income'
+            );
         } elseif ($reportType === 'expense') {
 
-            $baseQuery
-                ->where('type', 'expense')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                );
+            $baseQuery->where(
+                'type',
+                'expense'
+            );
         } elseif ($reportType === 'deposit') {
 
             $baseQuery->where(
@@ -221,7 +215,14 @@ class KetuaIndukFinanceReportController extends Controller
 
         // Total setoran internal
         $totalDeposit = (float) (clone $baseQuery)
-            ->where('source_type', 'deposit')
+            ->where(
+                'source_type',
+                'deposit'
+            )
+            ->where(
+                'type',
+                'expense'
+            )
             ->sum('amount');
 
         // Total pemasukan
@@ -268,6 +269,7 @@ class KetuaIndukFinanceReportController extends Controller
                 SUM(
                     CASE
                         WHEN source_type = 'deposit'
+                            AND type = 'expense'
                         THEN amount
                         ELSE 0
                     END
@@ -498,22 +500,16 @@ class KetuaIndukFinanceReportController extends Controller
 
         if ($reportType === 'income') {
 
-            $query
-                ->where('type', 'income')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                );
+            $query->where(
+                'type',
+                'income'
+            );
         } elseif ($reportType === 'expense') {
 
-            $query
-                ->where('type', 'expense')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                );
+            $query->where(
+                'type',
+                'expense'
+            );
         } elseif ($reportType === 'deposit') {
 
             $query->where(
@@ -547,18 +543,17 @@ class KetuaIndukFinanceReportController extends Controller
         $totalDeposit =
             (float) $transactions
                 ->where('source_type', 'deposit')
+                ->where('type', 'expense')
                 ->sum('amount');
 
         $totalIncome =
             (float) $transactions
                 ->where('type', 'income')
-                ->where('source_type', '!=', 'deposit')
                 ->sum('amount');
 
         $totalExpense =
             (float) $transactions
                 ->where('type', 'expense')
-                ->where('source_type', '!=', 'deposit')
                 ->sum('amount');
 
         $netBalance =
@@ -581,13 +576,11 @@ class KetuaIndukFinanceReportController extends Controller
                 $income =
                     (float) $rows
                         ->where('type', 'income')
-                        ->where('source_type', '!=', 'deposit')
                         ->sum('amount');
 
                 $expense =
                     (float) $rows
                         ->where('type', 'expense')
-                        ->where('source_type', '!=', 'deposit')
                         ->sum('amount');
 
                 $deposit =
@@ -595,6 +588,10 @@ class KetuaIndukFinanceReportController extends Controller
                         ->where(
                             'source_type',
                             'deposit'
+                        )
+                        ->where(
+                            'type',
+                            'expense'
                         )
                         ->sum('amount');
 

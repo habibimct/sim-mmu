@@ -1,6 +1,6 @@
 <div x-data="{
-    openFinance: {{ request()->routeIs('ketua-induk.finance.*') ? 'true' : 'false' }},
-    openOrganization: {{ request()->routeIs('ketua-induk.organization.*') ? 'true' : 'false' }},
+    openFinance: {{ request()->routeIs('ketua-induk.finance.*', 'ketua-induk.reports.finance.*') ? 'true' : 'false' }},
+    openOrganization: {{ request()->routeIs('ketua-induk.teachers.*', 'ketua-induk.students.*') ? 'true' : 'false' }},
     openReports: {{ request()->routeIs('ketua-induk.reports.*') ? 'true' : 'false' }}
 }"
     class="h-full flex flex-col
@@ -582,9 +582,9 @@
                    border-l border-white/20
                    space-y-1"> --}}
 
-            {{-- Data Siswa --}}
+        {{-- Data Siswa --}}
 
-            {{-- <div
+        {{-- <div
                 class="flex items-center gap-2
                        px-3 py-2
                        rounded-lg
@@ -601,9 +601,9 @@
             </div> --}}
 
 
-            {{-- Absensi --}}
+        {{-- Absensi --}}
 
-            {{-- <div
+        {{-- <div
                 class="flex items-center gap-2
                        px-3 py-2
                        rounded-lg

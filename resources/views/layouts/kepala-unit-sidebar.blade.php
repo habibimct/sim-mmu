@@ -1,7 +1,14 @@
 <div x-data="{
-    openFinance: {{ request()->routeIs('kepala-unit.finance.*') ? 'true' : 'false' }},
-    openOrganization: {{ request()->routeIs('kepala-unit.organization.*') ? 'true' : 'false' }},
-    openReports: {{ request()->routeIs('kepala-unit.reports.*') ? 'true' : 'false' }}
+    openFinance: {{ request()->routeIs('kepala-unit.finance.*', 'kepala-unit.reports.finance.*') ? 'true' : 'false' }},
+    openOrganization: {{ request()->routeIs(
+        'kepala-unit.teachers.*',
+        'kepala-unit.students.*',
+        'kepala-unit.attendances.*',
+        'kepala-unit.student-attendances.*',
+    )
+        ? 'true'
+        : 'false' }},
+    openReports: {{ request()->routeIs('kepala-unit.reports.finance.*') ? 'true' : 'false' }}
 }" class="h-full flex flex-col
        bg-blue-950
        text-white
@@ -288,12 +295,12 @@
 
             <a href="{{ route('kepala-unit.finance.transactions.index') }}"
                 class="flex items-center gap-2
-           px-3 py-2 rounded-lg
-           text-xs
-           transition
-           {{ request()->routeIs('kepala-unit.finance.transactions.*')
-               ? 'bg-white/15 text-white'
-               : 'text-white/60 hover:bg-white/10 hover:text-white' }}">
+                px-3 py-2 rounded-lg
+                text-xs
+                transition
+                {{ request()->routeIs('kepala-unit.finance.transactions.*')
+                    ? 'bg-white/15 text-white'
+                    : 'text-white/60 hover:bg-white/10 hover:text-white' }}">
                 <span
                     class="w-1.5 h-1.5 rounded-full
                {{ request()->routeIs('kepala-unit.finance.transactions.*') ? 'bg-white' : 'bg-white/40' }}"></span>
@@ -323,13 +330,14 @@
                 px-3 py-2 rounded-lg
                 text-xs
                 transition
-                {{ request()->routeIs('kepala-unit.reports.finance.summary.*')
+                {{ request()->routeIs('kepala-unit.reports.finance.*')
                     ? 'bg-white/15 text-white'
                     : 'text-white/60 hover:bg-white/10 hover:text-white' }}">
 
                 <span
                     class="w-1.5 h-1.5 rounded-full
-                    {{ request()->routeIs('kepala-unit.reports.finance.summary.*') ? 'bg-white' : 'bg-white/40' }}"></span>
+                    {{ request()->routeIs('kepala-unit.reports.finance.*') ? 'bg-white' : 'bg-white/40' }}">
+                </span>
 
                 Laporan Keuangan
             </a>

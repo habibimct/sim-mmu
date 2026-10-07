@@ -512,21 +512,48 @@ class FinanceController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Filter pencarian untuk rekap
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('search')) {
+
+            $search = trim($request->search);
+
+            $organizationSummaryQuery->where(function ($query) use ($search) {
+
+                $query
+                    ->where(
+                        'category',
+                        'like',
+                        "%{$search}%"
+                    )
+                    ->orWhere(
+                        'description',
+                        'like',
+                        "%{$search}%"
+                    );
+            });
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
         | Bentuk rekap per organisasi
         |--------------------------------------------------------------------------
         */
 
         /*
-|--------------------------------------------------------------------------
-| Rekap per organisasi
-|--------------------------------------------------------------------------
-|
-| Sebelumnya setiap organisasi melakukan query income + expense
-| masing-masing.
-|
-| Sekarang seluruh organisasi dihitung dalam SATU query agregasi.
-|
-*/
+        |--------------------------------------------------------------------------
+        | Rekap per organisasi
+        |--------------------------------------------------------------------------
+        |
+        | Sebelumnya setiap organisasi melakukan query income + expense
+        | masing-masing.
+        |
+        | Sekarang seluruh organisasi dihitung dalam SATU query agregasi.
+        |
+        */
 
         $organizationTotals = (clone $organizationSummaryQuery)
             ->selectRaw(
