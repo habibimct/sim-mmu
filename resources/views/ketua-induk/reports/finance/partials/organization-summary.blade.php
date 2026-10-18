@@ -55,7 +55,7 @@
                             <div class="font-medium text-gray-900">
                                 {{ $row->organization?->type === 'induk'
                                     ? 'INDUK'
-                                    : ($row->organization?->name ?? '-') }}
+                                    : ($row->organization?->code ?? '-') }}
                             </div>
 
                             @if ($row->organization?->type === 'unit')

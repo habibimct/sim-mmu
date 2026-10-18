@@ -37,36 +37,34 @@ class StudentsImport implements
             'students',
             function ($value) {
 
-                return match (
-                    strtolower(trim($value))
-                ) {
+                return match (strtolower(trim($value))) {
 
                     'nis' =>
-                        'nis',
+                    'nis',
 
                     'nama' =>
-                        'name',
+                    'name',
 
                     'jenis kelamin' =>
-                        'gender',
+                    'gender',
 
                     'tempat lahir' =>
-                        'birth_place',
+                    'birth_place',
 
                     'tanggal lahir' =>
-                        'birth_date',
+                    'birth_date',
 
                     'organisasi' =>
-                        'organization',
+                    'organization',
 
                     'tahun akademik' =>
-                        'academic_year',
+                    'academic_year',
 
                     'kelas' =>
-                        'school_class',
+                    'school_class',
 
                     default =>
-                        $value,
+                    $value,
                 };
             }
         );
@@ -146,7 +144,7 @@ class StudentsImport implements
                             )
                         );
 
-                    $organizationName =
+                    $organizationCode =
                         trim(
                             (string) $row['organization']
                         );
@@ -170,13 +168,12 @@ class StudentsImport implements
 
                     if (
                         strcasecmp(
-                            $organizationName,
-                            $organization->name
+                            $organizationCode,
+                            $organization->code
                         ) !== 0
                     ) {
-
                         throw new RuntimeException(
-                            "Baris {$rowNumber}: organisasi pada Excel tidak sesuai dengan organisasi yang dipilih."
+                            "Baris {$rowNumber}: kode organisasi '{$organizationCode}' tidak sesuai dengan organisasi yang dipilih."
                         );
                     }
 
@@ -261,7 +258,6 @@ class StudentsImport implements
                             Date::excelToDateTimeObject(
                                 $birthDate
                             )->format('Y-m-d');
-
                     } elseif (
                         $birthDate !== null
                         &&
@@ -278,7 +274,6 @@ class StudentsImport implements
                     } else {
 
                         $birthDate = null;
-
                     }
 
 
@@ -292,26 +287,26 @@ class StudentsImport implements
                         Student::create([
 
                             'organization_id' =>
-                                $this->organizationId,
+                            $this->organizationId,
 
                             'nis' =>
-                                $nis,
+                            $nis,
 
                             'name' =>
-                                $name,
+                            $name,
 
                             'gender' =>
-                                $gender,
+                            $gender,
 
                             'birth_place' =>
-                                $row['birth_place']
-                                    ?? null,
+                            $row['birth_place']
+                                ?? null,
 
                             'birth_date' =>
-                                $birthDate,
+                            $birthDate,
 
                             'is_active' =>
-                                true,
+                            true,
                         ]);
 
 
@@ -324,26 +319,26 @@ class StudentsImport implements
                     StudentAcademicYear::create([
 
                         'student_id' =>
-                            $student->id,
+                        $student->id,
 
                         'academic_year_id' =>
-                            $academicYear->id,
+                        $academicYear->id,
 
                         'organization_id' =>
-                            $this->organizationId,
+                        $this->organizationId,
 
                         'school_class_id' =>
-                            $schoolClass->id,
+                        $schoolClass->id,
 
                         'status' =>
-                            'active',
+                        'active',
 
                         'started_at' =>
-                            $academicYear->start_date
-                                ?? now()->toDateString(),
+                        $academicYear->start_date
+                            ?? now()->toDateString(),
 
                         'ended_at' =>
-                            null,
+                        null,
                     ]);
                 }
             }

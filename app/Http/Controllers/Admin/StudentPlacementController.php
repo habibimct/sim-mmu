@@ -468,4 +468,27 @@ class StudentPlacementController extends Controller
 
         return Student::organizationIdsForUser();
     }
+
+    public function classes(Request $request)
+    {
+        $validated = $request->validate([
+            'academic_year_id' => ['nullable', 'integer', 'exists:academic_years,id'],
+            'organization_id' => ['nullable', 'integer', 'exists:organizations,id'],
+        ]);
+
+        $classes = SchoolClass::query()
+            ->when(
+                $validated['academic_year_id'] ?? null,
+                fn($query, $id) => $query->where('academic_year_id', $id)
+            )
+            ->when(
+                $validated['organization_id'] ?? null,
+                fn($query, $id) => $query->where('organization_id', $id)
+            )
+            ->orderBy('level')
+            ->orderBy('name')
+            ->get(['id', 'name', 'level']);
+
+        return response()->json($classes);
+    }
 }

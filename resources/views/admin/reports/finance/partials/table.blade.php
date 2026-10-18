@@ -58,7 +58,6 @@
                 <tbody>
 
                     @forelse ($transactions as $transaction)
-
                         <tr>
 
                             <td>
@@ -70,26 +69,22 @@
                             </td>
 
                             <td>
-                                {{ $transaction->organization?->name ?? '-' }}
+                                {{ $transaction->organization?->code ?? '-' }}
                             </td>
+
 
                             <td>
-
                                 @if ($transaction->type === 'income')
-
-                                    <span class="badge badge-success">
+                                    <span class="badge" style="background-color: #198754; color: #ffffff;">
                                         Pemasukan
                                     </span>
-
                                 @else
-
-                                    <span class="badge badge-danger">
+                                    <span class="badge" style="background-color: #dc3545; color: #ffffff;">
                                         Pengeluaran
                                     </span>
-
                                 @endif
-
                             </td>
+
 
                             <td>
                                 {{ $transaction->category }}
@@ -111,12 +106,7 @@
                             <td class="text-right font-weight-bold">
 
                                 Rp
-                                {{ number_format(
-                                    $transaction->amount,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }}
+                                {{ number_format($transaction->amount, 0, ',', '.') }}
 
                             </td>
 
@@ -126,16 +116,12 @@
 
                         <tr>
 
-                            <td
-                                colspan="8"
-                                class="text-center text-muted py-4"
-                            >
+                            <td colspan="8" class="text-center text-muted py-4">
                                 Tidak ada transaksi
                                 pada periode yang dipilih.
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>
@@ -151,7 +137,7 @@
         <div class="d-flex justify-content-end align-items-center p-3 border-top">
 
             <div>
-            {{ $transactions->onEachSide(1)->links('pagination::bootstrap-5') }}
+                {{ $transactions->onEachSide(1)->links('pagination::bootstrap-5') }}
             </div>
 
         </div>

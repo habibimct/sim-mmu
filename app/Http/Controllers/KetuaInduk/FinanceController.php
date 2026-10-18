@@ -583,10 +583,10 @@ class FinanceController extends Controller
 
 
         /*
-|--------------------------------------------------------------------------
-| Tempelkan hasil agregasi ke daftar organisasi
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Tempelkan hasil agregasi ke daftar organisasi
+        |--------------------------------------------------------------------------
+        */
 
         $organizationSummary = $organizations
             ->map(

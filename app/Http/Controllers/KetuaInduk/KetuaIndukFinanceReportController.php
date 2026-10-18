@@ -276,7 +276,7 @@ class KetuaIndukFinanceReportController extends Controller
                 ) AS total_deposit
             ")
             ->groupBy('organization_id')
-            ->with('organization:id,name,type')
+            ->with('organization:id,name,code,type')
             ->get()
             ->map(function ($row) {
 

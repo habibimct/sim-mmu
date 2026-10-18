@@ -200,7 +200,7 @@
                                     </td>
 
                                     <td>
-                                        {{ $schoolClass->organization->name }}
+                                        {{ $schoolClass->organization->code }}
                                     </td>
 
                                     <td>

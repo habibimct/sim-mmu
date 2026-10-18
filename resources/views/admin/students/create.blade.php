@@ -373,7 +373,7 @@
 
                 <a
                     href="{{ route('admin.students.index') }}"
-                    class="btn btn-secondary"
+                    class="btn btn-outline-secondary"
                 >
                     <i class="bi bi-arrow-left me-1"></i>
                     Kembali
@@ -382,7 +382,7 @@
 
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn btn-outline-primary"
                 >
                     <i class="bi bi-check-lg me-1"></i>
                     Simpan Siswa

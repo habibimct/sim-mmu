@@ -57,7 +57,7 @@
                             </td>
 
                             <td>
-                                {{ $row->organization?->name ?? '-' }}
+                                {{ $row->organization?->code ?? '-' }}
                             </td>
 
                             <td class="text-right text-success">

@@ -157,7 +157,7 @@
                                     @forelse ($teacher->organizations
                                                 as $organization)
                                         <span class="badge bg-secondary me-1">
-                                            {{ $organization->name }}
+                                            {{ $organization->code }}
                                         </span>
 
                                     @empty

@@ -85,7 +85,7 @@
                             <div class="font-medium text-gray-900">
                                 {{ $transaction->organization?->type === 'induk'
                                     ? 'PMUB'
-                                    : ($transaction->organization?->name ?? '-') }}
+                                    : ($transaction->organization?->code ?? '-') }}
                             </div>
 
                         </td>

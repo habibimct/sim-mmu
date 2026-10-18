@@ -58,7 +58,7 @@
 
                                 @foreach ($organizations as $organization)
                                     <option value="{{ $organization->id }}">
-                                        {{ $organization->name }}
+                                        {{ $organization->code }}
                                     </option>
                                 @endforeach
 
@@ -220,12 +220,12 @@
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg me-1"></i>
                         Batal
                     </button>
 
-                    <button type="submit" class="btn btn-primary" id="btnCreateStudent">
+                    <button type="submit" class="btn btn-outline-primary" id="btnCreateStudent">
                         <i class="bi bi-check-lg me-1"></i>
                         Simpan Siswa
                     </button>

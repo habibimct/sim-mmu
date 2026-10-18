@@ -134,7 +134,7 @@
 
                                 {{-- Organisasi --}}
                                 <td>
-                                    {{ $academicPlacement?->organization?->name ?? ($student->organization?->name ?? '-') }}
+                                    {{ $academicPlacement?->organization?->code ?? ($student->organization?->code ?? '-') }}
                                 </td>
 
                                 {{-- Status --}}
@@ -155,7 +155,7 @@
                                 {{-- Aksi --}}
                                 <td>
 
-                                    <button type="button" class="btn btn-warning btn-sm btn-edit-student"
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-edit-student"
                                         data-bs-toggle="modal" data-bs-target="#modalEditStudent"
                                         data-student-id="{{ $student->id }}" data-student-nis="{{ $student->nis }}"
                                         data-student-name="{{ $student->name }}"
@@ -172,7 +172,7 @@
 
 
                                     <button type="button"
-                                        class="btn btn-sm {{ $student->is_active ? 'btn-danger' : 'btn-success' }}"
+                                        class="btn btn-sm {{ $student->is_active ? 'btn-outline-danger' : 'btn-outline-success' }}"
                                         data-bs-toggle="modal" data-bs-target="#toggleStudentModal"
                                         data-student-id="{{ $student->id }}" data-student-name="{{ $student->name }}"
                                         data-student-active="{{ $student->is_active ? '1' : '0' }}"

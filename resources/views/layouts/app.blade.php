@@ -9,6 +9,22 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- ======================================================
+    LOGO / FAVICON INDUK
+    ======================================================= --}}
+
+    @php
+        $induk = \App\Models\Organization::where('type', 'induk')->first();
+    @endphp
+
+    @if ($induk?->logo_path)
+        <link rel="icon" type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}">
+
+        <link rel="shortcut icon" type="image/webp"
+            href="{{ asset('storage/' . $induk->logo_path) }}?v={{ $induk->updated_at?->timestamp }}">
+    @endif
+
     <title>
         @yield('title', config('app.name', 'SIM-MMU'))
     </title>

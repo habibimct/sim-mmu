@@ -71,7 +71,7 @@
                             </td>
 
                             <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-primary btn-class-students"
+                                <button type="button" class="btn btn-sm btn-outline-primary btn-class-students"
                                     data-url="{{ route('admin.students.class-students', $summaryItem->id) }}"
                                     title="Lihat daftar siswa">
                                     <i class="bi bi-eye"></i>

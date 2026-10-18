@@ -259,6 +259,12 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('students.placement.store');
 
+        Route::middleware('permission:students.manage')
+            ->get(
+                '/students/placement/classes',
+                [StudentPlacementController::class, 'classes']
+            )->name('students.placement.classes');
+
 
         /*
         |--------------------------------------------------------------------------
@@ -280,18 +286,38 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('students.promotion.store');
 
-
-
-        Route::middleware('permission:teachers.view')
-            ->get('/teachers', [TeacherController::class, 'index'])
-            ->name('teachers.index');
-
-        Route::middleware('permission:teachers.view')
+        Route::middleware('permission:students.manage')
             ->get(
-                'teachers/export',
-                [TeacherController::class, 'export']
+            '/students/promotion/classes',
+            [StudentPromotionController::class, 'classes']
+        )->name('students.promotion.classes');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pemindahan Siswa Antar Kelas
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:students.manage')
+            ->get(
+                'students/class-transfer',
+                [StudentClassTransferController::class, 'index']
             )
-            ->name('teachers.export');
+            ->name('students.class-transfer.index');
+
+        Route::middleware('permission:students.manage')
+            ->post(
+                'students/class-transfer',
+                [StudentClassTransferController::class, 'store']
+            )
+            ->name('students.class-transfer.store');
+
+        Route::middleware('permission:students.manage')
+            ->get(
+                '/students/class-transfer/classes',
+                [StudentClassTransferController::class, 'classes']
+            )->name('students.class-transfer.classes');
 
 
 
@@ -355,6 +381,25 @@ Route::middleware(['auth', 'organization.scope'])
                 [GuardianController::class, 'detachStudent']
             )
             ->name('guardians.students.detach');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Guru
+        |--------------------------------------------------------------------------
+        */
+
+        Route::middleware('permission:teachers.view')
+            ->get('/teachers', [TeacherController::class, 'index'])
+            ->name('teachers.index');
+
+        Route::middleware('permission:teachers.view')
+            ->get(
+                'teachers/export',
+                [TeacherController::class, 'export']
+            )
+            ->name('teachers.export');
+
 
 
         /*
@@ -603,27 +648,6 @@ Route::middleware(['auth', 'organization.scope'])
             )
             ->name('school-classes.destroy');
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Pemindahan Siswa Antar Kelas
-        |--------------------------------------------------------------------------
-        */
-
-        Route::middleware('permission:students.manage')
-            ->get(
-                'students/class-transfer',
-                [StudentClassTransferController::class, 'index']
-            )
-            ->name('students.class-transfer.index');
-
-        Route::middleware('permission:students.manage')
-            ->post(
-                'students/class-transfer',
-                [StudentClassTransferController::class, 'store']
-            )
-            ->name('students.class-transfer.store');
 
 
 

@@ -478,10 +478,44 @@ class StudentController extends Controller
 
 
         /*
-    |--------------------------------------------------------------------------
-    | View
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | Data contoh untuk modal import siswa
+        |--------------------------------------------------------------------------
+        */
+
+        $exampleOrganization = $organizations->first();
+
+        $exampleAcademicYear = AcademicYear::query()
+            ->where('is_active', true)
+            ->orderByDesc('start_date')
+            ->first();
+
+        $exampleClass = null;
+
+        if ($exampleOrganization && $exampleAcademicYear) {
+            $exampleClass = SchoolClass::query()
+                ->where(
+                    'organization_id',
+                    $exampleOrganization->id
+                )
+                ->where(
+                    'academic_year_id',
+                    $exampleAcademicYear->id
+                )
+                ->where('is_active', true)
+                ->where('is_alumni', false)
+                ->orderBy('level')
+                ->orderBy('name')
+                ->first();
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | View
+        |--------------------------------------------------------------------------
+        */
 
         return view(
             'admin.students.index',
@@ -490,7 +524,10 @@ class StudentController extends Controller
                 'organizations',
                 'academicYears',
                 'schoolClasses',
-                'schoolClassSummary'
+                'schoolClassSummary',
+                'exampleOrganization',
+                'exampleAcademicYear',
+                'exampleClass'
             )
         );
     }

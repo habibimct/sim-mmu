@@ -266,7 +266,7 @@ MODAL FILTER TRANSAKSI
                                         === $organization->id
                                     )
                                 >
-                                    {{ $organization->name }}
+                                    {{ $organization->code }}
                                 </option>
 
                             @endforeach

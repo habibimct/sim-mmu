@@ -229,7 +229,7 @@
                             >
                                 @if ($teacher->organizations->isNotEmpty())
 
-                                    {{ $teacher->organizations->pluck('name')->join(', ') }}
+                                    {{ $teacher->organizations->pluck('code')->join(', ') }}
 
                                 @else
 

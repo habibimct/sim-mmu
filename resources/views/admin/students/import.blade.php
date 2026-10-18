@@ -71,11 +71,11 @@
                     <input type="file" id="file" name="file" class="form-control" accept=".xlsx,.xls" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-outline-primary">
                     Upload
                 </button>
 
-                <a href="{{ route('admin.students.import.template') }}" class="btn btn-success">
+                <a href="{{ route('admin.students.import.template') }}" class="btn btn-outline-success">
                     <i class="fas fa-file-excel"></i>
                     Download Template Excel
                 </a>

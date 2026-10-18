@@ -1,10 +1,4 @@
-<div
-    class="modal fade"
-    id="importStudentModal"
-    tabindex="-1"
-    aria-labelledby="importStudentModalLabel"
-    aria-hidden="true"
->
+<div class="modal fade" id="importStudentModal" tabindex="-1" aria-labelledby="importStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <div class="modal-content">
@@ -17,10 +11,7 @@
 
                 <div>
 
-                    <h5
-                        class="modal-title"
-                        id="importStudentModalLabel"
-                    >
+                    <h5 class="modal-title" id="importStudentModalLabel">
                         <i class="bi bi-file-earmark-excel me-2"></i>
                         Import Peserta dari Excel
                     </h5>
@@ -31,12 +22,7 @@
 
                 </div>
 
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Tutup"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
 
             </div>
 
@@ -45,11 +31,7 @@
             FORM
             ========================================================== --}}
 
-            <form
-                action="{{ route('admin.students.import') }}"
-                method="POST"
-                enctype="multipart/form-data"
-            >
+            <form action="{{ route('admin.students.import') }}" method="POST" enctype="multipart/form-data">
 
                 @csrf
 
@@ -61,24 +43,15 @@
                     ================================================== --}}
 
                     @if (session('import_success'))
-
-                        <div
-                            class="alert alert-success alert-dismissible fade show"
-                            role="alert"
-                        >
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
 
                             <i class="bi bi-check-circle me-1"></i>
 
                             {{ session('import_success') }}
 
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="alert"
-                            ></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                         </div>
-
                     @endif
 
 
@@ -87,24 +60,15 @@
                     ================================================== --}}
 
                     @if (session('import_error'))
-
-                        <div
-                            class="alert alert-danger alert-dismissible fade show"
-                            role="alert"
-                        >
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
 
                             <i class="bi bi-exclamation-circle me-1"></i>
 
                             {{ session('import_error') }}
 
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="alert"
-                            ></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                         </div>
-
                     @endif
 
 
@@ -127,11 +91,9 @@
                             <ul class="mb-0 ps-4">
 
                                 @foreach ($errors->all() as $error)
-
                                     <li>
                                         {{ $error }}
                                     </li>
-
                                 @endforeach
 
                             </ul>
@@ -147,46 +109,29 @@
 
                     <div class="mb-3">
 
-                        <label
-                            for="import_organization_id"
-                            class="form-label"
-                        >
+                        <label for="import_organization_id" class="form-label">
                             Organisasi
                         </label>
 
-                        <select
-                            name="organization_id"
-                            id="import_organization_id"
-                            class="form-select @error('organization_id') is-invalid @enderror"
-                            required
-                        >
+                        <select name="organization_id" id="import_organization_id"
+                            class="form-select @error('organization_id') is-invalid @enderror" required>
 
                             <option value="">
                                 -- Pilih Organisasi --
                             </option>
 
                             @foreach ($organizations as $organization)
-
-                                <option
-                                    value="{{ $organization->id }}"
-                                    @selected(
-                                        old('organization_id')
-                                        == $organization->id
-                                    )
-                                >
-                                    {{ $organization->name }}
+                                <option value="{{ $organization->id }}" @selected(old('organization_id') == $organization->id)>
+                                    {{ $organization->code }}
                                 </option>
-
                             @endforeach
 
                         </select>
 
                         @error('organization_id')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                         @enderror
 
                     </div>
@@ -198,28 +143,17 @@
 
                     <div class="mb-3">
 
-                        <label
-                            for="import_file"
-                            class="form-label"
-                        >
+                        <label for="import_file" class="form-label">
                             File Excel
                         </label>
 
-                        <input
-                            type="file"
-                            name="file"
-                            id="import_file"
-                            class="form-control @error('file') is-invalid @enderror"
-                            accept=".xlsx,.xls"
-                            required
-                        >
+                        <input type="file" name="file" id="import_file"
+                            class="form-control @error('file') is-invalid @enderror" accept=".xlsx,.xls" required>
 
                         @error('file')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                         @enderror
 
                     </div>
@@ -272,6 +206,59 @@
 
                     </div>
 
+                    {{-- CONTOH PENGISIAN --}}
+                    <div class="card border-success mt-3 mb-0">
+                        <div class="card-header bg-light">
+                            <strong class="text-success">
+                                <i class="bi bi-table me-1"></i>
+                                Contoh Pengisian Template
+                            </strong>
+                        </div>
+
+                        <div class="card-body">
+                            <p class="small text-muted">
+                                Gunakan contoh berikut sebagai panduan. Ganti dengan
+                                data siswa sebenarnya dan jangan mengubah nama kolom.
+                            </p>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm text-nowrap mb-2">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>NIS</th>
+                                            <th>Nama</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>Tempat Lahir</th>
+                                            <th>Tanggal Lahir</th>
+                                            <th>Organisasi</th>
+                                            <th>Tahun Akademik</th>
+                                            <th>Kelas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2026001</td>
+                                            <td>Ahmad Fauzi</td>
+                                            <td>L</td>
+                                            <td>Malang</td>
+                                            <td>15/03/2012</td>
+                                            <td>{{ $organizations->first()?->code ?? '-' }}</td>
+                                            <td>{{ $exampleAcademicYear?->name ?? '-' }}</td>
+                                            <td>{{ $exampleClass?->name ?? 'Belum ada kelas' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="alert alert-warning small mb-0">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                Data di atas hanya ilustrasi. Pastikan organisasi,
+                                tahun akademik, kelas, tanggal, dan jenis kelamin mengikuti
+                                format yang diterima oleh sistem.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
 
@@ -281,27 +268,17 @@
 
                 <div class="modal-footer">
 
-                    <a
-                        href="{{ route('admin.students.import.template') }}"
-                        class="btn btn-success"
-                    >
+                    <a href="{{ route('admin.students.import.template') }}" class="btn btn-outline-success">
                         <i class="bi bi-download me-1"></i>
                         Download Template
                     </a>
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg me-1"></i>
                         Batal
                     </button>
 
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
+                    <button type="submit" class="btn btn-outline-primary">
                         <i class="bi bi-upload me-1"></i>
                         Import Peserta
                     </button>
@@ -321,45 +298,32 @@ AUTO OPEN MODAL
 ============================================================== --}}
 
 @push('js')
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            function() {
 
-<script>
+                const modalElement =
+                    document.getElementById(
+                        'importStudentModal'
+                    );
 
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-
-        const modalElement =
-            document.getElementById(
-                'importStudentModal'
-            );
-
-        if (!modalElement) {
-            return;
-        }
+                if (!modalElement) {
+                    return;
+                }
 
 
-        @if (
-            session('import_success')
-            ||
-            session('import_error')
-            ||
-            $errors->has('organization_id')
-            ||
-            $errors->has('file')
-        )
+                @if (session('import_success') || session('import_error') || $errors->any())
 
-            const importModal =
-                new bootstrap.Modal(
-                    modalElement
-                );
+                    const importModal =
+                        new bootstrap.Modal(
+                            modalElement
+                        );
 
-            importModal.show();
+                    importModal.show();
+                @endif
 
-        @endif
-
-    }
-);
-
-</script>
-
+            }
+        );
+    </script>
 @endpush

@@ -157,7 +157,7 @@
 
                                     <td class="px-5 py-4 text-sm font-medium text-gray-800">
 
-                                        {{ $organization->name }}
+                                        {{ $organization->code }}
 
                                         @if ($organization->id === $induk->id)
                                             <span

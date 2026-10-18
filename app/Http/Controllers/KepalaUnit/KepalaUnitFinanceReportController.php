@@ -480,14 +480,13 @@ class KepalaUnitFinanceReportController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $transactions =
-            $query
+        $transactions = $query
             ->with([
                 'organization',
                 'creator',
             ])
-            ->orderBy('transaction_date')
-            ->orderBy('id')
+            ->orderByDesc('transaction_date')
+            ->orderByDesc('id')
             ->get();
 
         /*
@@ -504,25 +503,13 @@ class KepalaUnitFinanceReportController extends Controller
                 )
                 ->sum('amount');
 
-        $totalIncome =
-            (float) $transactions
-                ->where('type', 'income')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                )
-                ->sum('amount');
+        $totalIncome = (float) $transactions
+            ->where('type', 'income')
+            ->sum('amount');
 
-        $totalExpense =
-            (float) $transactions
-                ->where('type', 'expense')
-                ->where(
-                    'source_type',
-                    '!=',
-                    'deposit'
-                )
-                ->sum('amount');
+        $totalExpense = (float) $transactions
+            ->where('type', 'expense')
+            ->sum('amount');
 
         $netBalance =
             $totalIncome - $totalExpense;

@@ -217,7 +217,7 @@
                                        text-sm
                                        text-gray-700"
                             >
-                                {{ $student->displayAcademicRecord?->organization?->name ?? '-' }}
+                                {{ $student->displayAcademicRecord?->organization?->code ?? '-' }}
                             </td>
 
 

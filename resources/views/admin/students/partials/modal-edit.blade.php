@@ -103,7 +103,7 @@
                                     <option
                                         value="{{ $organization->id }}"
                                     >
-                                        {{ $organization->name }}
+                                        {{ $organization->code }}
                                     </option>
 
                                 @endforeach
@@ -409,7 +409,7 @@
 
                     <button
                         type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-outline-secondary"
                         data-bs-dismiss="modal"
                     >
                         <i class="bi bi-x-lg me-1"></i>
@@ -418,7 +418,7 @@
 
                     <button
                         type="submit"
-                        class="btn btn-primary"
+                        class="btn btn-outline-primary"
                         id="btnUpdateStudent"
                     >
                         <i class="bi bi-check-lg me-1"></i>

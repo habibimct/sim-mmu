@@ -394,7 +394,7 @@
                                 {{-- Organisasi --}}
                                 <td>
 
-                                    {{ $teacher->organizations->pluck('name')->join(', ') }}
+                                    {{ $teacher->organizations->pluck('code')->join(', ') }}
 
                                 </td>
 

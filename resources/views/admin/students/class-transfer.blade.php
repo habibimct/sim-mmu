@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="m-0">Pindah Kelas</h1>
 
-        <a href="{{ route('admin.students.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.students.index') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i>
             Kembali
         </a>
@@ -35,6 +35,7 @@
         </div>
     @endif
 
+
     <div class="card">
 
         <div class="card-header">
@@ -50,14 +51,13 @@
                 {{-- Tahun Ajaran --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="transfer_academic_year_id" class="form-label">
                         Tahun Ajaran
                     </label>
 
-                    <select name="academic_year_id" class="form-select" required>
-                        <option value="">
-                            -- Pilih Tahun Ajaran --
-                        </option>
+                    <select name="academic_year_id" id="transfer_academic_year_id" class="form-select" required>
+
+                        <option value="">-- Pilih Tahun Ajaran --</option>
 
                         @foreach ($academicYears as $academicYear)
                             <option value="{{ $academicYear->id }}" @selected($academicYearId == $academicYear->id)>
@@ -73,21 +73,20 @@
 
                 </div>
 
-                {{-- Organisasi --}}
+                {{-- Unit --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="transfer_organization_id" class="form-label">
                         Unit
                     </label>
 
-                    <select name="organization_id" class="form-select" required>
-                        <option value="">
-                            -- Pilih Unit --
-                        </option>
+                    <select name="organization_id" id="transfer_organization_id" class="form-select" required>
+
+                        <option value="">-- Pilih Unit --</option>
 
                         @foreach ($organizations as $organization)
                             <option value="{{ $organization->id }}" @selected($organizationId == $organization->id)>
-                                {{ $organization->name }}
+                                {{ $organization->code }}
                             </option>
                         @endforeach
 
@@ -98,19 +97,17 @@
                 {{-- Kelas Asal --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="transfer_source_class_id" class="form-label">
                         Kelas Asal
                     </label>
 
-                    <select name="source_class_id" class="form-select" required>
-                        <option value="">
-                            -- Pilih Kelas Asal --
-                        </option>
+                    <select name="source_class_id" id="transfer_source_class_id" class="form-select" required>
+
+                        <option value="">-- Pilih Kelas Asal --</option>
 
                         @foreach ($classes as $class)
                             <option value="{{ $class->id }}" @selected($sourceClassId == $class->id)>
-                                Tingkat {{ $class->level }}
-                                - {{ $class->name }}
+                                Tingkat {{ $class->level }} - {{ $class->name }}
                             </option>
                         @endforeach
 
@@ -119,7 +116,7 @@
                 </div>
 
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-outline-primary">
                         <i class="bi bi-search"></i>
                         Tampilkan Siswa
                     </button>
@@ -131,9 +128,10 @@
 
     </div>
 
+
     {{-- ==========================================================
      AREA PINDAH KELAS
-=========================================================== --}}
+    =========================================================== --}}
 
     @if ($sourceClass)
 
@@ -150,7 +148,7 @@
 
                 {{-- ==================================================
                  KELAS ASAL
-            =================================================== --}}
+                =================================================== --}}
 
                 <div class="col-md-6">
 
@@ -223,7 +221,7 @@
                                     <tbody>
 
                                         @forelse ($sourceStudents
-                                                    as $studentAcademicYear)
+                                                            as $studentAcademicYear)
                                             <tr>
 
                                                 <td class="text-center">
@@ -273,7 +271,7 @@
 
                 {{-- ==================================================
                  KELAS TUJUAN
-            =================================================== --}}
+                =================================================== --}}
 
                 <div class="col-md-6">
 
@@ -344,7 +342,7 @@
                                     <tbody>
 
                                         @forelse ($targetStudents
-                                                    as $studentAcademicYear)
+                                                            as $studentAcademicYear)
                                             <tr>
 
                                                 <td>
@@ -390,7 +388,7 @@
 
         {{-- ==========================================================
          FORM PROSES PINDAH
-    =========================================================== --}}
+        =========================================================== --}}
 
         <form method="POST" action="{{ route('admin.students.class-transfer.store') }}" id="formMoveStudents"
             class="mt-3">
@@ -408,7 +406,7 @@
 
             <div class="text-center">
 
-                <button type="submit" class="btn btn-primary" id="btnMoveStudents" @disabled(!$targetClassId || $sourceStudents->isEmpty())>
+                <button type="submit" class="btn btn-outline-primary" id="btnMoveStudents" @disabled(!$targetClassId || $sourceStudents->isEmpty())>
                     <i class="bi bi-arrow-left-right me-1"></i>
                     Pindahkan Siswa Terpilih
                 </button>
@@ -484,4 +482,137 @@
         }
     </script>
 
+    <script>
+        /* ==========================================================
+       FILTER OTOMATIS PINDAH KELAS
+       ========================================================== */
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const academicYearSelect = document.getElementById(
+                'transfer_academic_year_id'
+            );
+
+            const organizationSelect = document.getElementById(
+                'transfer_organization_id'
+            );
+
+            const sourceClassSelect = document.getElementById(
+                'transfer_source_class_id'
+            );
+
+            const selectedClassId = @json($sourceClassId);
+
+            if (
+                !academicYearSelect ||
+                !organizationSelect ||
+                !sourceClassSelect
+            ) {
+                return;
+            }
+
+            async function loadSourceClasses(preserveSelection = false) {
+
+                const academicYearId = academicYearSelect.value;
+                const organizationId = organizationSelect.value;
+
+                const previousClassId = preserveSelection ?
+                    sourceClassSelect.value :
+                    '';
+
+                sourceClassSelect.innerHTML = '';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Pilih Kelas Asal --';
+
+                sourceClassSelect.appendChild(defaultOption);
+                sourceClassSelect.disabled = true;
+
+                const params = new URLSearchParams();
+
+                if (academicYearId) {
+                    params.append('academic_year_id', academicYearId);
+                }
+
+                if (organizationId) {
+                    params.append('organization_id', organizationId);
+                }
+
+                try {
+
+                    const response = await fetch(
+                        `{{ route('admin.students.class-transfer.classes') }}?${params.toString()}`, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error('Gagal mengambil daftar kelas asal.');
+                    }
+
+                    const classes = await response.json();
+
+                    classes.forEach(function(schoolClass) {
+
+                        const option = document.createElement('option');
+
+                        option.value = schoolClass.id;
+
+                        option.textContent =
+                            'Tingkat ' + schoolClass.level +
+                            ' - ' + schoolClass.name;
+
+                        sourceClassSelect.appendChild(option);
+
+                    });
+
+                    const classToSelect = previousClassId || selectedClassId;
+
+                    if (classToSelect) {
+
+                        const matchingOption = Array.from(
+                            sourceClassSelect.options
+                        ).find(function(option) {
+                            return Number(option.value) === Number(classToSelect);
+                        });
+
+                        if (matchingOption) {
+                            matchingOption.selected = true;
+                        }
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    const errorOption = document.createElement('option');
+                    errorOption.value = '';
+                    errorOption.textContent = 'Gagal memuat kelas. Silakan coba lagi.';
+
+                    sourceClassSelect.appendChild(errorOption);
+
+                } finally {
+
+                    sourceClassSelect.disabled = false;
+
+                }
+            }
+
+            academicYearSelect.addEventListener('change', function() {
+                loadSourceClasses(false);
+            });
+
+            organizationSelect.addEventListener('change', function() {
+                loadSourceClasses(false);
+            });
+
+            // Muat kelas saat halaman dibuka.
+            loadSourceClasses(true);
+
+        });
+    </script>
 @stop

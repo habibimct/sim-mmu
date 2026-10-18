@@ -73,7 +73,7 @@ MODAL KONFIRMASI AKTIF / NONAKTIF
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-outline-secondary"
                     data-bs-dismiss="modal"
                 >
                     <i class="bi bi-x-lg me-1"></i>

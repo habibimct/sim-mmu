@@ -178,7 +178,7 @@
 
                                     <div class="fw-semibold">
 
-                                        {{ $deposit->organization?->name ?? '-' }}
+                                        {{ $deposit->organization?->code ?? '-' }}
 
                                     </div>
 
@@ -190,7 +190,7 @@
 
                                     <div class="fw-semibold">
 
-                                        {{ $deposit->targetOrganization?->name ?? '-' }}
+                                        {{ $deposit->targetOrganization?->code ?? '-' }}
 
                                     </div>
 

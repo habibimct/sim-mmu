@@ -40,6 +40,7 @@
     @endif
 
 
+
     {{-- ==========================================================
     FILTER PENEMPATAN
     =========================================================== --}}
@@ -47,17 +48,11 @@
     <div class="card">
 
         <div class="card-header">
-
             <h3 class="card-title">
-
                 <i class="bi bi-funnel me-1"></i>
-
                 Tentukan Penempatan
-
             </h3>
-
         </div>
-
 
         <div class="card-body">
 
@@ -66,12 +61,12 @@
                 {{-- Tahun Ajaran --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="student_filter_academic_year_id" class="form-label">
                         Tahun Ajaran
                         <span class="text-danger">*</span>
                     </label>
 
-                    <select name="academic_year_id" class="form-select" required>
+                    <select name="academic_year_id" id="student_filter_academic_year_id" class="form-select" required>
 
                         <option value="">
                             -- Pilih Tahun Ajaran --
@@ -93,16 +88,15 @@
 
                 </div>
 
-
                 {{-- Unit --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="student_filter_organization_id" class="form-label">
                         Unit
                         <span class="text-danger">*</span>
                     </label>
 
-                    <select name="organization_id" class="form-select" required>
+                    <select name="organization_id" id="student_filter_organization_id" class="form-select" required>
 
                         <option value="">
                             -- Pilih Unit --
@@ -111,7 +105,7 @@
                         @foreach ($organizations as $organization)
                             <option value="{{ $organization->id }}" @selected($organizationId == $organization->id)>
 
-                                {{ $organization->name }}
+                                {{ $organization->code }}
 
                             </option>
                         @endforeach
@@ -120,27 +114,24 @@
 
                 </div>
 
-
                 {{-- Kelas --}}
                 <div class="col-md-4">
 
-                    <label class="form-label">
+                    <label for="student_filter_school_class_id" class="form-label">
                         Kelas
                         <span class="text-danger">*</span>
                     </label>
 
-                    <select name="school_class_id" class="form-select">
+                    <select name="school_class_id" id="student_filter_school_class_id" class="form-select">
 
                         <option value="">
                             -- Pilih Kelas --
                         </option>
 
                         @foreach ($classes as $class)
-                            <option value="{{ $class->id }}" @selected($schoolClassId == $class->id)>
-
-                                Tingkat {{ $class->level }}
-                                - {{ $class->name }}
-
+                            <option value="{{ $class->id }}" data-organization="{{ $class->organization_id }}"
+                                data-academic-year="{{ $class->academic_year_id }}" @selected($schoolClassId == $class->id)>
+                                Tingkat {{ $class->level }} - {{ $class->name }}
                             </option>
                         @endforeach
 
@@ -148,16 +139,12 @@
 
                 </div>
 
-
                 {{-- Tombol --}}
                 <div class="col-12">
 
-                    <button type="submit" class="btn btn-primary">
-
+                    <button type="submit" class="btn btn-outline-primary">
                         <i class="bi bi-search me-1"></i>
-
                         Tampilkan Siswa
-
                     </button>
 
                 </div>
@@ -170,8 +157,8 @@
 
 
     {{-- ==========================================================
-DAFTAR SISWA + KELAS TUJUAN
-========================================================== --}}
+    DAFTAR SISWA + KELAS TUJUAN
+    ========================================================== --}}
 
     @if ($schoolClassId)
 
@@ -188,8 +175,8 @@ DAFTAR SISWA + KELAS TUJUAN
             <div class="row g-3">
 
                 {{-- ==================================================
-            SISWA BELUM DITEMPATKAN
-            ================================================== --}}
+                SISWA BELUM DITEMPATKAN
+                ================================================== --}}
 
                 <div class="col-lg-6">
 
@@ -285,7 +272,7 @@ DAFTAR SISWA + KELAS TUJUAN
                         @if ($students->count())
                             <div class="card-footer text-end">
 
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-outline-primary">
 
                                     <i class="bi bi-person-plus me-1"></i>
 
@@ -302,8 +289,8 @@ DAFTAR SISWA + KELAS TUJUAN
 
 
                 {{-- ==================================================
-            SISWA YANG SUDAH ADA DI KELAS
-            ================================================== --}}
+                SISWA YANG SUDAH ADA DI KELAS
+                ================================================== --}}
 
                 <div class="col-lg-6">
 
@@ -416,8 +403,7 @@ DAFTAR SISWA + KELAS TUJUAN
 @stop
 
 
-@section('js')
-
+@push('js')
     <script>
         document
             .getElementById('checkAllStudents')
@@ -435,4 +421,134 @@ DAFTAR SISWA + KELAS TUJUAN
             });
     </script>
 
-@stop
+
+    {{-- ==========================================================
+    JAVASCRIPT FILTER PENEMPATAN
+    ========================================================== --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const academicYearSelect = document.getElementById(
+                'student_filter_academic_year_id'
+            );
+
+            const organizationSelect = document.getElementById(
+                'student_filter_organization_id'
+            );
+
+            const schoolClassSelect = document.getElementById(
+                'student_filter_school_class_id'
+            );
+
+            const selectedClassId = @json($schoolClassId);
+
+            if (
+                !academicYearSelect ||
+                !organizationSelect ||
+                !schoolClassSelect
+            ) {
+                return;
+            }
+
+            async function loadClasses(preserveSelection = false) {
+
+                const academicYearId = academicYearSelect.value;
+                const organizationId = organizationSelect.value;
+
+                // Simpan pilihan hanya ketika halaman pertama dibuka.
+                const previousClassId = preserveSelection ?
+                    schoolClassSelect.value :
+                    '';
+
+                schoolClassSelect.innerHTML = '';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Pilih Kelas --';
+
+                schoolClassSelect.appendChild(defaultOption);
+                schoolClassSelect.disabled = true;
+
+                const params = new URLSearchParams();
+
+                if (academicYearId) {
+                    params.append('academic_year_id', academicYearId);
+                }
+
+                if (organizationId) {
+                    params.append('organization_id', organizationId);
+                }
+
+                try {
+                    const response = await fetch(
+                        `{{ route('admin.students.placement.classes') }}?${params.toString()}`, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error('Gagal mengambil daftar kelas.');
+                    }
+
+                    const classes = await response.json();
+
+                    classes.forEach(function(schoolClass) {
+
+                        const option = document.createElement('option');
+
+                        option.value = schoolClass.id;
+
+                        option.textContent =
+                            'Tingkat ' + schoolClass.level +
+                            ' - ' + schoolClass.name;
+
+                        schoolClassSelect.appendChild(option);
+                    });
+
+                    // Pertahankan kelas terpilih saat halaman pertama dibuka,
+                    // hanya jika kelas tersebut masih tersedia.
+                    const classToSelect = previousClassId || selectedClassId;
+
+                    if (classToSelect) {
+                        const matchingOption = Array.from(
+                            schoolClassSelect.options
+                        ).find(function(option) {
+                            return Number(option.value) === Number(classToSelect);
+                        });
+
+                        if (matchingOption) {
+                            matchingOption.selected = true;
+                        }
+                    }
+
+                } catch (error) {
+                    console.error(error);
+
+                    const errorOption = document.createElement('option');
+                    errorOption.value = '';
+                    errorOption.textContent = 'Gagal memuat kelas. Coba ubah filter.';
+                    schoolClassSelect.appendChild(errorOption);
+
+                } finally {
+                    schoolClassSelect.disabled = false;
+                }
+            }
+
+            academicYearSelect.addEventListener('change', function() {
+                loadClasses(false);
+            });
+
+            organizationSelect.addEventListener('change', function() {
+                loadClasses(false);
+            });
+
+            // Muat daftar kelas ketika halaman pertama kali dibuka.
+            loadClasses(true);
+
+        });
+    </script>
+@endpush

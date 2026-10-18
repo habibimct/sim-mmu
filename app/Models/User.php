@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
+use App\Models\Guardian;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -68,6 +69,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(
             Teacher::class,
+            'user_id',
+            'id'
+        );
+    }
+
+    /**
+     * Data wali yang terkait dengan akun user.
+     */
+    public function guardian(): HasOne
+    {
+        return $this->hasOne(
+            Guardian::class,
             'user_id',
             'id'
         );

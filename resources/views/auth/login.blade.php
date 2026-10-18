@@ -400,7 +400,7 @@
 
                         <div>
 
-                            <x-input-label for="email" value="Email" class="text-sm font-medium text-slate-700" />
+                            <x-input-label for="email" value="Email/NIK" class="text-sm font-medium text-slate-700" />
 
                             <div class="relative mt-2">
 

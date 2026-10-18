@@ -64,3 +64,4 @@ require __DIR__ . '/notifications.php';
 require __DIR__ . '/ketua-induk.php';
 require __DIR__ . '/kepala-unit.php';
 require __DIR__ . '/guru/web.php';
+require __DIR__ . '/wali.php';

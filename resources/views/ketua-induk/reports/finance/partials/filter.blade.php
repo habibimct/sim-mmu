@@ -72,7 +72,7 @@ FILTER LAPORAN
 
                     @foreach ($organizations as $organization)
                         <option value="{{ $organization->id }}" @selected((string) $organizationId === (string) $organization->id)>
-                            {{ $organization->type === 'induk' ? 'PMUB' : $organization->name }}
+                            {{ $organization->type === 'induk' ? 'PMUB' : $organization->code }}
                         </option>
                     @endforeach
 

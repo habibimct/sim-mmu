@@ -96,7 +96,7 @@ TABEL TRANSAKSI KEUANGAN
 
                         <td class="px-5 py-4 text-sm font-medium text-gray-800">
 
-                            {{ $transaction->organization->name }}
+                            {{ $transaction->organization->code }}
 
                         </td>
 

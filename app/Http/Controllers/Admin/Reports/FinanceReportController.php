@@ -244,17 +244,17 @@ class FinanceReportController extends Controller
         }
 
         /*
-|--------------------------------------------------------------------------
-| Kategori yang tersedia
-|--------------------------------------------------------------------------
-|
-| Kategori mengikuti:
-| - scope organisasi user
-| - unit yang dipilih
-| - jenis transaksi yang dipilih
-| - hanya transaksi confirmed
-|
-*/
+        |--------------------------------------------------------------------------
+        | Kategori yang tersedia
+        |--------------------------------------------------------------------------
+        |
+        | Kategori mengikuti:
+        | - scope organisasi user
+        | - unit yang dipilih
+        | - jenis transaksi yang dipilih
+        | - hanya transaksi confirmed
+        |
+        */
 
         $categoriesQuery = FinanceTransaction::query()
             ->whereIn(
@@ -315,10 +315,10 @@ class FinanceReportController extends Controller
             ->pluck('category');
 
         /*
-|--------------------------------------------------------------------------
-| Pastikan kategori yang dipilih masih tersedia
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Pastikan kategori yang dipilih masih tersedia
+        |--------------------------------------------------------------------------
+        */
 
         if (
             $category !== 'all' &&
@@ -562,7 +562,7 @@ class FinanceReportController extends Controller
             ->groupBy(
                 'organization_id'
             )
-            ->with('organization:id,name')
+            ->with('organization:id,code,name')
             ->get()
             ->map(function ($row) {
 

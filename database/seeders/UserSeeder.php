@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Cari organisasi INDUK
-        $induk = Organization::where('code', 'INDUK')->firstOrFail();
+        $induk = Organization::where('type', 'induk')->firstOrFail();
 
         // Cari role Admin Sistem
         $adminRole = Role::where('code', 'admin_sistem')->firstOrFail();
@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         // Buat user Admin Sistem
         $admin = User::updateOrCreate(
             [
-                'email' => 'ma.mamu1986@gmail.com',
+                'email' => 'admin@pmub.com',
             ],
             [
                 'name' => 'Administrator PMUB',

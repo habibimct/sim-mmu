@@ -148,7 +148,7 @@
                             <div>
 
                                 <div class="font-medium text-gray-800">
-                                    {{ $unit->name }}
+                                    {{ $unit->code }}
                                 </div>
 
                                 @if ($unit->type)

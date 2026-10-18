@@ -247,16 +247,16 @@ class StudentPromotionController extends Controller
         }
 
         /*
-|--------------------------------------------------------------------------
-| Kelas tujuan
-|--------------------------------------------------------------------------
-|
-| Hanya tersedia jika siswa belum berada
-| pada tingkat terakhir.
-|
-| Kelas tujuan berasal dari tahun ajaran tujuan.
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Kelas tujuan
+        |--------------------------------------------------------------------------
+        |
+        | Hanya tersedia jika siswa belum berada
+        | pada tingkat terakhir.
+        |
+        | Kelas tujuan berasal dari tahun ajaran tujuan.
+        |--------------------------------------------------------------------------
+        */
 
         $targetClasses = collect();
 
@@ -951,4 +951,37 @@ class StudentPromotionController extends Controller
                 $message
             );
     }
+
+public function classes(Request $request)
+{
+    $validated = $request->validate([
+        'source_academic_year_id' => [
+            'required',
+            'integer',
+            'exists:academic_years,id',
+        ],
+        'organization_id' => [
+            'required',
+            'integer',
+            'exists:organizations,id',
+        ],
+    ]);
+
+    $classes = SchoolClass::query()
+        ->where(
+            'academic_year_id',
+            $validated['source_academic_year_id']
+        )
+        ->where(
+            'organization_id',
+            $validated['organization_id']
+        )
+        ->where('is_active', true)
+        ->where('is_alumni', false)
+        ->orderBy('level')
+        ->orderBy('name')
+        ->get(['id', 'name', 'level']);
+
+    return response()->json($classes);
+}
 }
