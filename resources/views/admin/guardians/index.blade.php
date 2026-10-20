@@ -17,21 +17,23 @@
             </p>
         </div>
 
+
         <div class="d-flex gap-2">
+
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#guardianImportModal">
+                <i class="bi bi-file-earmark-excel me-1"></i>
+                Import Excel
+            </button>
 
             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
                 data-bs-target="#guardianFilterModal">
-
                 <i class="bi bi-funnel me-1"></i>
                 Filter
-
             </button>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#guardianCreateModal">
-
                 <i class="bi bi-person-plus me-1"></i>
                 Tambah Wali
-
             </button>
 
         </div>
@@ -41,6 +43,47 @@
 @stop
 
 @section('content')
+
+    @if (session('import_result'))
+        @php
+            $result = session('import_result');
+        @endphp
+
+        <div class="alert alert-info alert-dismissible fade show">
+            <h5>
+                <i class="bi bi-file-earmark-check me-1"></i>
+                Hasil Import Wali
+            </h5>
+
+            <p class="mb-2">
+                Berhasil: <strong>{{ $result['success'] }}</strong> data.
+                Gagal: <strong>{{ count($result['errors']) }}</strong> data.
+            </p>
+
+            @if (count($result['errors']))
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered bg-white mb-0">
+                        <thead>
+                            <tr>
+                                <th>Baris Excel</th>
+                                <th>Alasan Gagal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($result['errors'] as $error)
+                                <tr>
+                                    <td>{{ $error['row'] }}</td>
+                                    <td>{{ $error['message'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div class="card">
 
@@ -118,7 +161,8 @@
                                 </td>
 
                                 <td class="text-center">
-                                    {{ $guardian->students_count }}
+                                    <span class="guardian-students-count"
+                                        data-guardian-id="{{ $guardian->id }}">{{ $guardian->students_count }}</span>
                                 </td>
 
                                 <td class="text-center">
@@ -225,6 +269,9 @@
 
     <div id="guardianStudentsModalContainer"></div>
 
+    {{-- Modal Import Wali --}}
+    @include('admin.guardians.partials.import-modal')
+
     {{-- Modal Filter --}}
     @include('admin.guardians.partials.filter')
 
@@ -235,66 +282,134 @@
 
 @stop
 
+
 @section('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
+            // Edit wali
             document.querySelectorAll('.btn-edit-guardian')
                 .forEach(function(button) {
-
                     button.addEventListener('click', function() {
+                        const form = document.getElementById('guardianEditForm');
 
-                        const form =
-                            document.getElementById('guardianEditForm');
+                        form.action = "{{ url('admin/guardians') }}/" + this.dataset.id;
 
-                        form.action =
-                            "{{ url('admin/guardians') }}/" +
-                            this.dataset.id;
+                        document.getElementById('guardian_edit_organization').value =
+                            this.dataset.organizationId;
+                        document.getElementById('guardian_edit_name').value =
+                            this.dataset.name;
+                        document.getElementById('guardian_edit_nik').value =
+                            this.dataset.nik;
+                        document.getElementById('guardian_edit_phone').value =
+                            this.dataset.phone || '';
 
-                        document.getElementById(
-                            'guardian_edit_organization'
-                        ).value = this.dataset.organizationId;
-
-                        document.getElementById(
-                            'guardian_edit_name'
-                        ).value = this.dataset.name;
-
-                        document.getElementById(
-                            'guardian_edit_nik'
-                        ).value = this.dataset.nik;
-
-                        document.getElementById(
-                            'guardian_edit_phone'
-                        ).value = this.dataset.phone || '';
-
-                        const modalElement =
-                            document.getElementById('guardianEditModal');
-
-                        const modal =
-                            bootstrap.Modal.getOrCreateInstance(
-                                modalElement
-                            );
-
-                        modal.show();
+                        bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById('guardianEditModal')
+                        ).show();
                     });
-
                 });
 
-        });
-    </script>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
             let currentGuardianStudentsUrl = null;
+            let isLoadingGuardianStudents = false;
 
-            // =====================================================
+            const container = document.getElementById(
+                'guardianStudentsModalContainer'
+            );
+
+            function cleanupModalBackdrop() {
+                // Jangan mengganggu modal lain yang masih terbuka.
+                if (document.querySelector('.modal.show')) {
+                    return;
+                }
+
+                document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                    backdrop.remove();
+                });
+
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('overflow');
+                document.body.style.removeProperty('padding-right');
+            }
+
+            function closeExistingGuardianModal() {
+                return new Promise(resolve => {
+                    const modalElement = document.getElementById(
+                        'guardianStudentsModal'
+                    );
+
+                    if (!modalElement || !modalElement.classList.contains('show')) {
+                        cleanupModalBackdrop();
+                        resolve();
+                        return;
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+
+                    modalElement.addEventListener('hidden.bs.modal', function() {
+                        modal?.dispose();
+                        cleanupModalBackdrop();
+                        resolve();
+                    }, {
+                        once: true
+                    });
+
+                    if (modal) {
+                        modal.hide();
+                    } else {
+                        bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+                    }
+                });
+            }
+
+            async function loadGuardianStudents(showModal = true) {
+                if (!currentGuardianStudentsUrl || isLoadingGuardianStudents) {
+                    return;
+                }
+
+                isLoadingGuardianStudents = true;
+
+                try {
+                    const response = await fetch(currentGuardianStudentsUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(
+                            response.status === 403 ?
+                            'Anda tidak memiliki akses ke data wali ini.' :
+                            'Gagal memuat data anak. Status: ' + response.status
+                        );
+                    }
+
+                    const html = await response.text();
+
+                    await closeExistingGuardianModal();
+
+                    container.innerHTML = html;
+
+                    const modalElement = document.getElementById(
+                        'guardianStudentsModal'
+                    );
+
+                    if (!modalElement) {
+                        throw new Error('Modal Kelola Anak tidak ditemukan.');
+                    }
+
+                    if (showModal) {
+                        bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert(error.message || 'Terjadi kesalahan saat memuat data anak.');
+                } finally {
+                    isLoadingGuardianStudents = false;
+                }
+            }
+
             // Buka modal Kelola Anak
-            // =====================================================
-
             document.addEventListener('click', function(event) {
-
                 const button = event.target.closest(
                     '.btn-manage-guardian-students'
                 );
@@ -305,80 +420,12 @@
 
                 event.preventDefault();
 
-                currentGuardianStudentsUrl =
-                    button.dataset.url;
-
+                currentGuardianStudentsUrl = button.dataset.url;
                 loadGuardianStudents(true);
             });
 
-
-            // =====================================================
-            // Load / reload isi modal
-            // =====================================================
-
-            function loadGuardianStudents(showModal = true) {
-
-                if (!currentGuardianStudentsUrl) {
-                    return;
-                }
-
-                fetch(currentGuardianStudentsUrl, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                    })
-                    .then(response => {
-
-                        if (!response.ok) {
-                            throw new Error(
-                                'Gagal memuat data anak.'
-                            );
-                        }
-
-                        return response.text();
-                    })
-                    .then(html => {
-
-                        const container =
-                            document.getElementById(
-                                'guardianStudentsModalContainer'
-                            );
-
-                        container.innerHTML = html;
-
-                        const modalElement =
-                            document.getElementById(
-                                'guardianStudentsModal'
-                            );
-
-                        if (!modalElement) {
-                            throw new Error(
-                                'Modal Kelola Anak tidak ditemukan.'
-                            );
-                        }
-
-                        const modal =
-                            bootstrap.Modal.getOrCreateInstance(
-                                modalElement
-                            );
-
-                        if (showModal) {
-                            modal.show();
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error);
-                        alert(error.message);
-                    });
-            }
-
-
-            // =====================================================
-            // Submit form di dalam modal
-            // =====================================================
-
-            document.addEventListener('submit', function(event) {
-
+            // Submit form tambah/lepas anak melalui AJAX
+            document.addEventListener('submit', async function(event) {
                 const form = event.target;
 
                 if (!form.closest('#guardianStudentsModal')) {
@@ -388,49 +435,88 @@
                 event.preventDefault();
                 event.stopPropagation();
 
-                const formData = new FormData(form);
+                if (form.dataset.submitting === 'true') {
+                    return;
+                }
 
-                fetch(form.action, {
-                        method: form.method.toUpperCase(),
+                form.dataset.submitting = 'true';
+
+                const submitButtons = form.querySelectorAll(
+                    'button[type="submit"], input[type="submit"]'
+                );
+
+                submitButtons.forEach(button => button.disabled = true);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: (form.method || 'POST').toUpperCase(),
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json',
                         },
-                        body: formData,
-                    })
-                    .then(async response => {
-
-                        const data = await response.json();
-
-                        if (!response.ok) {
-                            throw new Error(
-                                data.message ||
-                                'Terjadi kesalahan.'
-                            );
-                        }
-
-                        return data;
-                    })
-                    .then(data => {
-
-                        /*
-                         * Reload isi modal.
-                         *
-                         * showModal = true
-                         * supaya modal tetap terbuka.
-                         */
-                        loadGuardianStudents(true);
-
-                    })
-                    .catch(error => {
-
-                        console.error(error);
-                        alert(error.message);
-
+                        body: new FormData(form),
                     });
 
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            data.message || 'Gagal menyimpan hubungan wali dan anak.'
+                        );
+                    }
+
+                    // Muat ulang daftar anak dan perbarui angka pada tabel utama.
+                    await loadGuardianStudents(true);
+
+                    try {
+                        const response = await fetch(currentGuardianStudentsUrl, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                        });
+
+                        if (response.ok) {
+                            // Jumlah anak diperbarui melalui data yang dikirim server.
+                            const html = await response.text();
+                            const doc = new DOMParser().parseFromString(html, 'text/html');
+
+                            const countElement = doc.querySelector(
+                                '[data-linked-students-count]'
+                            );
+
+                            if (countElement) {
+                                const guardianId = currentGuardianStudentsUrl.match(/guardians\/(\d+)/)
+                                    ?.[1];
+
+                                const tableCount = document.querySelector(
+                                    `.guardian-students-count[data-guardian-id="${guardianId}"]`
+                                );
+
+                                if (tableCount) {
+                                    tableCount.textContent = countElement.dataset.linkedStudentsCount;
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Gagal memperbarui jumlah anak:', error);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert(error.message || 'Terjadi kesalahan saat menyimpan data.');
+                } finally {
+                    form.dataset.submitting = 'false';
+                    submitButtons.forEach(button => button.disabled = false);
+                }
             }, true);
 
+            // Tangani penutupan modal Kelola Anak saja.
+            document.addEventListener('hidden.bs.modal', function(event) {
+                if (event.target.id !== 'guardianStudentsModal') {
+                    return;
+                }
+
+                cleanupModalBackdrop();
+            });
         });
     </script>
 @endsection

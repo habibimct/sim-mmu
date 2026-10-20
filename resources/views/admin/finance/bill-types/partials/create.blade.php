@@ -92,7 +92,7 @@ MODAL TAMBAH JENIS TAGIHAN
                                         old('organization_id') == $organization->id
                                     )
                                 >
-                                    {{ $organization->name }}
+                                    {{ $organization->code }}
                                 </option>
 
                             @endforeach

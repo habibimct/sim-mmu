@@ -8,6 +8,9 @@ use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Student;
+use App\Exports\GuardiansImportTemplateExport;
+use App\Imports\GuardiansImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,69 +32,48 @@ class GuardianController extends Controller
         $query = Guardian::query()
             ->with([
                 'user',
+                'organization',
                 'students.organization',
             ])
             ->withCount('students')
-            ->whereHas('students', function ($q) use ($organizationIds) {
-                $q->whereIn('organization_id', $organizationIds);
+            ->where(function ($q) use ($organizationIds) {
+                // Wali yang organisasi asalnya dapat diakses.
+                $q->whereIn('organization_id', $organizationIds)
+
+                    // Atau wali yang memiliki anak di unit yang dapat diakses.
+                    ->orWhereHas('students', function ($studentQuery) use ($organizationIds) {
+                        $studentQuery->whereIn('organization_id', $organizationIds);
+                    });
             });
 
-        /*
-        |--------------------------------------------------------------------------
-        | Pencarian
-        |--------------------------------------------------------------------------
-        */
-
+        // Pencarian nama, NIK, atau nomor HP.
         if ($request->filled('search')) {
-
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
-
-                $q->where(
-                    'name',
-                    'like',
-                    "%{$search}%"
-                )
-                    ->orWhere(
-                        'nik',
-                        'like',
-                        "%{$search}%"
-                    )
-                    ->orWhere(
-                        'phone',
-                        'like',
-                        "%{$search}%"
-                    );
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('nik', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Filter organisasi
-        |--------------------------------------------------------------------------
-        */
-
+        // Filter unit: tampilkan wali jika memiliki anak di unit tersebut
+        // atau organisasi asal wali adalah unit yang dipilih.
         if ($request->filled('organization_id')) {
             $organizationId = (int) $request->organization_id;
 
-            if (! $organizationIds->contains($organizationId)) {
-                abort(403);
-            }
+            abort_unless($organizationIds->contains($organizationId), 403);
 
-            $query->whereHas('students', function ($q) use ($organizationId) {
-                $q->where('organization_id', $organizationId);
+            $query->where(function ($q) use ($organizationId) {
+                $q->where('organization_id', $organizationId)
+                    ->orWhereHas('students', function ($studentQuery) use ($organizationId) {
+                        $studentQuery->where('organization_id', $organizationId);
+                    });
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Filter status
-        |--------------------------------------------------------------------------
-        */
-
+        // Filter status.
         if ($request->filled('status')) {
-
             $query->where(
                 'is_active',
                 $request->status === 'active'
@@ -116,10 +98,7 @@ class GuardianController extends Controller
         */
 
         $organizations = Organization::query()
-            ->whereIn(
-                'id',
-                $organizationIds
-            )
+            ->whereIn('id', $organizationIds)
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
@@ -294,58 +273,45 @@ class GuardianController extends Controller
             );
     }
 
-    public function students(
-        Guardian $guardian
-    ): View {
-        $organizationIds = Organization::accessibleIdsForUser();
 
-        /*
-    |--------------------------------------------------------------------------
-    | Guardian harus memiliki minimal satu anak yang berada di
-    | organisasi yang dapat diakses user saat ini.
-    |--------------------------------------------------------------------------
-    */
-        $hasAccessibleStudent = $guardian->students()
-            ->whereIn('organization_id', $organizationIds)
-            ->exists();
+public function students(Guardian $guardian): View
+{
+    $organizationIds = Organization::accessibleIdsForUser();
 
-        abort_unless(
-            $hasAccessibleStudent,
-            403
-        );
+    $hasAccess = $organizationIds->contains(
+        (int) $guardian->organization_id
+    ) || $guardian->students()
+        ->whereIn('organization_id', $organizationIds)
+        ->exists();
 
-        $guardian->load([
-            'students' => function ($query) {
-                $query
-                    ->with('organization')
-                    ->orderBy('name');
-            },
-        ]);
+    abort_unless($hasAccess, 403);
 
-        /*
-    |--------------------------------------------------------------------------
-    | Tampilkan siswa dari seluruh organisasi yang dapat diakses user.
-    | Siswa yang sudah terhubung dengan Guardian tidak ditampilkan lagi.
-    |--------------------------------------------------------------------------
-    */
-        $students = Student::query()
-            ->with('organization')
-            ->whereIn('organization_id', $organizationIds)
-            ->whereNotIn(
-                'id',
-                $guardian->students->pluck('id')
-            )
-            ->orderBy('name')
-            ->get();
+    // Tampilkan SEMUA anak yang sudah terhubung dengan wali,
+    // termasuk anak dari unit lain.
+    $guardian->load([
+        'organization',
+        'students' => function ($query) {
+            $query->with('organization')->orderBy('name');
+        },
+    ]);
 
-        return view(
-            'admin.guardians.partials.students-modal',
-            compact(
-                'guardian',
-                'students'
-            )
-        );
-    }
+    // Anak yang bisa ditambahkan hanya dari unit yang dapat diakses.
+    $students = Student::query()
+        ->with('organization')
+        ->whereIn('organization_id', $organizationIds)
+        ->whereNotIn(
+            'id',
+            $guardian->students->pluck('id')
+        )
+        ->orderBy('name')
+        ->get();
+
+    return view(
+        'admin.guardians.partials.students-modal',
+        compact('guardian', 'students', 'organizationIds')
+    );
+}
+
 
     public function attachStudent(
         Request $request,
@@ -353,18 +319,9 @@ class GuardianController extends Controller
     ) {
         $organizationIds = Organization::accessibleIdsForUser();
 
-        /*
-    |--------------------------------------------------------------------------
-    | Guardian harus memiliki minimal satu anak yang dapat diakses
-    | oleh user saat ini.
-    |--------------------------------------------------------------------------
-    */
-        $hasAccessibleStudent = $guardian->students()
-            ->whereIn('organization_id', $organizationIds)
-            ->exists();
-
+        // Periksa akses terhadap unit wali.
         abort_unless(
-            $hasAccessibleStudent,
+            $organizationIds->contains($guardian->organization_id),
             403
         );
 
@@ -389,16 +346,9 @@ class GuardianController extends Controller
             $validated['student_id']
         );
 
-        /*
-    |--------------------------------------------------------------------------
-    | Siswa harus berada pada organisasi yang dapat diakses
-    | oleh user yang sedang login.
-    |--------------------------------------------------------------------------
-    */
+        // Siswa harus berasal dari unit yang dapat diakses pengguna.
         abort_unless(
-            $organizationIds->contains(
-                $student->organization_id
-            ),
+            $organizationIds->contains($student->organization_id),
             403
         );
 
@@ -513,5 +463,41 @@ class GuardianController extends Controller
                 'success',
                 'Password Wali berhasil dibuat ulang.'
             );
+    }
+
+
+    public function importTemplate()
+    {
+        return Excel::download(
+            new GuardiansImportTemplateExport(),
+            'template-import-wali.xlsx'
+        );
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                'max:5120',
+            ],
+        ]);
+
+        $organizationIds = Organization::accessibleIdsForUser()
+            ->map(fn($id) => (int) $id)
+            ->all();
+
+        $import = new GuardiansImport($organizationIds);
+
+        Excel::import($import, $request->file('file'));
+
+        return redirect()
+            ->route('admin.guardians.index')
+            ->with('import_result', [
+                'success' => $import->getSuccessCount(),
+                'errors' => $import->getErrors(),
+            ]);
     }
 }

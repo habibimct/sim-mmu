@@ -110,12 +110,13 @@
                         Nama lengkap
                     </label>
 
-                    <input type="text" id="name" name="name" value="{{ old('name', $guardian->name) }}" required
-                        maxlength="255" autocomplete="name"
-                        class="w-full rounded-xl border border-gray-300
-                           px-4 py-3 text-sm text-gray-800
-                           focus:border-green-600 focus:outline-none
-                           focus:ring-2 focus:ring-green-100">
+                    <input type="text" id="name" value="{{ $guardian->name }}" readonly
+                        class="w-full cursor-not-allowed rounded-xl border border-gray-200
+                        bg-gray-100 px-4 py-3 text-sm text-gray-600">
+
+                    <p class="mt-1.5 text-xs text-gray-500">
+                        Nama tidak dapat diubah melalui profil. Hubungi admin jika terdapat kesalahan.
+                    </p>
                 </div>
 
                 <div>

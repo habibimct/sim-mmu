@@ -29,6 +29,7 @@
     @stack('styles')
 </head>
 
+
 <body class="min-h-screen bg-white text-slate-800 antialiased sm:bg-slate-100">
 
     <div class="mx-auto min-h-screen max-w-lg px-3 py-3 sm:px-5 sm:py-5">
@@ -37,12 +38,15 @@
             class="relative min-h-[calc(100vh-24px)] overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 sm:min-h-[calc(100vh-40px)]">
 
             {{-- Konten halaman --}}
-            <main class="px-4 pb-24 pt-4 sm:px-5">
+            <main class="px-4 pb-28 pt-4 sm:px-5">
                 @yield('content')
             </main>
 
-            {{-- Navigasi bawah --}}
-            <nav aria-label="Navigasi utama" class="absolute inset-x-0 bottom-0 border-t border-slate-200 bg-slate-50">
+            {{-- Navigasi bawah: tetap terlihat saat halaman di-scroll --}}
+
+            <nav aria-label="Navigasi utama"
+                class="fixed bottom-0 left-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 border-t border-slate-100 bg-slate-30/95 shadow-lg backdrop-blur sm:bottom-5 sm:rounded-b-2xl">
+
                 <div class="grid grid-cols-3 px-3 py-3">
 
                     {{-- Beranda --}}
@@ -95,5 +99,6 @@
 
     @stack('scripts')
 </body>
+
 
 </html>

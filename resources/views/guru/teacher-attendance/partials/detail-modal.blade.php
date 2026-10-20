@@ -80,7 +80,7 @@
                         </p>
 
                         <p class="mt-1 font-medium text-gray-800">
-                            {{ $attendance->teachingAssignment->organization->name }}
+                            {{ $attendance->teachingAssignment->organization->code }}
                         </p>
                     </div>
 

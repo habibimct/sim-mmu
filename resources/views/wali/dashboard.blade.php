@@ -5,7 +5,8 @@
 @section('content')
 
     {{-- Sapaan --}}
-    <header class="mb-4">
+    <header class="flex items-center justify-between gap-2 mb-4">
+        <div>
         <p class="text-xs text-slate-500">
             SIM-MMU · Portal Orang Tua
         </p>
@@ -15,8 +16,27 @@
         </h1>
 
         <p class="mt-1 text-sm text-slate-600">
-            Selamat datang. Mari pantau perkembangan anak Anda.
+            Selamat datang Bpk/Ibu {{ $guardian->name }}. Mari pantau perkembangan anak Anda.
         </p>
+        </div>
+
+<form method="POST" action="{{ route('logout') }}"
+    onsubmit="return confirm('Apakah Anda yakin ingin keluar dari akun?')">
+    @csrf
+
+    <button type="submit"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.7" class="h-5 w-5" aria-hidden="true">
+            <path d="M10 17l5-5-5-5" />
+            <path d="M15 12H3" />
+            <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+        </svg>
+
+        Keluar
+    </button>
+</form>
     </header>
 
     {{-- Pilihan anak --}}

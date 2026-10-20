@@ -68,7 +68,7 @@
                         request('organization_id') == $organization->id
                     )>
 
-                    {{ $organization->name }}
+                    {{ $organization->code }}
 
                 </option>
 

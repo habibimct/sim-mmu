@@ -46,7 +46,7 @@
 
                             @foreach ($organizations as $organization)
                                 <option value="{{ $organization->id }}">
-                                    {{ $organization->name }}
+                                    {{ $organization->code }}
                                 </option>
                             @endforeach
 

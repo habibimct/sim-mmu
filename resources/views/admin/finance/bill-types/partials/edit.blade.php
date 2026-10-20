@@ -90,7 +90,7 @@ MODAL EDIT JENIS TAGIHAN
                                 <option
                                     value="{{ $organization->id }}"
                                 >
-                                    {{ $organization->name }}
+                                    {{ $organization->code }}
                                 </option>
 
                             @endforeach

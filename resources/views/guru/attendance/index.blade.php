@@ -181,7 +181,7 @@
                             </p>
 
                             <p class="mt-0.5 text-xs text-gray-700 truncate">
-                                {{ $assignment->schoolClass->organization->name }}
+                                {{ $assignment->schoolClass->organization->code }}
                             </p>
 
                         </div>
@@ -354,7 +354,7 @@
                                 </td>
 
                                 <td class="px-4 py-3 text-gray-700">
-                                    {{ $attendance->teachingAssignment->schoolClass->organization->name }}
+                                    {{ $attendance->teachingAssignment->schoolClass->organization->code }}
                                 </td>
 
                                 <td class="px-4 py-3 font-medium text-gray-800">

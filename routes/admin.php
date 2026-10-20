@@ -288,9 +288,9 @@ Route::middleware(['auth', 'organization.scope'])
 
         Route::middleware('permission:students.manage')
             ->get(
-            '/students/promotion/classes',
-            [StudentPromotionController::class, 'classes']
-        )->name('students.promotion.classes');
+                '/students/promotion/classes',
+                [StudentPromotionController::class, 'classes']
+            )->name('students.promotion.classes');
 
 
         /*
@@ -345,6 +345,16 @@ Route::middleware(['auth', 'organization.scope'])
             ->name('guardians.store');
 
 
+        Route::middleware('permission:guardians.manage')
+            ->get('guardians/import-template',
+            [GuardianController::class, 'importTemplate']
+        )->name('guardians.import-template');
+
+        Route::middleware('permission:guardians.manage')
+            ->post('guardians/import',
+            [GuardianController::class, 'import']
+        )->name('guardians.import');
+
         /*
         |--------------------------------------------------------------------------
         | Wali / Orang Tua - Edit
@@ -381,6 +391,13 @@ Route::middleware(['auth', 'organization.scope'])
                 [GuardianController::class, 'detachStudent']
             )
             ->name('guardians.students.detach');
+
+
+
+
+
+
+
 
 
         /*

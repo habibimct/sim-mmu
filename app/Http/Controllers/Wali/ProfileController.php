@@ -31,12 +31,10 @@ class ProfileController extends Controller
         $guardian = $user->guardian()->firstOrFail();
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:30'],
         ]);
 
         $guardian->update([
-            'name' => $validated['name'],
             'phone' => $validated['phone'] ?? null,
         ]);
 

@@ -39,7 +39,7 @@
 
                             @foreach ($organizations as $organization)
                                 <option value="{{ $organization->id }}" @selected(old('organization_id') == $organization->id)>
-                                    {{ $organization->name }}
+                                    {{ $organization->code }}
                                 </option>
                             @endforeach
 

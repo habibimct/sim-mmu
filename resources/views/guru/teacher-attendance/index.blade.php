@@ -102,7 +102,7 @@
                                 </td>
 
                                 <td class="px-4 py-3 text-gray-700">
-                                    {{ $attendance->teachingAssignment->organization->name }}
+                                    {{ $attendance->teachingAssignment->organization->code }}
                                 </td>
 
                                 <td class="px-4 py-3 font-medium text-gray-800">

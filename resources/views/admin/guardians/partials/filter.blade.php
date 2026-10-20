@@ -61,7 +61,7 @@
                                     (string) request('organization_id')
                                     === (string) $organization->id
                                 )>
-                                {{ $organization->name }}
+                                {{ $organization->code }}
                             </option>
 
                         @endforeach

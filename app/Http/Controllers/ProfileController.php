@@ -34,7 +34,6 @@ class ProfileController extends Controller
 
         $user->fill(
             $request->safe()->only([
-                'name',
                 'email',
             ])
         );
