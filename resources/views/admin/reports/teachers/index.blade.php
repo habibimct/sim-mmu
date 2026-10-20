@@ -22,13 +22,13 @@
 
         <div class="d-flex gap-2">
 
-            <a href="{{ route('admin.reports.teachers.excel', request()->query()) }}" class="btn btn-success">
+            <a href="{{ route('admin.reports.teachers.excel', request()->query()) }}" class="btn btn-outline-success">
                 <i class="bi bi-file-earmark-excel me-1"></i>
                 Excel
             </a>
 
 
-            <a href="{{ route('admin.reports.teachers.pdf', request()->query()) }}" class="btn btn-danger">
+            <a href="{{ route('admin.reports.teachers.pdf', request()->query()) }}" class="btn btn-outline-danger">
                 <i class="bi bi-file-earmark-pdf me-1"></i>
                 PDF
             </a>

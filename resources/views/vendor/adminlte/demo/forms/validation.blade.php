@@ -153,7 +153,7 @@
                             <label class="form-label" for="defaultUrl">URL</label>
                             <input type="url" class="form-control" id="defaultUrl" required />
                         </div>
-                        <button class="btn btn-success" type="submit">
+                        <button class="btn btn-outline-success" type="submit">
                             Submit (browser default)
                         </button>
                     </form>
@@ -183,7 +183,7 @@
                                 <div class="invalid-tooltip">Please choose a username.</div>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-success" type="submit">Submit (tooltip)</button>
+                                <button class="btn btn-outline-success" type="submit">Submit (tooltip)</button>
                             </div>
                         </div>
                     </form>

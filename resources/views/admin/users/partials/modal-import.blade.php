@@ -167,7 +167,7 @@
 
                     <a
                         href="{{ route('admin.users.template') }}"
-                        class="btn btn-success">
+                        class="btn btn-outline-success">
 
                         <i class="bi bi-download me-1"></i>
                         Download Template

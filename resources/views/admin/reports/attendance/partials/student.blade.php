@@ -163,12 +163,12 @@ FILTER ABSENSI SISWA
             Reset
         </a>
 
-        <a href="{{ route('admin.reports.attendance.student.excel', request()->query()) }}" class="btn btn-success">
+        <a href="{{ route('admin.reports.attendance.student.excel', request()->query()) }}" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Excel
         </a>
 
-        <a href="{{ route('admin.reports.attendance.student.pdf', request()->query()) }}" class="btn btn-danger"
+        <a href="{{ route('admin.reports.attendance.student.pdf', request()->query()) }}" class="btn btn-outline-danger"
             target="_blank">
             <i class="fas fa-file-pdf"></i>
             PDF

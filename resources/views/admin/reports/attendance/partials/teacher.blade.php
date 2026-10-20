@@ -122,12 +122,12 @@ FILTER
             Pengaturan Jam
         </button>
 
-        <a href="{{ route('admin.reports.attendance.excel', request()->query()) }}" class="btn btn-success">
+        <a href="{{ route('admin.reports.attendance.excel', request()->query()) }}" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Excel
         </a>
 
-        <a href="{{ route('admin.reports.attendance.pdf', request()->query()) }}" class="btn btn-danger"
+        <a href="{{ route('admin.reports.attendance.pdf', request()->query()) }}" class="btn btn-outline-danger"
             target="_blank">
             <i class="bi bi-file-earmark-pdf me-1"></i>
             PDF

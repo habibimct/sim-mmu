@@ -37,7 +37,7 @@
                 'admin.reports.deposits.export-excel',
                 request()->query()
             ) }}"
-               class="btn btn-success">
+               class="btn btn-outline-success">
 
                 <i class="bi bi-file-earmark-excel"></i>
 
@@ -51,7 +51,7 @@
                 'admin.reports.deposits.export-pdf',
                 request()->query()
             ) }}"
-               class="btn btn-danger">
+               class="btn btn-outline-danger">
 
                 <i class="bi bi-file-earmark-pdf"></i>
 

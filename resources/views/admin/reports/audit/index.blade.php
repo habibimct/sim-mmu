@@ -24,14 +24,14 @@
                 Filter
             </button>
 
-            <a href="{{ route('admin.reports.audit.export-excel', request()->query()) }}" class="btn btn-success">
+            <a href="{{ route('admin.reports.audit.export-excel', request()->query()) }}" class="btn btn-outline-success">
 
                 <i class="bi bi-file-earmark-excel me-1"></i>
                 Export Excel
 
             </a>
 
-            <a href="{{ route('admin.reports.audit.export-pdf', request()->query()) }}" class="btn btn-danger">
+            <a href="{{ route('admin.reports.audit.export-pdf', request()->query()) }}" class="btn btn-outline-danger">
 
                 <i class="bi bi-file-earmark-pdf me-1"></i>
                 Export PDF
