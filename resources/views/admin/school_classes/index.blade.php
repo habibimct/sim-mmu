@@ -11,13 +11,13 @@
         </h1>
         <div>
             @can('classes.manage')
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
 
                     <i class="bi bi-plus-lg me-1"></i>
                     Tambah Kelas
 
                 </button>
-                <a href="{{ route('admin.school-classes.bulk-create') }}" class="btn btn-success">
+                <a href="{{ route('admin.school-classes.bulk-create') }}" class="btn btn-outline-success">
                     <i class="fas fa-layer-group"></i>
                     Buat Banyak Kelas
                 </a>

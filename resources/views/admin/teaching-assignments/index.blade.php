@@ -19,7 +19,7 @@
 
         <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-outline-primary"
             data-bs-toggle="modal"
             data-bs-target="#modalCreateTeachingAssignment"
         >

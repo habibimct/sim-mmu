@@ -15,7 +15,7 @@
             {{-- Import Guru --}}
             @can('teachers.manage')
                 <button type="button"
-                    class="btn btn-success"
+                    class="btn btn-outline-success"
                     data-bs-toggle="modal"
                     data-bs-target="#modalImportGuru">
 
@@ -29,7 +29,7 @@
             {{-- Export --}}
             @can('teachers.view')
                 <a href="{{ route('admin.teachers.export', request()->query()) }}"
-                    class="btn btn-success">
+                    class="btn btn-outline-success">
 
                     <i class="bi bi-file-earmark-excel me-1"></i>
                     Export
@@ -41,7 +41,7 @@
             {{-- Tambah Guru --}}
             @can('teachers.manage')
                 <button type="button"
-                    class="btn btn-primary"
+                    class="btn btn-outline-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#modalTambahGuru">
 
@@ -245,16 +245,15 @@
                 <div class="col-md-2 d-flex gap-2">
 
                     <button type="submit"
-                        class="btn btn-primary">
+                        class="btn btn-outline-primary">
 
                         <i class="bi bi-search"></i>
-                        Cari
-
+                        
                     </button>
 
 
                     <a href="{{ route('admin.teachers.index') }}"
-                        class="btn btn-secondary">
+                        class="btn btn-outline-secondary">
 
                         Reset
 

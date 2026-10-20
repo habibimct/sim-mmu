@@ -21,7 +21,7 @@
             </button>
 
             @can('bills.manage')
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCreateStudentBill">
                     <i class="bi bi-plus-lg me-1"></i>
                     Tambah Tagihan
                 </button>

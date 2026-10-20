@@ -23,7 +23,7 @@
             </div>
 
             @can('create', App\Models\BillType::class)
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateBillType">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCreateBillType">
                     <i class="bi bi-plus-lg me-1"></i>
                     Tambah Jenis Tagihan
                 </button>
@@ -150,7 +150,7 @@ FILTER
                                     Reset
                                 </a>
 
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-outline-primary">
                                     <i class="bi bi-funnel me-1"></i>
                                     Terapkan
                                 </button>

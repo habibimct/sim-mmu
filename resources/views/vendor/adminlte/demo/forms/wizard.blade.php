@@ -184,7 +184,7 @@
                                 <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
                                 Previous
                             </button>
-                            <button type="button" class="btn btn-primary" id="wz-next">
+                            <button type="button" class="btn btn-outline-primary" id="wz-next">
                                 Next
                                 <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                             </button>

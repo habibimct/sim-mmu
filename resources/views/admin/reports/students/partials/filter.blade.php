@@ -97,7 +97,7 @@
 
             <div class="d-flex gap-2">
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-outline-primary">
                     <i class="bi bi-search me-1"></i>
                     Tampilkan
                 </button>

@@ -240,7 +240,7 @@
                         Batal
                     </button>
 
-                    <button type="submit" class="btn btn-primary" id="btnSaveTeachingAssignment">
+                    <button type="submit" class="btn btn-outline-primary" id="btnSaveTeachingAssignment">
 
                         <i class="bi bi-save me-1"></i>
 

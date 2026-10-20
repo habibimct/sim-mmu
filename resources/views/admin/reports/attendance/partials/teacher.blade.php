@@ -104,7 +104,7 @@ FILTER
 
     <div class="mt-3 d-flex gap-2">
 
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-outline-primary">
             <i class="bi bi-funnel me-1"></i>
             Tampilkan
         </button>
@@ -208,7 +208,7 @@ FILTER
                     Tutup
                 </button>
 
-                <button type="button" class="btn btn-primary" id="applyTeacherAttendanceTime">
+                <button type="button" class="btn btn-outline-primary" id="applyTeacherAttendanceTime">
                     <i class="bi bi-check-lg me-1"></i>
                     Terapkan
                 </button>

@@ -207,7 +207,7 @@
                     </button>
 
                     <button type="submit"
-                            class="btn btn-primary">
+                            class="btn btn-outline-primary">
 
                         <i class="bi bi-check-lg"></i>
 

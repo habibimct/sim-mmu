@@ -240,7 +240,7 @@
                     </button>
 
 
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-outline-primary">
 
                         <i class="bi bi-search me-1"></i>
 

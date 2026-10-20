@@ -116,7 +116,7 @@
 
         <button
             type="submit"
-            class="btn btn-primary">
+            class="btn btn-outline-primary">
 
             <i class="bi bi-search"></i>
             Cari
@@ -125,7 +125,7 @@
 
         <a
             href="{{ route('admin.school-classes.index') }}"
-            class="btn btn-secondary">
+            class="btn btn-outline-secondary">
 
             Reset
 

@@ -12,14 +12,14 @@
 
         <div class="d-flex gap-2">
 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityLogFilterModal">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activityLogFilterModal">
 
                 <i class="bi bi-funnel me-1"></i>
                 Filter
 
             </button>
 
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">
 
                 <i class="bi bi-arrow-left me-1"></i>
                 Kembali

@@ -101,7 +101,7 @@
                         <div class="col-md-auto mt-3 mt-md-0">
                             <button
                                 type="submit"
-                                class="btn btn-primary"
+                                class="btn btn-outline-primary"
                             >
                                 <i class="bi bi-arrow-right-circle me-1"></i>
                                 Tampilkan
@@ -401,7 +401,7 @@
 
                             <button
                                 type="submit"
-                                class="btn btn-primary"
+                                class="btn btn-outline-primary"
                             >
                                 <i class="bi bi-save me-1"></i>
                                 Simpan Perubahan

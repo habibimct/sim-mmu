@@ -222,7 +222,7 @@ MODAL EDIT JENIS TAGIHAN
 
                     <button
                         type="submit"
-                        class="btn btn-primary"
+                        class="btn btn-outline-primary"
                     >
                         <i class="bi bi-check-lg me-1"></i>
                         Simpan Perubahan

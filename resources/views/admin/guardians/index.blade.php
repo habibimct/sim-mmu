@@ -31,7 +31,7 @@
                 Filter
             </button>
 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#guardianCreateModal">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#guardianCreateModal">
                 <i class="bi bi-person-plus me-1"></i>
                 Tambah Wali
             </button>

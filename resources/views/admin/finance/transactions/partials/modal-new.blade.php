@@ -332,7 +332,7 @@
                             Batal
 
                         </button>
-                        <button type="submit" id="btnSimpanTransaksi" class="btn btn-primary">
+                        <button type="submit" id="btnSimpanTransaksi" class="btn btn-outline-primary">
                             <i class="bi bi-save me-1"></i>
                             Simpan Transaksi
                         </button>

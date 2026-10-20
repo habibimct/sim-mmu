@@ -6,7 +6,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <h1>Organisasi</h1>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrganizationModal">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createOrganizationModal">
             <i class="bi bi-plus-lg"></i>
             Tambah Organisasi
         </button>

@@ -77,7 +77,7 @@
                     Batal
                 </button>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-outline-primary">
                     <i class="bi bi-upload me-1"></i>
                     Upload Wali
                 </button>

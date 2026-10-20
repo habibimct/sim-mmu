@@ -31,19 +31,19 @@
                     @endforeach
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2">
-                    <button type="button" class="btn btn-primary btn-lg">Large</button>
-                    <button type="button" class="btn btn-primary">Default</button>
-                    <button type="button" class="btn btn-primary btn-sm">Small</button>
-                    <button type="button" class="btn btn-primary" disabled>Disabled</button>
+                    <button type="button" class="btn btn-outline-primary btn-lg">Large</button>
+                    <button type="button" class="btn btn-outline-primary">Default</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm">Small</button>
+                    <button type="button" class="btn btn-outline-primary" disabled>Disabled</button>
                 </div>
             </x-adminlte-card>
 
             {{-- Button group --}}
             <x-adminlte-card title="Button Group" icon="bi bi-segmented-nav">
                 <div class="btn-group mb-2" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-primary">Left</button>
-                    <button type="button" class="btn btn-primary">Middle</button>
-                    <button type="button" class="btn btn-primary">Right</button>
+                    <button type="button" class="btn btn-outline-primary">Left</button>
+                    <button type="button" class="btn btn-outline-primary">Middle</button>
+                    <button type="button" class="btn btn-outline-primary">Right</button>
                 </div>
                 <br>
                 <div class="btn-group" role="group">
@@ -172,7 +172,7 @@
                 <button type="button" class="btn btn-secondary me-2" data-bs-toggle="tooltip" data-bs-title="Hello! I'm a tooltip">
                     Hover me
                 </button>
-                <button type="button" class="btn btn-primary" id="generalToastBtn">Show toast</button>
+                <button type="button" class="btn btn-outline-primary" id="generalToastBtn">Show toast</button>
 
                 <div class="toast-container position-fixed bottom-0 end-0 p-3">
                     <div id="generalToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

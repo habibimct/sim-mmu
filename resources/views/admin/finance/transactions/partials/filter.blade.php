@@ -87,14 +87,14 @@
                 {{-- Tombol --}}
                 <div class="col-md-3 d-flex align-items-end">
 
-                    <button type="submit" class="btn btn-primary me-2">
+                    <button type="submit" class="btn btn-outline-primary me-2">
 
                         <i class="bi bi-search me-1"></i>
 
                     </button>
 
 
-                    <a href="{{ route('admin.finance.transactions.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('admin.finance.transactions.index') }}" class="btn btn-outline-secondary">
 
                         <i class="bi bi-arrow-counterclockwise"></i>
 

@@ -3,12 +3,12 @@
     {{ $slot }}
     <div class="mt-4">
         @if ($step > 1)
-            <button type="button" class="btn btn-secondary" onclick="showStep({{ $step - 1 }})">
+            <button type="button" class="btn btn-outline-secondary" onclick="showStep({{ $step - 1 }})">
                 {{ __('adminlte.previous') ?? 'Previous' }}
             </button>
         @endif
         @if ($step > 0)
-            <button type="button" class="btn btn-primary" onclick="showStep({{ $step + 1 }})">
+            <button type="button" class="btn btn-outline-primary" onclick="showStep({{ $step + 1 }})">
                 {{ __('adminlte.next') ?? 'Next' }}
             </button>
         @endif

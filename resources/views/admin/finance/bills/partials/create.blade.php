@@ -452,7 +452,7 @@ MODAL CREATE TAGIHAN SISWA
 
                     <button
                         type="submit"
-                        class="btn btn-primary"
+                        class="btn btn-outline-primary"
                         id="btnCreateStudentBill"
                     >
                         <i class="bi bi-check-lg me-1"></i>

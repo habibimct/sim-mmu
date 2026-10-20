@@ -267,7 +267,7 @@ MODAL CREATE PAYMENT
                         Batal
                     </button>
 
-                    <button type="submit" class="btn btn-primary" id="btnCreatePayment">
+                    <button type="submit" class="btn btn-outline-primary" id="btnCreatePayment">
                         <i class="bi bi-check-lg me-1"></i>
                         Simpan Pembayaran
                     </button>

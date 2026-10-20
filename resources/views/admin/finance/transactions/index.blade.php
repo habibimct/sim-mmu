@@ -32,7 +32,7 @@
         </div>
 
         @can('finance.manage')
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTransaksiBaru">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalTransaksiBaru">
                 <i class="bi bi-plus-lg me-1"></i>
                 Transaksi Baru
             </button>

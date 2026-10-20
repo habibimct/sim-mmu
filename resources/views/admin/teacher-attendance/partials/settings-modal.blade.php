@@ -125,7 +125,7 @@
                 <div class="modal-footer">
 
                     <button type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-outline-secondary"
                         data-bs-dismiss="modal">
 
                         Batal
@@ -133,7 +133,7 @@
                     </button>
 
                     <button type="submit"
-                        class="btn btn-primary">
+                        class="btn btn-outline-primary">
 
                         <i class="fas fa-check me-1"></i>
                         Terapkan

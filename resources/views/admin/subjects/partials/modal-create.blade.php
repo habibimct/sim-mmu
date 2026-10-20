@@ -131,7 +131,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-outline-secondary"
                     data-bs-dismiss="modal"
                 >
                     Batal
@@ -139,7 +139,7 @@
 
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn btn-outline-primary"
                 >
 
                     <i class="bi bi-save me-1"></i>

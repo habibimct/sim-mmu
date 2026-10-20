@@ -233,7 +233,7 @@
                 <div class="modal-footer">
 
                     <a href="{{ route('admin.student-attendance.index') }}"
-                        class="btn btn-secondary">
+                        class="btn btn-outline-secondary">
 
                         Reset
 
@@ -248,7 +248,7 @@
                     </button>
 
                     <button type="submit"
-                        class="btn btn-primary">
+                        class="btn btn-outline-primary">
 
                         <i class="bi bi-check-lg me-1"></i>
                         Terapkan

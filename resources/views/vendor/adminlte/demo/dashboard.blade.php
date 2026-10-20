@@ -222,7 +222,7 @@
                         <div class="input-group">
                             <input type="text" name="message" placeholder="Type Message ..." class="form-control">
                             <span class="input-group-append">
-                                <button type="button" class="btn btn-primary">Send</button>
+                                <button type="button" class="btn btn-outline-primary">Send</button>
                             </span>
                         </div>
                     </form>

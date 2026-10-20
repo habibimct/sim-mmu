@@ -151,7 +151,7 @@
 
             <div class="card-footer">
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-outline-primary">
                     <i class="bi bi-save"></i>
                     Simpan Perubahan
                 </button>
